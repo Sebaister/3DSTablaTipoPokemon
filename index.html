@@ -125,6 +125,96 @@
             text-align: left;
             color: #CCC;
         }
+        /* Estilos para el buscador */
+        .search-container {
+            text-align: center;
+            margin: 10px 0;
+            padding: 6px;
+            background-color: #222;
+            border-radius: 6px;
+        }
+        .search-input {
+            padding: 6px;
+            width: 60%;
+            max-width: 200px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #111;
+            color: white;
+        }
+        .search-btn {
+            padding: 6px 10px;
+            background-color: #E00;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-left: 4px;
+        }
+        .pokemon-result {
+            display: none;
+            border: 1px solid #444;
+            border-radius: 6px;
+            margin: 8px 0;
+            padding: 6px;
+            background-color: #222;
+        }
+        .pokemon-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .pokemon-name {
+            font-size: 14px;
+            font-weight: bold;
+            margin-left: 8px;
+            text-transform: capitalize;
+        }
+        .pokemon-id {
+            color: #AAA;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+        .pokemon-image {
+            width: 64px;
+            height: 64px;
+            image-rendering: pixelated;
+        }
+        .pokemon-stats {
+            margin-top: 8px;
+        }
+        .stat-row {
+            display: flex;
+            margin-bottom: 4px;
+        }
+        .stat-name {
+            width: 100px;
+            font-weight: bold;
+        }
+        .stat-value {
+            flex-grow: 1;
+        }
+        .stat-bar {
+            height: 12px;
+            background-color: #333;
+            border-radius: 6px;
+            margin-top: 2px;
+            overflow: hidden;
+        }
+        .stat-bar-fill {
+            height: 100%;
+            background-color: #E00;
+            border-radius: 6px;
+        }
+        .error-message {
+            color: #F44;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .loading {
+            text-align: center;
+            color: #AAA;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
@@ -134,7 +224,47 @@
         <a href="#gen1" class="button">Gen 1</a>
         <a href="#gen2" class="button">Gen 2-5</a>
         <a href="#gen6" class="button">Gen 6+</a>
-        <a href="#search" class="button">Buscar Pokémon</a> <!-- Nuevo botón -->
+        <a href="#search" class="button">Buscar Pokémon</a>
+    </div>
+
+    <!-- BUSCADOR DE POKÉMON -->
+    <div id="search" class="content">
+        <h2>Buscar Pokémon</h2>
+        
+        <div class="search-container">
+            <input type="text" id="pokemon-search" class="search-input" placeholder="Nombre o Número" />
+            <button onclick="searchPokemon()" class="search-btn">Buscar</button>
+        </div>
+        
+        <div id="loading" class="loading" style="display: none;">Cargando...</div>
+        <div id="error" class="error-message" style="display: none;"></div>
+        
+        <div id="pokemon-result" class="pokemon-result">
+            <div class="pokemon-header">
+                <img id="pokemon-img" class="pokemon-image" src="" />
+                <span id="pokemon-name" class="pokemon-name"></span>
+                <span id="pokemon-id" class="pokemon-id"></span>
+            </div>
+            
+            <div class="type-section">
+                <strong>Tipo(s):</strong>
+                <div id="pokemon-types" class="type-list"></div>
+            </div>
+            
+            <div class="pokemon-stats">
+                <strong>Estadísticas:</strong>
+                <div id="pokemon-stats"></div>
+            </div>
+            
+            <div class="type-section">
+                <strong>Habilidades:</strong>
+                <div id="pokemon-abilities"></div>
+            </div>
+        </div>
+        
+        <div style="text-align:center;margin:10px 0;">
+            <a href="#" class="button">Volver</a>
+        </div>
     </div>
 
     <!-- GENERACIÓN 1 -->
@@ -1810,23 +1940,7 @@
             <a href="#" class="button">Volver</a>
         </div>
     </div>
-<div id="search" class="content">
-        <h2>Buscar Pokémon</h2>
-        
-        <div class="search-box">
-            <input type="text" id="pokemonInput" class="search-input" placeholder="Ej: ditto" onkeypress="if(event.keyCode==13) searchPokemon()">
-            <button class="button" onclick="searchPokemon()">Buscar</button>
-        </div>
 
-        <div id="pokemonResult" class="pokemon-data" style="display:none;">
-            <img id="pokemonSprite" class="pokemon-sprite" src="" alt="Sprite Pokémon">
-            <div class="pokemon-name" id="pokemonName"></div>
-            <div class="pokemon-types" id="pokemonTypes"></div>
-            <div class="pokemon-stat"><strong>Altura:</strong> <span id="pokemonHeight"></span> dm</div>
-            <div class="pokemon-stat"><strong>Peso:</strong> <span id="pokemonWeight"></span> hg</div>
-            <div class="pokemon-stat"><strong>Habilidades:</strong> <span id="pokemonAbilities"></span></div>
-        </div>
-    </div>
     <script>
         function showType(typeId) {
             // Oculta todos los detalles primero
@@ -1841,74 +1955,196 @@
             // Desplaza a la vista (sin animación smooth para mejor rendimiento)
             document.getElementById(typeId).scrollIntoView();
         }
-     // NUEVA FUNCIÓN PARA EL BUSCADOR (AGREGADO AL FINAL SIN CONFLICTOS)
-        async function searchPokemon() {
-            const input = document.getElementById("pokemonInput").value.toLowerCase().trim();
-            const resultDiv = document.getElementById("pokemonResult");
+        
+        function searchPokemon() {
+            var searchInput = document.getElementById('pokemon-search');
+            var pokemonName = searchInput.value.trim().toLowerCase();
             
-            if (!input) {
-                alert("Por favor escribe un nombre de Pokémon");
+            if (!pokemonName) {
+                showError('Por favor ingresa un nombre o número de Pokémon');
                 return;
             }
-
-            try {
-                // Mostrar carga
-                resultDiv.style.display = "none";
+            
+            // Mostrar carga
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('pokemon-result').style.display = 'none';
+            
+            // Hacer la petición a la PokeAPI
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://pokeapi.co/api/v2/pokemon/' + pokemonName, true);
+            
+            xhr.onload = function() {
+                document.getElementById('loading').style.display = 'none';
                 
-                // Hacer la petición a PokeAPI
-                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${input}`);
-                const data = await response.json();
-                
-                // Mostrar sprite
-                document.getElementById("pokemonSprite").src = data.sprites.front_default;
-                document.getElementById("pokemonName").textContent = 
-                    data.name.charAt(0).toUpperCase() + data.name.slice(1);
-                
-                // Mostrar tipos con colores
-                const typesContainer = document.getElementById("pokemonTypes");
-                typesContainer.innerHTML = "";
-                data.types.forEach(type => {
-                    const typeName = type.type.name;
-                    const typeTag = document.createElement("span");
-                    typeTag.className = `type-tag ${typeName}`;
-                    typeTag.textContent = typeName.charAt(0).toUpperCase() + typeName.slice(1);
-                    typesContainer.appendChild(typeTag);
-                });
-                
-                // Mostrar altura y peso
-                document.getElementById("pokemonHeight").textContent = data.height;
-                document.getElementById("pokemonWeight").textContent = data.weight;
-                
-                // Mostrar habilidades
-                const abilities = data.abilities.map(ability => {
-                    return ability.ability.name.replace(/-/g, " ");
-                });
-                document.getElementById("pokemonAbilities").textContent = 
-                    abilities.join(", ");
-                
-                // Mostrar estadísticas
-                const stats = data.stats.map(stat => {
-                    return `${stat.stat.name}: ${stat.base_stat}`;
-                });
-                document.getElementById("pokemonStats").textContent = 
-                    stats.join(", ");
-                
-                // Mostrar resultados
-                resultDiv.style.display = "block";
-                resultDiv.scrollIntoView();
-                
-            } catch (error) {
-                alert("Pokémon no encontrado. Intenta con otro nombre.");
-                console.error("Error al buscar Pokémon:", error);
-            }
+                if (xhr.status === 200) {
+                    try {
+                        var pokemonData = JSON.parse(xhr.responseText);
+                        displayPokemon(pokemonData);
+                    } catch (e) {
+                        showError('Error al procesar los datos del Pokémon');
+                    }
+                } else {
+                    showError('Pokémon no encontrado. Intenta con otro nombre o número.');
+                }
+            };
+            
+            xhr.onerror = function() {
+                document.getElementById('loading').style.display = 'none';
+                showError('Error de conexión. Intenta nuevamente.');
+            };
+            
+            xhr.send();
         }
-
-        // INICIALIZACIÓN: Mostrar Gen 1 al cargar (OPCIONAL)
-        window.onload = function() {
-            if (!window.location.hash) {
-                window.location.hash = "gen1";
-            }
-        };
+        
+        function displayPokemon(pokemon) {
+            // Mostrar información básica
+            document.getElementById('pokemon-name').textContent = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+            document.getElementById('pokemon-id').textContent = '#' + pokemon.id;
+            
+            // Mostrar imagen (usando sprite por defecto)
+            var imgUrl = pokemon.sprites.front_default || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png';
+            document.getElementById('pokemon-img').src = imgUrl;
+            
+            // Mostrar tipos
+            var typesContainer = document.getElementById('pokemon-types');
+            typesContainer.innerHTML = '';
+            
+            pokemon.types.forEach(function(typeObj) {
+                var typeName = typeObj.type.name;
+                var typeTag = document.createElement('div');
+                typeTag.className = 'type-tag ' + getTypeClass(typeName);
+                typeTag.textContent = getTypeNameInSpanish(typeName);
+                typesContainer.appendChild(typeTag);
+            });
+            
+            // Mostrar estadísticas
+            var statsContainer = document.getElementById('pokemon-stats');
+            statsContainer.innerHTML = '';
+            
+            pokemon.stats.forEach(function(statObj) {
+                var statName = statObj.stat.name;
+                var statValue = statObj.base_stat;
+                
+                var statRow = document.createElement('div');
+                statRow.className = 'stat-row';
+                
+                var statNameElem = document.createElement('div');
+                statNameElem.className = 'stat-name';
+                statNameElem.textContent = getStatNameInSpanish(statName) + ':';
+                
+                var statValueElem = document.createElement('div');
+                statValueElem.className = 'stat-value';
+                statValueElem.textContent = statValue;
+                
+                var statBar = document.createElement('div');
+                statBar.className = 'stat-bar';
+                
+                var statBarFill = document.createElement('div');
+                statBarFill.className = 'stat-bar-fill';
+                statBarFill.style.width = (statValue / 255 * 100) + '%';
+                
+                statBar.appendChild(statBarFill);
+                
+                statRow.appendChild(statNameElem);
+                statRow.appendChild(statValueElem);
+                statRow.appendChild(statBar);
+                
+                statsContainer.appendChild(statRow);
+            });
+            
+            // Mostrar habilidades
+            var abilitiesContainer = document.getElementById('pokemon-abilities');
+            abilitiesContainer.innerHTML = '';
+            
+            pokemon.abilities.forEach(function(abilityObj) {
+                var abilityName = abilityObj.ability.name;
+                var abilityItem = document.createElement('div');
+                abilityItem.textContent = '- ' + abilityName.charAt(0).toUpperCase() + abilityName.slice(1).replace('-', ' ');
+                
+                if (abilityObj.is_hidden) {
+                    abilityItem.textContent += ' (Oculta)';
+                }
+                
+                abilitiesContainer.appendChild(abilityItem);
+            });
+            
+            // Mostrar el resultado
+            document.getElementById('pokemon-result').style.display = 'block';
+            document.getElementById('pokemon-result').scrollIntoView();
+        }
+        
+        function showError(message) {
+            var errorElem = document.getElementById('error');
+            errorElem.textContent = message;
+            errorElem.style.display = 'block';
+        }
+        
+        function getTypeClass(typeName) {
+            // Mapeo de tipos en inglés a clases CSS
+            var typeMap = {
+                'normal': 'normal',
+                'fire': 'fuego',
+                'water': 'agua',
+                'grass': 'planta',
+                'electric': 'electrico',
+                'ice': 'hielo',
+                'fighting': 'lucha',
+                'poison': 'veneno',
+                'ground': 'tierra',
+                'flying': 'volador',
+                'psychic': 'psiquico',
+                'bug': 'bicho',
+                'rock': 'roca',
+                'ghost': 'fantasma',
+                'dragon': 'dragon',
+                'dark': 'siniestro',
+                'steel': 'acero',
+                'fairy': 'hada'
+            };
+            
+            return typeMap[typeName] || 'normal';
+        }
+        
+        function getTypeNameInSpanish(typeName) {
+            // Mapeo de tipos en inglés a español
+            var typeMap = {
+                'normal': 'Normal',
+                'fire': 'Fuego',
+                'water': 'Agua',
+                'grass': 'Planta',
+                'electric': 'Eléctrico',
+                'ice': 'Hielo',
+                'fighting': 'Lucha',
+                'poison': 'Veneno',
+                'ground': 'Tierra',
+                'flying': 'Volador',
+                'psychic': 'Psíquico',
+                'bug': 'Bicho',
+                'rock': 'Roca',
+                'ghost': 'Fantasma',
+                'dragon': 'Dragón',
+                'dark': 'Siniestro',
+                'steel': 'Acero',
+                'fairy': 'Hada'
+            };
+            
+            return typeMap[typeName] || typeName;
+        }
+        
+        function getStatNameInSpanish(statName) {
+            // Mapeo de nombres de estadísticas en inglés a español
+            var statMap = {
+                'hp': 'PS',
+                'attack': 'Ataque',
+                'defense': 'Defensa',
+                'special-attack': 'At. Especial',
+                'special-defense': 'Def. Especial',
+                'speed': 'Velocidad'
+            };
+            
+            return statMap[statName] || statName;
+        }
     </script>
 </body>
 </html>
