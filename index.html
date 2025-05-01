@@ -6,68 +6,70 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #000000;
-            color: white;
-            text-align: center;
+            background-color: #000;
+            color: #fff;
             margin: 0;
-            padding: 5px;
+            padding: 2px;
+            font-size: 10px;
         }
         h1 {
             color: #e60000;
-            font-size: 20px;
-            margin: 5px 0;
+            font-size: 14px;
+            margin: 3px 0;
+            text-align: center;
         }
-        h2 {
-            font-size: 16px;
-            margin: 10px 0 5px;
-            color: #ffcc00;
+        .menu {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 3px;
+            margin-bottom: 5px;
         }
-        .generation {
+        .button {
+            display: block;
+            padding: 4px 6px;
+            background-color: #e60000;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            font-size: 10px;
+            min-width: 60px;
+            text-align: center;
+        }
+        .content {
             display: none;
-            margin: 0 auto;
-            max-width: 380px;
         }
-        .generation:target {
+        .content:target {
             display: block;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 5px 0;
-            font-size: 10px;
+            margin: 3px 0;
         }
         th, td {
-            border: 1px solid #444;
+            border: 1px solid #333;
             padding: 2px;
             text-align: center;
+            height: 16px;
         }
         th {
-            background-color: #333;
-            color: white;
-            font-size: 11px;
+            background-color: #222;
+            color: #fff;
+            font-size: 9px;
         }
-        .button {
+        .type {
             display: inline-block;
-            margin: 3px;
-            padding: 5px 8px;
-            background-color: #e60000;
-            color: white;
-            text-decoration: none;
-            border-radius: 3px;
-            font-size: 12px;
-        }
-        .type-cell {
-            width: 24px;
-            height: 24px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            display: inline-block;
-            text-align: center;
-            line-height: 24px;
+            font-size: 8px;
+            line-height: 18px;
             font-weight: bold;
-            font-size: 10px;
-            margin: 1px;
+            text-align: center;
+            margin: 0 1px;
         }
-        /* Colores de tipos Pokémon */
+        /* Colores de tipos */
         .normal { background-color: #A8A878; }
         .fuego { background-color: #F08030; }
         .agua { background-color: #6890F0; }
@@ -86,113 +88,135 @@
         .siniestro { background-color: #705848; }
         .acero { background-color: #B8B8D0; }
         .hada { background-color: #EE99AC; }
+        .note {
+            font-size: 8px;
+            margin: 3px 0;
+            text-align: left;
+            padding: 0 5px;
+        }
     </style>
 </head>
 <body>
     <h1>Tablas de Tipos Pokémon</h1>
     
-    <!-- Botones de navegación -->
-    <a href="#gen1" class="button">Gen 1</a>
-    <a href="#gen2" class="button">Gen 2-5</a>
-    <a href="#gen6" class="button">Gen 6+</a>
-    
-    <!-- Generación 1 -->
-    <div id="gen1" class="generation">
-        <h2>Generación 1 (RB/AM/VR)</h2>
-        
-        <h3>Efectividad de Ataques</h3>
+    <div class="menu">
+        <a href="#gen1" class="button">Gen 1</a>
+        <a href="#gen2" class="button">Gen 2-5</a>
+        <a href="#gen6" class="button">Gen 6+</a>
+        <a href="#inmunidades" class="button">Inmunidades</a>
+    </div>
+
+    <!-- GENERACIÓN 1 -->
+    <div id="gen1" class="content">
         <table>
             <tr>
-                <th>Ataque\Defensa</th>
-                <th><div class="type-cell normal">N</div></th>
-                <th><div class="type-cell fuego">F</div></th>
-                <th><div class="type-cell agua">A</div></th>
-                <th><div class="type-cell electrico">El</div></th>
-                <th><div class="type-cell planta">P</div></th>
-                <th><div class="type-cell hielo">H</div></th>
-                <th><div class="type-cell lucha">Lu</div></th>
-                <th><div class="type-cell veneno">V</div></th>
-                <th><div class="type-cell tierra">T</div></th>
+                <th rowspan="2">Atq\Def</th>
+                <th colspan="9">Generación 1</th>
             </tr>
             <tr>
-                <td><div class="type-cell normal">N</div></td>
-                <td>1×</td><td>1×</td><td>1×</td><td>1×</td><td>1×</td><td>1×</td><td>1×</td><td>1×</td><td>1×</td>
+                <th><div class="type normal">N</div></th>
+                <th><div class="type fuego">F</div></th>
+                <th><div class="type agua">A</div></th>
+                <th><div class="type planta">P</div></th>
+                <th><div class="type electrico">El</div></th>
+                <th><div class="type hielo">H</div></th>
+                <th><div class="type lucha">Lu</div></th>
+                <th><div class="type veneno">V</div></th>
+                <th><div class="type tierra">T</div></th>
             </tr>
             <tr>
-                <td><div class="type-cell fuego">F</div></td>
-                <td>1×</td><td>½×</td><td>½×</td><td>1×</td><td>2×</td><td>2×</td><td>1×</td><td>1×</td><td>1×</td>
+                <td><div class="type normal">N</div></td>
+                <td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td>
+            </tr>
+            <tr>
+                <td><div class="type fuego">F</div></td>
+                <td>1</td><td>½</td><td>½</td><td>2</td><td>1</td><td>2</td><td>1</td><td>1</td><td>1</td>
             </tr>
             <!-- Filas completas para todos los tipos -->
         </table>
-        
-        <h3>Inmunidades</h3>
-        <ul style="text-align:left; font-size:12px; margin:5px 20px; padding:0; list-style:none;">
-            <li>• Fantasma vs Normal/Lucha: 0×</li>
-            <li>• Tierra vs Volador: 0×</li>
-        </ul>
-        
         <a href="#" class="button">Volver</a>
     </div>
-    
-    <!-- Generación 2-5 -->
-    <div id="gen2" class="generation">
-        <h2>Generaciones 2-5 (O/P a N/B)</h2>
-        
-        <h3>Nuevos Tipos</h3>
-        <div style="margin:5px;">
-            <div class="type-cell acero">Ac</div>
-            <div class="type-cell siniestro">Si</div>
-            <div class="type-cell hada">Ha</div>
+
+    <!-- GENERACIÓN 2-5 -->
+    <div id="gen2" class="content">
+        <table>
+            <tr>
+                <th rowspan="2">Atq\Def</th>
+                <th colspan="8">Generaciones 2-5</th>
+            </tr>
+            <tr>
+                <th><div class="type acero">Ac</div></th>
+                <th><div class="type siniestro">Si</div></th>
+                <th><div class="type hada">Ha</div></th>
+                <th><div class="type roca">R</div></th>
+                <th><div class="type fantasma">Fa</div></th>
+                <th><div class="type dragon">Dr</div></th>
+                <th><div class="type psiquico">Ps</div></th>
+                <th><div class="type bicho">B</div></th>
+            </tr>
+            <tr>
+                <td><div class="type acero">Ac</div></td>
+                <td>½</td><td>1</td><td>2</td><td>2</td><td>1</td><td>1</td><td>1</td><td>1</td>
+            </tr>
+            <!-- Filas completas para todos los tipos -->
+        </table>
+        <div class="note">
+            <strong>Cambios:</strong> Acero resiste 10 tipos, Siniestro es fuerte vs Psíquico/Fantasma
         </div>
-        
-        <h3>Cambios Generación 2</h3>
-        <table>
-            <tr>
-                <th>Tipo</th>
-                <th>Cambio</th>
-            </tr>
-            <tr>
-                <td><div class="type-cell fantasma">Fa</div></td>
-                <td>Ahora es fuerte contra Psíquico</td>
-            </tr>
-            <!-- Más cambios -->
-        </table>
-        
         <a href="#" class="button">Volver</a>
     </div>
-    
-    <!-- Generación 6+ -->
-    <div id="gen6" class="generation">
-        <h2>Generación 6+ (X/Y - Escarlata/Violeta)</h2>
-        
-        <h3>Cambios Recientes</h3>
+
+    <!-- GENERACIÓN 6+ -->
+    <div id="gen6" class="content">
         <table>
             <tr>
-                <th>Tipo</th>
-                <th>Cambio</th>
+                <th rowspan="2">Atq\Def</th>
+                <th colspan="6">Generación 6+</th>
             </tr>
             <tr>
-                <td><div class="type-cell hada">Ha</div></td>
-                <td>Inmune a Dragón</td>
+                <th><div class="type hada">Ha</div></th>
+                <th><div class="type acero">Ac</div></th>
+                <th><div class="type siniestro">Si</div></th>
+                <th><div class="type fantasma">Fa</div></th>
+                <th><div class="type planta">P</div></th>
+                <th><div class="type dragon">Dr</div></th>
             </tr>
-            <!-- Más cambios -->
+            <tr>
+                <td><div class="type hada">Ha</div></td>
+                <td>1</td><td>½</td><td>2</td><td>2</td><td>1</td><td>2</td>
+            </tr>
+            <!-- Filas completas para todos los tipos -->
         </table>
-        
-        <h3>Efectividad Actualizada</h3>
+        <div class="note">
+            <strong>Cambios:</strong> Hada vs Dragón 2×, Acero resiste Hada, Planta vs Hada 1×
+        </div>
+        <a href="#" class="button">Volver</a>
+    </div>
+
+    <!-- INMUNIDADES -->
+    <div id="inmunidades" class="content">
+        <h2>Inmunidades</h2>
         <table>
             <tr>
-                <th>Ataque</th>
-                <th>Defensa</th>
-                <th>Multiplicador</th>
+                <th>Tipo Ataque</th>
+                <th>Tipo Defensa</th>
+                <th>Generación</th>
             </tr>
             <tr>
-                <td><div class="type-cell siniestro">Si</div></td>
-                <td><div class="type-cell psiquico">Ps</div></td>
-                <td>2×</td>
+                <td><div class="type normal">N</div></td>
+                <td><div class="type fantasma">Fa</div></td>
+                <td>Todas</td>
             </tr>
-            <!-- Más combinaciones -->
+            <tr>
+                <td><div class="type electrico">El</div></td>
+                <td><div class="type tierra">T</div></td>
+                <td>Todas</td>
+            </tr>
+            <!-- Más inmunidades -->
         </table>
-        
+        <div class="note">
+            <strong>Nota:</strong> Inmunidades ignoran movimientos de "objetivo seguro" como Fuerza Equina
+        </div>
         <a href="#" class="button">Volver</a>
     </div>
 </body>
