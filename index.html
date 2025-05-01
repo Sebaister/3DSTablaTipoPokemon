@@ -10,7 +10,7 @@
             color: #fff;
             margin: 0;
             padding: 2px;
-            font-size: 10px;
+            font-size: 9px;
         }
         h1 {
             color: #e60000;
@@ -33,7 +33,7 @@
             text-decoration: none;
             border-radius: 3px;
             font-size: 10px;
-            min-width: 60px;
+            min-width: 70px;
             text-align: center;
         }
         .content {
@@ -57,17 +57,24 @@
             background-color: #222;
             color: #fff;
             font-size: 9px;
+            white-space: nowrap;
         }
-        .type {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
+        .type-header {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            text-align: left;
+            padding: 5px 2px;
             font-size: 8px;
-            line-height: 18px;
+        }
+        .type-name {
+            display: inline-block;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 8px;
             font-weight: bold;
+            margin: 1px;
+            min-width: 40px;
             text-align: center;
-            margin: 0 1px;
         }
         /* Colores de tipos */
         .normal { background-color: #A8A878; }
@@ -94,15 +101,18 @@
             text-align: left;
             padding: 0 5px;
         }
+        .effective { background-color: #4CAF50; color: white; }
+        .weak { background-color: #F44336; color: white; }
+        .immune { background-color: #9E9E9E; color: white; }
     </style>
 </head>
 <body>
     <h1>Tablas de Tipos Pokémon</h1>
     
     <div class="menu">
-        <a href="#gen1" class="button">Gen 1</a>
-        <a href="#gen2" class="button">Gen 2-5</a>
-        <a href="#gen6" class="button">Gen 6+</a>
+        <a href="#gen1" class="button">Generación 1</a>
+        <a href="#gen2" class="button">Generación 2-5</a>
+        <a href="#gen6" class="button">Generación 6+</a>
         <a href="#inmunidades" class="button">Inmunidades</a>
     </div>
 
@@ -111,28 +121,136 @@
         <table>
             <tr>
                 <th rowspan="2">Atq\Def</th>
-                <th colspan="9">Generación 1</th>
+                <th colspan="9">Generación 1 (RB/AM/VR)</th>
             </tr>
             <tr>
-                <th><div class="type normal">N</div></th>
-                <th><div class="type fuego">F</div></th>
-                <th><div class="type agua">A</div></th>
-                <th><div class="type planta">P</div></th>
-                <th><div class="type electrico">El</div></th>
-                <th><div class="type hielo">H</div></th>
-                <th><div class="type lucha">Lu</div></th>
-                <th><div class="type veneno">V</div></th>
-                <th><div class="type tierra">T</div></th>
+                <th><div class="type-name normal">Normal</div></th>
+                <th><div class="type-name fuego">Fuego</div></th>
+                <th><div class="type-name agua">Agua</div></th>
+                <th><div class="type-name planta">Planta</div></th>
+                <th><div class="type-name electrico">Eléctrico</div></th>
+                <th><div class="type-name hielo">Hielo</div></th>
+                <th><div class="type-name lucha">Lucha</div></th>
+                <th><div class="type-name veneno">Veneno</div></th>
+                <th><div class="type-name tierra">Tierra</div></th>
             </tr>
+            <!-- Fila Normal -->
             <tr>
-                <td><div class="type normal">N</div></td>
-                <td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td>
+                <td><div class="type-name normal">Normal</div></td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
             </tr>
+            <!-- Fila Fuego -->
             <tr>
-                <td><div class="type fuego">F</div></td>
-                <td>1</td><td>½</td><td>½</td><td>2</td><td>1</td><td>2</td><td>1</td><td>1</td><td>1</td>
+                <td><div class="type-name fuego">Fuego</div></td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td class="weak">½×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
             </tr>
-            <!-- Filas completas para todos los tipos -->
+            <!-- Fila Agua -->
+            <tr>
+                <td><div class="type-name agua">Agua</div></td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td class="weak">½×</td>
+                <td class="weak">½×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+            </tr>
+            <!-- Fila Planta -->
+            <tr>
+                <td><div class="type-name planta">Planta</div></td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td class="effective">2×</td>
+                <td class="weak">½×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td class="effective">2×</td>
+            </tr>
+            <!-- Fila Eléctrico -->
+            <tr>
+                <td><div class="type-name electrico">Eléctrico</div></td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td class="weak">½×</td>
+                <td class="immune">0×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+            </tr>
+            <!-- Fila Hielo -->
+            <tr>
+                <td><div class="type-name hielo">Hielo</div></td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td class="weak">½×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+            </tr>
+            <!-- Fila Lucha -->
+            <tr>
+                <td><div class="type-name lucha">Lucha</div></td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td>1×</td>
+            </tr>
+            <!-- Fila Veneno -->
+            <tr>
+                <td><div class="type-name veneno">Veneno</div></td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td class="weak">½×</td>
+                <td class="weak">½×</td>
+            </tr>
+            <!-- Fila Tierra -->
+            <tr>
+                <td><div class="type-name tierra">Tierra</div></td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+            </tr>
         </table>
         <a href="#" class="button">Volver</a>
     </div>
@@ -142,60 +260,158 @@
         <table>
             <tr>
                 <th rowspan="2">Atq\Def</th>
-                <th colspan="8">Generaciones 2-5</th>
+                <th colspan="9">Generaciones 2-5 (O/P a N/B)</th>
             </tr>
             <tr>
-                <th><div class="type acero">Ac</div></th>
-                <th><div class="type siniestro">Si</div></th>
-                <th><div class="type hada">Ha</div></th>
-                <th><div class="type roca">R</div></th>
-                <th><div class="type fantasma">Fa</div></th>
-                <th><div class="type dragon">Dr</div></th>
-                <th><div class="type psiquico">Ps</div></th>
-                <th><div class="type bicho">B</div></th>
+                <th><div class="type-name volador">Volador</div></th>
+                <th><div class="type-name psiquico">Psíquico</div></th>
+                <th><div class="type-name bicho">Bicho</div></th>
+                <th><div class="type-name roca">Roca</div></th>
+                <th><div class="type-name fantasma">Fantasma</div></th>
+                <th><div class="type-name dragon">Dragón</div></th>
+                <th><div class="type-name siniestro">Siniestro</div></th>
+                <th><div class="type-name acero">Acero</div></th>
+                <th><div class="type-name hada">Hada</div></th>
             </tr>
+            <!-- Fila Volador -->
             <tr>
-                <td><div class="type acero">Ac</div></td>
-                <td>½</td><td>1</td><td>2</td><td>2</td><td>1</td><td>1</td><td>1</td><td>1</td>
+                <td><div class="type-name volador">Volador</div></td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td class="weak">½×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td>1×</td>
             </tr>
-            <!-- Filas completas para todos los tipos -->
+            <!-- Fila Psíquico -->
+            <tr>
+                <td><div class="type-name psiquico">Psíquico</div></td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="immune">0×</td>
+                <td class="weak">½×</td>
+                <td>1×</td>
+            </tr>
+            <!-- Fila Bicho -->
+            <tr>
+                <td><div class="type-name bicho">Bicho</div></td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td class="weak">½×</td>
+                <td class="weak">½×</td>
+            </tr>
+            <!-- Fila Roca -->
+            <tr>
+                <td><div class="type-name roca">Roca</div></td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td>1×</td>
+            </tr>
+            <!-- Fila Fantasma -->
+            <tr>
+                <td><div class="type-name fantasma">Fantasma</div></td>
+                <td class="immune">0×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td>1×</td>
+                <td>1×</td>
+            </tr>
+            <!-- Fila Dragón -->
+            <tr>
+                <td><div class="type-name dragon">Dragón</div></td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td class="immune">0×</td>
+            </tr>
+            <!-- Fila Siniestro -->
+            <tr>
+                <td><div class="type-name siniestro">Siniestro</div></td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+            </tr>
+            <!-- Fila Acero -->
+            <tr>
+                <td><div class="type-name acero">Acero</div></td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td class="weak">½×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td class="effective">2×</td>
+            </tr>
+            <!-- Fila Hada -->
+            <tr>
+                <td><div class="type-name hada">Hada</div></td>
+                <td>1×</td>
+                <td class="weak">½×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td class="effective">2×</td>
+                <td class="effective">2×</td>
+                <td class="weak">½×</td>
+                <td>1×</td>
+            </tr>
         </table>
         <div class="note">
-            <strong>Cambios:</strong> Acero resiste 10 tipos, Siniestro es fuerte vs Psíquico/Fantasma
+            <strong>Cambios:</strong> Acero resiste 10 tipos, Siniestro es fuerte contra Psíquico/Fantasma
         </div>
         <a href="#" class="button">Volver</a>
     </div>
 
     <!-- GENERACIÓN 6+ -->
     <div id="gen6" class="content">
-        <table>
-            <tr>
-                <th rowspan="2">Atq\Def</th>
-                <th colspan="6">Generación 6+</th>
-            </tr>
-            <tr>
-                <th><div class="type hada">Ha</div></th>
-                <th><div class="type acero">Ac</div></th>
-                <th><div class="type siniestro">Si</div></th>
-                <th><div class="type fantasma">Fa</div></th>
-                <th><div class="type planta">P</div></th>
-                <th><div class="type dragon">Dr</div></th>
-            </tr>
-            <tr>
-                <td><div class="type hada">Ha</div></td>
-                <td>1</td><td>½</td><td>2</td><td>2</td><td>1</td><td>2</td>
-            </tr>
-            <!-- Filas completas para todos los tipos -->
-        </table>
+        <h2>Generación 6+ (X/Y - Escarlata/Violeta)</h2>
         <div class="note">
-            <strong>Cambios:</strong> Hada vs Dragón 2×, Acero resiste Hada, Planta vs Hada 1×
+            <strong>Principales cambios:</strong><br>
+            • Hada es inmune a Dragón<br>
+            • Acero ya no resiste Siniestro/Fantasma<br>
+            • Planta vs Hada ahora es neutral (antes resistía)
         </div>
         <a href="#" class="button">Volver</a>
     </div>
 
     <!-- INMUNIDADES -->
     <div id="inmunidades" class="content">
-        <h2>Inmunidades</h2>
+        <h2>Inmunidades por Tipo</h2>
         <table>
             <tr>
                 <th>Tipo Ataque</th>
@@ -203,19 +419,33 @@
                 <th>Generación</th>
             </tr>
             <tr>
-                <td><div class="type normal">N</div></td>
-                <td><div class="type fantasma">Fa</div></td>
+                <td><div class="type-name normal">Normal</div></td>
+                <td><div class="type-name fantasma">Fantasma</div></td>
                 <td>Todas</td>
             </tr>
             <tr>
-                <td><div class="type electrico">El</div></td>
-                <td><div class="type tierra">T</div></td>
+                <td><div class="type-name electrico">Eléctrico</div></td>
+                <td><div class="type-name tierra">Tierra</div></td>
                 <td>Todas</td>
             </tr>
-            <!-- Más inmunidades -->
+            <tr>
+                <td><div class="type-name lucha">Lucha</div></td>
+                <td><div class="type-name fantasma">Fantasma</div></td>
+                <td>Todas</td>
+            </tr>
+            <tr>
+                <td><div class="type-name psiquico">Psíquico</div></td>
+                <td><div class="type-name siniestro">Siniestro</div></td>
+                <td>Gen 2+</td>
+            </tr>
+            <tr>
+                <td><div class="type-name dragon">Dragón</div></td>
+                <td><div class="type-name hada">Hada</div></td>
+                <td>Gen 6+</td>
+            </tr>
         </table>
         <div class="note">
-            <strong>Nota:</strong> Inmunidades ignoran movimientos de "objetivo seguro" como Fuerza Equina
+            <strong>Nota:</strong> Movimientos como Fuerza Equina pueden ignorar inmunidades
         </div>
         <a href="#" class="button">Volver</a>
     </div>
