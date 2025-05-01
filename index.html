@@ -5,6 +5,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=400">
     <style>
+        .pokemon-scroll-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #444;
+    border-radius: 6px;
+    margin: 8px 0;
+    background-color: #222;
+}
+
+.pokemon-grid {
+    display: block; /* Cambia de "grid" a "block" para compatibilidad */
+    padding: 4px;
+}
         body {
             font-family: Arial, sans-serif;
             background-color: #000;
@@ -2268,33 +2281,7 @@
 }
 
 // Función para filtrar Pokémon según búsqueda (ahora crea los botones dinámicamente)
-function filterPokemon(gen) {
-    var searchTerm = document.getElementById(gen + "-search").value.toLowerCase();
-    var pokemonList = document.getElementById(gen + "-pokemon-list");
-    var pokemonDataGen = pokemonData[gen];
-    
-    // Limpiar lista
-    pokemonList.innerHTML = ""; // Usamos innerHTML (más compatible)
-    
-    // Si no hay búsqueda, no mostrar nada
-    if (!searchTerm.trim()) return;
-    
-    // Filtrar Pokémon
-    for (var i = 0; i < pokemonDataGen.length; i++) {
-        var pokemon = pokemonDataGen[i];
-        var pokemonName = pokemon.name.split(' ')[1].toLowerCase();
-        
-        if (pokemonName.includes(searchTerm)) {
-            var button = document.createElement("button");
-            button.className = "pokemon-button"; // Usar className en lugar de classList
-            button.textContent = pokemon.name.split(' ')[1];
-            button.onclick = (function(p) {
-                return function() { showPokemonDetails(gen, p); };
-            })(pokemon);
-            pokemonList.appendChild(button);
-        }
-    }
-    
+
     // Si no hay resultados, mostrar mensaje
     if (pokemonList.children.length === 0) {
         var noResults = document.createElement("div");
@@ -3615,6 +3602,25 @@ function filterPokemon(gen) {
     {name: "1025 Pecharunt", types: ["veneno", "fantasma"]}
             ]
         };
+        function loadAllPokemon(gen) {
+    var pokemonList = document.getElementById(`${gen}-pokemon-list`);
+    pokemonList.innerHTML = "";
+    
+    pokemonData[gen].forEach(pokemon => {
+        var button = document.createElement("button");
+        button.className = "pokemon-button";
+        button.textContent = pokemon.name.split(' ')[1]; // Ej: "Pikachu"
+        button.onclick = function() { showPokemonDetails(gen, pokemon); };
+        pokemonList.appendChild(button);
+    });
+}
+
+// Inicializar al cargar la página
+window.onload = function() {
+    loadAllPokemon("gen1");
+    loadAllPokemon("gen2");
+    loadAllPokemon("gen6");
+};
     </script>
 </body>
 </html>
