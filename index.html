@@ -2270,26 +2270,41 @@
 
 // Función para filtrar Pokémon según búsqueda (ahora crea los botones dinámicamente)
 function filterPokemon(gen) {
-    const searchTerm = document.getElementById(`${gen}-search`).value.toLowerCase();
-    const pokemonList = document.getElementById(`${gen}-pokemon-list`);
+    var searchTerm = document.getElementById(gen + "-search").value.toLowerCase();
+    var pokemonList = document.getElementById(gen + "-pokemon-list");
+    var pokemonDataGen = pokemonData[gen];
     
-    // Limpia el contenedor antes de mostrar nuevos resultados
-    pokemonList.innerHTML = '';
+    // Limpiar lista
+    pokemonList.innerHTML = ""; // Usamos innerHTML (más compatible)
     
-    // Si no hay término de búsqueda, no mostrar nada
-    if (searchTerm.trim() === '') return;
+    // Si no hay búsqueda, no mostrar nada
+    if (!searchTerm.trim()) return;
     
-    // Filtra y muestra los Pokémon que coincidan con la búsqueda
-    pokemonData[gen].forEach(pokemon => {
-        const pokemonName = pokemon.name.split(' ')[1].toLowerCase();
+    // Filtrar Pokémon
+    for (var i = 0; i < pokemonDataGen.length; i++) {
+        var pokemon = pokemonDataGen[i];
+        var pokemonName = pokemon.name.split(' ')[1].toLowerCase();
+        
         if (pokemonName.includes(searchTerm)) {
-            const button = document.createElement('button');
-            button.className = 'pokemon-button';
-            button.textContent = pokemon.name.split(' ')[1]; // Muestra el nombre
-            button.onclick = function() { showPokemonDetails(gen, pokemon); };
+            var button = document.createElement("button");
+            button.className = "pokemon-button"; // Usar className en lugar de classList
+            button.textContent = pokemon.name.split(' ')[1];
+            button.onclick = (function(p) {
+                return function() { showPokemonDetails(gen, p); };
+            })(pokemon);
             pokemonList.appendChild(button);
         }
-    });
+    }
+    
+    // Si no hay resultados, mostrar mensaje
+    if (pokemonList.children.length === 0) {
+        var noResults = document.createElement("div");
+        noResults.textContent = "No se encontraron Pokémon";
+        noResults.style.color = "#AAA";
+        noResults.style.textAlign = "center";
+        pokemonList.appendChild(noResults);
+    }
+});
 }
 
         // Función para filtrar Pokémon según búsqueda
