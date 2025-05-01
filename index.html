@@ -55,6 +55,7 @@
             border: none;
             color: white;
             margin: 2px;
+            cursor: pointer;
         }
         .content {
             display: none;
@@ -125,6 +126,81 @@
             text-align: left;
             color: #CCC;
         }
+        /* Estilos para selección de Pokémon */
+        .pokemon-selector {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .pokemon-search {
+            margin: 8px 0;
+            text-align: center;
+        }
+        .pokemon-search input {
+            padding: 4px;
+            width: 80%;
+            max-width: 300px;
+            border-radius: 4px;
+            border: 1px solid #444;
+            background-color: #222;
+            color: white;
+        }
+        .pokemon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 4px;
+            margin: 8px 0;
+        }
+        .pokemon-button {
+            display: inline-block;
+            padding: 6px 8px;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 11px;
+            margin: 2px;
+            cursor: pointer;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .pokemon-button:hover {
+            background-color: #555;
+        }
+        .pokemon-result {
+            display: none;
+            margin: 10px 0;
+            padding: 8px;
+            background-color: #222;
+            border-radius: 6px;
+            border: 1px solid #444;
+        }
+        .pokemon-name {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .pokemon-types {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .pokemon-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .type-btn {
+                min-width: 60px;
+                font-size: 10px;
+                padding: 3px 5px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -139,8 +215,8 @@
     <!-- GENERACIÓN 1 -->
     <div id="gen1" class="content">
         <h2>Generación 1 (Rojo/Azul/Amarillo)</h2>
-        
-        <div class="type-menu">
+                          
+         <div class="type-menu">
             <button class="type-btn normal" onclick="showType('gen1-normal')">Normal</button>
             <button class="type-btn fuego" onclick="showType('gen1-fuego')">Fuego</button>
             <button class="type-btn agua" onclick="showType('gen1-agua')">Agua</button>
@@ -158,7 +234,7 @@
             <button class="type-btn dragon" onclick="showType('gen1-dragon')">Dragón</button>
         </div>
 
-        <!-- Detalle Normal -->
+         <!-- Detalle Normal -->
         <div id="gen1-normal" class="type-detail">
             <div class="type-header normal">Normal</div>
             <div class="type-section">
@@ -606,6 +682,24 @@
         
         <div style="text-align:center;margin:10px 0;">
             <a href="#" class="button">Volver</a>
+        </div>
+
+        <!-- Selector de Pokémon para Gen 1 -->
+        <div class="pokemon-selector">
+            <div class="pokemon-search">
+                <input type="text" id="gen1-search" placeholder="Buscar Pokémon..." 
+       oninput="filterPokemon('gen1')" onfocus="filterPokemon('gen1')">
+            </div>
+            <div class="pokemon-grid" id="gen1-pokemon-list">
+                <!-- Lista de Pokémon se llenará con JavaScript -->
+            </div>
+        </div>
+
+        <!-- Resultado de Pokémon seleccionado -->
+        <div id="gen1-pokemon-result" class="pokemon-result">
+            <div class="pokemon-name" id="gen1-pokemon-name"></div>
+            <div class="pokemon-types" id="gen1-pokemon-types"></div>
+            <div id="gen1-pokemon-effectiveness"></div>
         </div>
     </div>
 
@@ -1184,6 +1278,23 @@
         
         <div style="text-align:center;margin:10px 0;">
             <a href="#" class="button">Volver</a>
+        </div>
+
+        <!-- Selector de Pokémon para Gen 2-5 -->
+        <div class="pokemon-selector">
+            <div class="pokemon-search">
+                <input type="text" id="gen2-search" placeholder="Buscar Pokémon..." oninput="filterPokemon('gen2')">
+            </div>
+            <div class="pokemon-grid" id="gen2-pokemon-list">
+                <!-- Lista de Pokémon se llenará con JavaScript -->
+            </div>
+        </div>
+
+        <!-- Resultado de Pokémon seleccionado -->
+        <div id="gen2-pokemon-result" class="pokemon-result">
+            <div class="pokemon-name" id="gen2-pokemon-name"></div>
+            <div class="pokemon-types" id="gen2-pokemon-types"></div>
+            <div id="gen2-pokemon-effectiveness"></div>
         </div>
     </div>
 
@@ -1808,10 +1919,639 @@
         <div style="text-align:center;margin:10px 0;">
             <a href="#" class="button">Volver</a>
         </div>
+
+        <!-- Selector de Pokémon para Gen 6+ -->
+        <div class="pokemon-selector">
+            <div class="pokemon-search">
+                <input type="text" id="gen6-search" placeholder="Buscar Pokémon..." oninput="filterPokemon('gen6')">
+            </div>
+            <div class="pokemon-grid" id="gen6-pokemon-list">
+                <!-- Lista de Pokémon se llenará con JavaScript -->
+            </div>
+        </div>
+
+        <!-- Resultado de Pokémon seleccionado -->
+        <div id="gen6-pokemon-result" class="pokemon-result">
+            <div class="pokemon-name" id="gen6-pokemon-name"></div>
+            <div class="pokemon-types" id="gen6-pokemon-types"></div>
+            <div id="gen6-pokemon-effectiveness"></div>
+        </div>
     </div>
 
     <script>
-        function showType(typeId) {
+        
+
+        // Tablas de efectividad por generación
+        const effectivenessTables = {
+            gen1: {
+                normal: {
+                    weak: ["lucha"],
+                    resist: [],
+                    strong: [],
+                    immune: ["fantasma"]
+                },
+                fuego: {
+                    weak: ["agua", "tierra", "roca"],
+                    resist: ["fuego", "planta", "hielo", "bicho"],
+                    strong: ["planta", "hielo", "bicho"],
+                    immune: []
+                },
+                agua: {
+                    weak: ["planta", "electrico"],
+                    resist: ["fuego", "agua", "hielo"],
+                    strong: ["fuego", "tierra", "roca"],
+                    immune: []
+                },
+                planta: {
+                    weak: ["fuego", "hielo", "veneno", "volador", "bicho"],
+                    resist: ["agua", "planta", "electrico", "tierra"],
+                    strong: ["agua", "tierra", "roca"],
+                    immune: []
+                },
+                electrico: {
+                    weak: ["tierra"],
+                    resist: ["electrico", "volador"],
+                    strong: ["agua", "volador"],
+                    immune: ["tierra"]
+                },
+                hielo: {
+                    weak: ["fuego", "lucha", "roca"],
+                    resist: ["hielo"],
+                    strong: ["planta", "tierra", "volador", "dragon"],
+                    immune: []
+                },
+                lucha: {
+                    weak: ["volador", "psiquico"],
+                    resist: ["bicho", "roca"],
+                    strong: ["normal", "hielo", "roca"],
+                    immune: ["fantasma"]
+                },
+                veneno: {
+                    weak: ["tierra", "psiquico"],
+                    resist: ["planta", "veneno", "bicho"],
+                    strong: ["planta", "bicho"],
+                    immune: []
+                },
+                tierra: {
+                    weak: ["agua", "planta", "hielo"],
+                    resist: ["veneno", "roca"],
+                    strong: ["fuego", "electrico", "veneno", "roca"],
+                    immune: ["electrico"]
+                },
+                volador: {
+                    weak: ["electrico", "hielo", "roca"],
+                    resist: ["planta", "lucha", "bicho"],
+                    strong: ["planta", "lucha", "bicho"],
+                    immune: ["tierra"]
+                },
+                psiquico: {
+                    weak: ["bicho"],
+                    resist: ["lucha", "psiquico"],
+                    strong: ["lucha", "veneno"],
+                    immune: []
+                },
+                bicho: {
+                    weak: ["fuego", "volador", "roca"],
+                    resist: ["planta", "lucha", "tierra"],
+                    strong: ["planta", "psiquico"],
+                    immune: []
+                },
+                roca: {
+                    weak: ["agua", "planta", "lucha", "tierra"],
+                    resist: ["normal", "fuego", "veneno", "volador"],
+                    strong: ["fuego", "hielo", "volador", "bicho"],
+                    immune: []
+                },
+                fantasma: {
+                    weak: ["fantasma"],
+                    resist: ["veneno", "bicho"],
+                    strong: ["psiquico", "fantasma"],
+                    immune: ["normal", "lucha"]
+                },
+                dragon: {
+                    weak: ["hielo", "dragon"],
+                    resist: ["fuego", "agua", "planta", "electrico"],
+                    strong: ["dragon"],
+                    immune: []
+                }
+            },
+            gen2: {
+                normal: {
+                    weak: ["lucha"],
+                    resist: [],
+                    strong: [],
+                    immune: ["fantasma"]
+                },
+                fuego: {
+                    weak: ["agua", "tierra", "roca"],
+                    resist: ["fuego", "planta", "hielo", "bicho", "acero", "hada"],
+                    strong: ["planta", "hielo", "bicho", "acero"],
+                    immune: []
+                },
+                agua: {
+                    weak: ["planta", "electrico"],
+                    resist: ["fuego", "agua", "hielo", "acero"],
+                    strong: ["fuego", "tierra", "roca"],
+                    immune: []
+                },
+                planta: {
+                    weak: ["fuego", "hielo", "veneno", "volador", "bicho"],
+                    resist: ["agua", "planta", "electrico", "tierra"],
+                    strong: ["agua", "tierra", "roca"],
+                    immune: []
+                },
+                electrico: {
+                    weak: ["tierra"],
+                    resist: ["electrico", "volador", "acero"],
+                    strong: ["agua", "volador"],
+                    immune: ["tierra"]
+                },
+                hielo: {
+                    weak: ["fuego", "lucha", "roca", "acero"],
+                    resist: ["hielo"],
+                    strong: ["planta", "tierra", "volador", "dragon"],
+                    immune: []
+                },
+                lucha: {
+                    weak: ["volador", "psiquico", "hada"],
+                    resist: ["bicho", "roca", "siniestro"],
+                    strong: ["normal", "hielo", "roca", "siniestro", "acero"],
+                    immune: []
+                },
+                veneno: {
+                    weak: ["tierra", "psiquico"],
+                    resist: ["planta", "veneno", "bicho", "lucha", "hada"],
+                    strong: ["planta", "hada"],
+                    immune: ["acero"]
+                },
+                tierra: {
+                    weak: ["agua", "planta", "hielo"],
+                    resist: ["veneno", "roca"],
+                    strong: ["fuego", "electrico", "veneno", "roca", "acero"],
+                    immune: ["electrico"]
+                },
+                volador: {
+                    weak: ["electrico", "hielo", "roca"],
+                    resist: ["planta", "lucha", "bicho"],
+                    strong: ["planta", "lucha", "bicho"],
+                    immune: ["tierra"]
+                },
+                psiquico: {
+                    weak: ["bicho", "fantasma", "siniestro"],
+                    resist: ["lucha", "psiquico"],
+                    strong: ["lucha", "veneno"],
+                    immune: ["siniestro"]
+                },
+                bicho: {
+                    weak: ["fuego", "volador", "roca"],
+                    resist: ["planta", "lucha", "tierra"],
+                    strong: ["planta", "psiquico", "siniestro"],
+                    immune: []
+                },
+                roca: {
+                    weak: ["agua", "planta", "lucha", "tierra", "acero"],
+                    resist: ["normal", "fuego", "veneno", "volador"],
+                    strong: ["fuego", "hielo", "volador", "bicho"],
+                    immune: []
+                },
+                fantasma: {
+                    weak: ["fantasma", "siniestro"],
+                    resist: ["veneno", "bicho"],
+                    strong: ["psiquico", "fantasma"],
+                    immune: ["normal", "lucha"]
+                },
+                dragon: {
+                    weak: ["hielo", "dragon", "hada"],
+                    resist: ["fuego", "agua", "planta", "electrico"],
+                    strong: ["dragon"],
+                    immune: []
+                },
+                acero: {
+                    weak: ["fuego", "lucha", "tierra"],
+                    resist: ["normal", "planta", "hielo", "volador", "psiquico", "bicho", "roca", "dragon", "acero", "siniestro", "fantasma"],
+                    strong: ["hielo", "roca", "hada"],
+                    immune: ["veneno"]
+                },
+                siniestro: {
+                    weak: ["lucha", "bicho"],
+                    resist: ["fantasma", "siniestro"],
+                    strong: ["psiquico", "fantasma"],
+                    immune: ["psiquico"]
+                }
+            },
+            gen6: {
+                normal: {
+                    weak: ["lucha"],
+                    resist: [],
+                    strong: [],
+                    immune: ["fantasma"]
+                },
+                fuego: {
+                    weak: ["agua", "tierra", "roca"],
+                    resist: ["fuego", "planta", "hielo", "bicho", "acero", "hada"],
+                    strong: ["planta", "hielo", "bicho", "acero"],
+                    immune: []
+                },
+                agua: {
+                    weak: ["planta", "electrico"],
+                    resist: ["fuego", "agua", "hielo", "acero"],
+                    strong: ["fuego", "tierra", "roca"],
+                    immune: []
+                },
+                planta: {
+                    weak: ["fuego", "hielo", "veneno", "volador", "bicho"],
+                    resist: ["agua", "planta", "electrico", "tierra"],
+                    strong: ["agua", "tierra", "roca"],
+                    immune: []
+                },
+                electrico: {
+                    weak: ["tierra"],
+                    resist: ["electrico", "volador", "acero"],
+                    strong: ["agua", "volador"],
+                    immune: ["tierra"]
+                },
+                hielo: {
+                    weak: ["fuego", "lucha", "roca", "acero"],
+                    resist: ["hielo"],
+                    strong: ["planta", "tierra", "volador", "dragon"],
+                    immune: []
+                },
+                lucha: {
+                    weak: ["volador", "psiquico", "hada"],
+                    resist: ["bicho", "roca", "siniestro"],
+                    strong: ["normal", "hielo", "roca", "siniestro", "acero"],
+                    immune: []
+                },
+                veneno: {
+                    weak: ["tierra", "psiquico"],
+                    resist: ["planta", "veneno", "bicho", "lucha", "hada"],
+                    strong: ["planta", "hada"],
+                    immune: ["acero"]
+                },
+                tierra: {
+                    weak: ["agua", "planta", "hielo"],
+                    resist: ["veneno", "roca"],
+                    strong: ["fuego", "electrico", "veneno", "roca", "acero"],
+                    immune: ["electrico"]
+                },
+                volador: {
+                    weak: ["electrico", "hielo", "roca"],
+                    resist: ["planta", "lucha", "bicho"],
+                    strong: ["planta", "lucha", "bicho"],
+                    immune: ["tierra"]
+                },
+                psiquico: {
+                    weak: ["bicho", "fantasma", "siniestro"],
+                    resist: ["lucha", "psiquico"],
+                    strong: ["lucha", "veneno"],
+                    immune: ["siniestro"]
+                },
+                bicho: {
+                    weak: ["fuego", "volador", "roca"],
+                    resist: ["planta", "lucha", "tierra"],
+                    strong: ["planta", "psiquico", "siniestro"],
+                    immune: []
+                },
+                roca: {
+                    weak: ["agua", "planta", "lucha", "tierra", "acero"],
+                    resist: ["normal", "fuego", "veneno", "volador"],
+                    strong: ["fuego", "hielo", "volador", "bicho"],
+                    immune: []
+                },
+                fantasma: {
+                    weak: ["fantasma", "siniestro"],
+                    resist: ["veneno", "bicho"],
+                    strong: ["psiquico", "fantasma"],
+                    immune: ["normal", "lucha"]
+                },
+                dragon: {
+                    weak: ["hielo", "dragon", "hada"],
+                    resist: ["fuego", "agua", "planta", "electrico"],
+                    strong: ["dragon"],
+                    immune: ["hada"]
+                },
+                acero: {
+                    weak: ["fuego", "lucha", "tierra"],
+                    resist: ["normal", "planta", "hielo", "volador", "psiquico", "bicho", "roca", "dragon", "acero", "hada"],
+                    strong: ["hielo", "roca", "hada"],
+                    immune: ["veneno"]
+                },
+                siniestro: {
+                    weak: ["lucha", "bicho", "hada"],
+                    resist: ["fantasma", "siniestro"],
+                    strong: ["psiquico", "fantasma"],
+                    immune: ["psiquico"]
+                },
+                hada: {
+                    weak: ["veneno", "acero"],
+                    resist: ["lucha", "bicho", "siniestro"],
+                    strong: ["lucha", "dragon", "siniestro"],
+                    immune: ["dragon"]
+                }
+            }
+        };
+
+        // Inicializar listas de Pokémon al cargar la página
+        window.onload = function() {
+            initializePokemonLists();
+        };
+
+        // Función para inicializar las listas de Pokémon
+        function initializePokemonLists() {
+    // Esta función ya no crea botones inicialmente
+    // Solo asegúrate de que los contenedores estén vacíos
+    for (const gen in pokemonData) {
+        const pokemonList = document.getElementById(`${gen}-pokemon-list`);
+        if (pokemonList) {
+            pokemonList.innerHTML = ''; // Limpia el contenedor
+        }
+    }
+}
+
+// Función para filtrar Pokémon según búsqueda (ahora crea los botones dinámicamente)
+function filterPokemon(gen) {
+    const searchTerm = document.getElementById(`${gen}-search`).value.toLowerCase();
+    const pokemonList = document.getElementById(`${gen}-pokemon-list`);
+    
+    // Limpia el contenedor antes de mostrar nuevos resultados
+    pokemonList.innerHTML = '';
+    
+    // Si no hay término de búsqueda, no mostrar nada
+    if (searchTerm.trim() === '') return;
+    
+    // Filtra y muestra los Pokémon que coincidan con la búsqueda
+    pokemonData[gen].forEach(pokemon => {
+        const pokemonName = pokemon.name.split(' ')[1].toLowerCase();
+        if (pokemonName.includes(searchTerm)) {
+            const button = document.createElement('button');
+            button.className = 'pokemon-button';
+            button.textContent = pokemon.name.split(' ')[1]; // Muestra el nombre
+            button.onclick = function() { showPokemonDetails(gen, pokemon); };
+            pokemonList.appendChild(button);
+        }
+    });
+}
+
+        // Función para filtrar Pokémon según búsqueda
+function filterPokemon(gen) {
+    const searchTerm = document.getElementById(`${gen}-search`).value.toLowerCase();
+    const pokemonList = document.getElementById(`${gen}-pokemon-list`);
+    
+    // Limpia solo si hay un término de búsqueda
+    if (searchTerm.trim() !== '') {
+        pokemonList.innerHTML = ''; // Limpia resultados anteriores
+        
+        // Filtra y muestra Pokémon que coincidan
+        pokemonData[gen].forEach(pokemon => {
+            const pokemonName = pokemon.name.split(' ')[1].toLowerCase();
+            if (pokemonName.includes(searchTerm)) {
+                const button = document.createElement('button');
+                button.className = 'pokemon-button';
+                button.textContent = pokemon.name.split(' ')[1];
+                button.onclick = function() { showPokemonDetails(gen, pokemon); };
+                pokemonList.appendChild(button);
+            }
+        });
+
+        // Muestra mensaje si no hay resultados
+        if (pokemonList.children.length === 0) {
+            const noResults = document.createElement('div');
+            noResults.textContent = 'No se encontraron Pokémon';
+            noResults.style.color = '#AAA';
+            noResults.style.textAlign = 'center';
+            noResults.style.padding = '10px';
+            pokemonList.appendChild(noResults);
+        }
+    } else {
+        pokemonList.innerHTML = ''; // Limpia si el buscador está vacío
+    }
+}
+
+        // Función para mostrar detalles del Pokémon seleccionado
+        function showPokemonDetails(gen, pokemon) {
+            // Mostrar nombre y tipos
+            document.getElementById(`${gen}-pokemon-name`).textContent = pokemon.name;
+            
+            const typesContainer = document.getElementById(`${gen}-pokemon-types`);
+            typesContainer.innerHTML = '';
+            
+            pokemon.types.forEach(type => {
+                const typeTag = document.createElement('div');
+                typeTag.className = `type-tag ${type}`;
+                typeTag.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+                typesContainer.appendChild(typeTag);
+            });
+            
+            // Calcular efectividades combinadas
+            const effectiveness = calculateCombinedEffectiveness(gen, pokemon.types);
+            
+            // Mostrar efectividades
+            const effectivenessContainer = document.getElementById(`${gen}-pokemon-effectiveness`);
+            effectivenessContainer.innerHTML = '';
+            
+            // Débil contra (4x)
+            const veryWeakSection = document.createElement('div');
+            veryWeakSection.className = 'type-section';
+            veryWeakSection.innerHTML = '<strong>Muy débil contra (4x):</strong>';
+            const veryWeakList = document.createElement('div');
+            veryWeakList.className = 'type-list';
+            
+            effectiveness.veryWeak.forEach(type => {
+                const typeTag = document.createElement('div');
+                typeTag.className = `type-tag weak ${type}`;
+                typeTag.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+                veryWeakList.appendChild(typeTag);
+            });
+            
+            if (effectiveness.veryWeak.length === 0) {
+                veryWeakList.innerHTML = '<div style="color:#AAA;">Ninguno</div>';
+            }
+            
+            veryWeakSection.appendChild(veryWeakList);
+            effectivenessContainer.appendChild(veryWeakSection);
+            
+            // Débil contra (2x)
+            const weakSection = document.createElement('div');
+            weakSection.className = 'type-section';
+            weakSection.innerHTML = '<strong>Débil contra (2x):</strong>';
+            const weakList = document.createElement('div');
+            weakList.className = 'type-list';
+            
+            effectiveness.weak.forEach(type => {
+                const typeTag = document.createElement('div');
+                typeTag.className = `type-tag weak ${type}`;
+                typeTag.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+                weakList.appendChild(typeTag);
+            });
+            
+            if (effectiveness.weak.length === 0) {
+                weakList.innerHTML = '<div style="color:#AAA;">Ninguno</div>';
+            }
+            
+            weakSection.appendChild(weakList);
+            effectivenessContainer.appendChild(weakSection);
+            
+            // Resistente a (0.5x)
+            const resistSection = document.createElement('div');
+            resistSection.className = 'type-section';
+            resistSection.innerHTML = '<strong>Resistente a (0.5x):</strong>';
+            const resistList = document.createElement('div');
+            resistList.className = 'type-list';
+            
+            effectiveness.resist.forEach(type => {
+                const typeTag = document.createElement('div');
+                typeTag.className = `type-tag resist ${type}`;
+                typeTag.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+                resistList.appendChild(typeTag);
+            });
+            
+            if (effectiveness.resist.length === 0) {
+                resistList.innerHTML = '<div style="color:#AAA;">Ninguno</div>';
+            }
+            
+            resistSection.appendChild(resistList);
+            effectivenessContainer.appendChild(resistSection);
+            
+            // Muy resistente (0.25x)
+            const veryResistSection = document.createElement('div');
+            veryResistSection.className = 'type-section';
+            veryResistSection.innerHTML = '<strong>Muy resistente (0.25x):</strong>';
+            const veryResistList = document.createElement('div');
+            veryResistList.className = 'type-list';
+            
+            effectiveness.veryResist.forEach(type => {
+                const typeTag = document.createElement('div');
+                typeTag.className = `type-tag resist ${type}`;
+                typeTag.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+                veryResistList.appendChild(typeTag);
+            });
+            
+            if (effectiveness.veryResist.length === 0) {
+                veryResistList.innerHTML = '<div style="color:#AAA;">Ninguno</div>';
+            }
+            
+            veryResistSection.appendChild(veryResistList);
+            effectivenessContainer.appendChild(veryResistSection);
+            
+            // Inmune a (0x)
+            const immuneSection = document.createElement('div');
+            immuneSection.className = 'type-section';
+            immuneSection.innerHTML = '<strong>Inmune a:</strong>';
+            const immuneList = document.createElement('div');
+            immuneList.className = 'type-list';
+            
+            effectiveness.immune.forEach(type => {
+                const typeTag = document.createElement('div');
+                typeTag.className = `type-tag immune ${type}`;
+                typeTag.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+                immuneList.appendChild(typeTag);
+            });
+            
+            if (effectiveness.immune.length === 0) {
+                immuneList.innerHTML = '<div style="color:#AAA;">Ninguno</div>';
+            }
+            
+            immuneSection.appendChild(immuneList);
+            effectivenessContainer.appendChild(immuneSection);
+            
+            // Fuerte contra
+            const strongSection = document.createElement('div');
+            strongSection.className = 'type-section';
+            strongSection.innerHTML = '<strong>Fuerte contra:</strong>';
+            const strongList = document.createElement('div');
+            strongList.className = 'type-list';
+            
+            effectiveness.strong.forEach(type => {
+                const typeTag = document.createElement('div');
+                typeTag.className = `type-tag strong ${type}`;
+                typeTag.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+                strongList.appendChild(typeTag);
+            });
+            
+            if (effectiveness.strong.length === 0) {
+                strongList.innerHTML = '<div style="color:#AAA;">Ninguno</div>';
+            }
+            
+            strongSection.appendChild(strongList);
+            effectivenessContainer.appendChild(strongSection);
+            
+            // Mostrar el resultado
+            document.getElementById(`${gen}-pokemon-result`).style.display = 'block';
+            document.getElementById(`${gen}-pokemon-result`).scrollIntoView();
+        }
+
+        // Función para calcular efectividades combinadas
+        function calculateCombinedEffectiveness(gen, types) {
+            const table = effectivenessTables[gen];
+            const result = {
+                veryWeak: [],    // 4x damage
+                weak: [],        // 2x damage
+                neutral: [],     // 1x damage
+                resist: [],      // 0.5x damage
+                veryResist: [],  // 0.25x damage
+                immune: [],      // 0x damage
+                strong: []       // Types this pokemon is strong against
+            };
+            
+            // Primero, obtener las inmunidades combinadas
+            const allTypes = Object.keys(table);
+            
+            allTypes.forEach(type => {
+                let effectiveness = 1;
+                
+                // Verificar inmunidades primero
+                for (const pokemonType of types) {
+                    if (table[pokemonType].immune.includes(type)) {
+                        effectiveness = 0;
+                        break;
+                    }
+                }
+                
+                if (effectiveness === 0) {
+                    if (!result.immune.includes(type)) {
+                        result.immune.push(type);
+                    }
+                    return;
+                }
+                
+                // Calcular efectividad combinada
+                for (const pokemonType of types) {
+                    if (table[pokemonType].weak.includes(type)) {
+                        effectiveness *= 2;
+                    } else if (table[pokemonType].resist.includes(type)) {
+                        effectiveness *= 0.5;
+                    }
+                }
+                
+                // Clasificar la efectividad resultante
+                if (effectiveness >= 4) {
+                    result.veryWeak.push(type);
+                } else if (effectiveness >= 2) {
+                    result.weak.push(type);
+                } else if (effectiveness === 1) {
+                    result.neutral.push(type);
+                } else if (effectiveness > 0 && effectiveness <= 0.25) {
+                    result.veryResist.push(type);
+                } else if (effectiveness > 0.25 && effectiveness <= 0.5) {
+                    result.resist.push(type);
+                }
+            });
+            
+            // Calcular tipos contra los que es fuerte (usando movimientos de ambos tipos)
+            const strongAgainst = new Set();
+            
+            types.forEach(pokemonType => {
+                table[pokemonType].strong.forEach(type => {
+                    strongAgainst.add(type);
+                });
+            });
+            
+            result.strong = Array.from(strongAgainst);
+            
+            return result;
+        }
+
+         function showType(typeId) {
             // Oculta todos los detalles primero
             var details = document.getElementsByClassName('type-detail');
             for (var i = 0; i < details.length; i++) {
@@ -1819,11 +2559,1048 @@
             }
             
             // Muestra el seleccionado
-            document.getElementById(typeId).style.display = 'block';
-            
-            // Desplaza a la vista (sin animación smooth para mejor rendimiento)
-            document.getElementById(typeId).scrollIntoView();
+            var selectedDetail = document.getElementById(typeId);
+            if (selectedDetail) {
+                selectedDetail.style.display = 'block';
+                selectedDetail.scrollIntoView({ behavior: 'smooth' });
+            }
         }
+// Datos de Pokémon por generación
+        const pokemonData = {
+                        gen1: [
+    {name: "001 Bulbasaur", types: ["planta", "veneno"]},
+    {name: "002 Ivysaur", types: ["planta", "veneno"]},
+    {name: "003 Venusaur", types: ["planta", "veneno"]},
+    {name: "004 Charmander", types: ["fuego"]},
+    {name: "005 Charmeleon", types: ["fuego"]},
+    {name: "006 Charizard", types: ["fuego", "volador"]},
+    {name: "007 Squirtle", types: ["agua"]},
+    {name: "008 Wartortle", types: ["agua"]},
+    {name: "009 Blastoise", types: ["agua"]},
+    {name: "010 Caterpie", types: ["bicho"]},
+    {name: "011 Metapod", types: ["bicho"]},
+    {name: "012 Butterfree", types: ["bicho", "volador"]},
+    {name: "013 Weedle", types: ["bicho", "veneno"]},
+    {name: "014 Kakuna", types: ["bicho", "veneno"]},
+    {name: "015 Beedrill", types: ["bicho", "veneno"]},
+    {name: "016 Pidgey", types: ["normal", "volador"]},
+    {name: "017 Pidgeotto", types: ["normal", "volador"]},
+    {name: "018 Pidgeot", types: ["normal", "volador"]},
+    {name: "019 Rattata", types: ["normal"]},
+    {name: "020 Raticate", types: ["normal"]},
+    {name: "021 Spearow", types: ["normal", "volador"]},
+    {name: "022 Fearow", types: ["normal", "volador"]},
+    {name: "023 Ekans", types: ["veneno"]},
+    {name: "024 Arbok", types: ["veneno"]},
+    {name: "025 Pikachu", types: ["electrico"]},
+    {name: "026 Raichu", types: ["electrico"]},
+    {name: "027 Sandshrew", types: ["tierra"]},
+    {name: "028 Sandslash", types: ["tierra"]},
+    {name: "029 Nidoran♀", types: ["veneno"]},
+    {name: "030 Nidorina", types: ["veneno"]},
+    {name: "031 Nidoqueen", types: ["veneno", "tierra"]},
+    {name: "032 Nidoran♂", types: ["veneno"]},
+    {name: "033 Nidorino", types: ["veneno"]},
+    {name: "034 Nidoking", types: ["veneno", "tierra"]},
+    {name: "035 Clefairy", types: ["hada"]},
+    {name: "036 Clefable", types: ["hada"]},
+    {name: "037 Vulpix", types: ["fuego"]},
+    {name: "038 Ninetales", types: ["fuego"]},
+    {name: "039 Jigglypuff", types: ["normal", "hada"]},
+    {name: "040 Wigglytuff", types: ["normal", "hada"]},
+    {name: "041 Zubat", types: ["veneno", "volador"]},
+    {name: "042 Golbat", types: ["veneno", "volador"]},
+    {name: "043 Oddish", types: ["planta", "veneno"]},
+    {name: "044 Gloom", types: ["planta", "veneno"]},
+    {name: "045 Vileplume", types: ["planta", "veneno"]},
+    {name: "046 Paras", types: ["bicho", "planta"]},
+    {name: "047 Parasect", types: ["bicho", "planta"]},
+    {name: "048 Venonat", types: ["bicho", "veneno"]},
+    {name: "049 Venomoth", types: ["bicho", "veneno"]},
+    {name: "050 Diglett", types: ["tierra"]},
+    {name: "051 Dugtrio", types: ["tierra"]},
+    {name: "052 Meowth", types: ["normal"]},
+    {name: "053 Persian", types: ["normal"]},
+    {name: "054 Psyduck", types: ["agua"]},
+    {name: "055 Golduck", types: ["agua"]},
+    {name: "056 Mankey", types: ["lucha"]},
+    {name: "057 Primeape", types: ["lucha"]},
+    {name: "058 Growlithe", types: ["fuego"]},
+    {name: "059 Arcanine", types: ["fuego"]},
+    {name: "060 Poliwag", types: ["agua"]},
+    {name: "061 Poliwhirl", types: ["agua"]},
+    {name: "062 Poliwrath", types: ["agua", "lucha"]},
+    {name: "063 Abra", types: ["psiquico"]},
+    {name: "064 Kadabra", types: ["psiquico"]},
+    {name: "065 Alakazam", types: ["psiquico"]},
+    {name: "066 Machop", types: ["lucha"]},
+    {name: "067 Machoke", types: ["lucha"]},
+    {name: "068 Machamp", types: ["lucha"]},
+    {name: "069 Bellsprout", types: ["planta", "veneno"]},
+    {name: "070 Weepinbell", types: ["planta", "veneno"]},
+    {name: "071 Victreebel", types: ["planta", "veneno"]},
+    {name: "072 Tentacool", types: ["agua", "veneno"]},
+    {name: "073 Tentacruel", types: ["agua", "veneno"]},
+    {name: "074 Geodude", types: ["roca", "tierra"]},
+    {name: "075 Graveler", types: ["roca", "tierra"]},
+    {name: "076 Golem", types: ["roca", "tierra"]},
+    {name: "077 Ponyta", types: ["fuego"]},
+    {name: "078 Rapidash", types: ["fuego"]},
+    {name: "079 Slowpoke", types: ["agua", "psiquico"]},
+    {name: "080 Slowbro", types: ["agua", "psiquico"]},
+    {name: "081 Magnemite", types: ["electrico", "acero"]},
+    {name: "082 Magneton", types: ["electrico", "acero"]},
+    {name: "083 Farfetch'd", types: ["normal", "volador"]},
+    {name: "084 Doduo", types: ["normal", "volador"]},
+    {name: "085 Dodrio", types: ["normal", "volador"]},
+    {name: "086 Seel", types: ["agua"]},
+    {name: "087 Dewgong", types: ["agua", "hielo"]},
+    {name: "088 Grimer", types: ["veneno"]},
+    {name: "089 Muk", types: ["veneno"]},
+    {name: "090 Shellder", types: ["agua"]},
+    {name: "091 Cloyster", types: ["agua", "hielo"]},
+    {name: "092 Gastly", types: ["fantasma", "veneno"]},
+    {name: "093 Haunter", types: ["fantasma", "veneno"]},
+    {name: "094 Gengar", types: ["fantasma", "veneno"]},
+    {name: "095 Onix", types: ["roca", "tierra"]},
+    {name: "096 Drowzee", types: ["psiquico"]},
+    {name: "097 Hypno", types: ["psiquico"]},
+    {name: "098 Krabby", types: ["agua"]},
+    {name: "099 Kingler", types: ["agua"]},
+    {name: "100 Voltorb", types: ["electrico"]},
+    {name: "101 Electrode", types: ["electrico"]},
+    {name: "102 Exeggcute", types: ["planta", "psiquico"]},
+    {name: "103 Exeggutor", types: ["planta", "psiquico"]},
+    {name: "104 Cubone", types: ["tierra"]},
+    {name: "105 Marowak", types: ["tierra"]},
+    {name: "106 Hitmonlee", types: ["lucha"]},
+    {name: "107 Hitmonchan", types: ["lucha"]},
+    {name: "108 Lickitung", types: ["normal"]},
+    {name: "109 Koffing", types: ["veneno"]},
+    {name: "110 Weezing", types: ["veneno"]},
+    {name: "111 Rhyhorn", types: ["tierra", "roca"]},
+    {name: "112 Rhydon", types: ["tierra", "roca"]},
+    {name: "113 Chansey", types: ["normal"]},
+    {name: "114 Tangela", types: ["planta"]},
+    {name: "115 Kangaskhan", types: ["normal"]},
+    {name: "116 Horsea", types: ["agua"]},
+    {name: "117 Seadra", types: ["agua"]},
+    {name: "118 Goldeen", types: ["agua"]},
+    {name: "119 Seaking", types: ["agua"]},
+    {name: "120 Staryu", types: ["agua"]},
+    {name: "121 Starmie", types: ["agua", "psiquico"]},
+    {name: "122 Mr. Mime", types: ["psiquico", "hada"]},
+    {name: "123 Scyther", types: ["bicho", "volador"]},
+    {name: "124 Jynx", types: ["hielo", "psiquico"]},
+    {name: "125 Electabuzz", types: ["electrico"]},
+    {name: "126 Magmar", types: ["fuego"]},
+    {name: "127 Pinsir", types: ["bicho"]},
+    {name: "128 Tauros", types: ["normal"]},
+    {name: "129 Magikarp", types: ["agua"]},
+    {name: "130 Gyarados", types: ["agua", "volador"]},
+    {name: "131 Lapras", types: ["agua", "hielo"]},
+    {name: "132 Ditto", types: ["normal"]},
+    {name: "133 Eevee", types: ["normal"]},
+    {name: "134 Vaporeon", types: ["agua"]},
+    {name: "135 Jolteon", types: ["electrico"]},
+    {name: "136 Flareon", types: ["fuego"]},
+    {name: "137 Porygon", types: ["normal"]},
+    {name: "138 Omanyte", types: ["roca", "agua"]},
+    {name: "139 Omastar", types: ["roca", "agua"]},
+    {name: "140 Kabuto", types: ["roca", "agua"]},
+    {name: "141 Kabutops", types: ["roca", "agua"]},
+    {name: "142 Aerodactyl", types: ["roca", "volador"]},
+    {name: "143 Snorlax", types: ["normal"]},
+    {name: "144 Articuno", types: ["hielo", "volador"]},
+    {name: "145 Zapdos", types: ["electrico", "volador"]},
+    {name: "146 Moltres", types: ["fuego", "volador"]},
+    {name: "147 Dratini", types: ["dragon"]},
+    {name: "148 Dragonair", types: ["dragon"]},
+    {name: "149 Dragonite", types: ["dragon", "volador"]},
+    {name: "150 Mewtwo", types: ["psiquico"]},
+    {name: "151 Mew", types: ["psiquico"]}
+  ],
+
+  gen2: [
+        {name: "152 Chikorita", types: ["planta"]},
+    {name: "153 Bayleef", types: ["planta"]},
+    {name: "154 Meganium", types: ["planta"]},
+    {name: "155 Cyndaquil", types: ["fuego"]},
+    {name: "156 Quilava", types: ["fuego"]},
+    {name: "157 Typhlosion", types: ["fuego"]},
+    {name: "158 Totodile", types: ["agua"]},
+    {name: "159 Croconaw", types: ["agua"]},
+    {name: "160 Feraligatr", types: ["agua"]},
+    {name: "161 Sentret", types: ["normal"]},
+    {name: "162 Furret", types: ["normal"]},
+    {name: "163 Hoothoot", types: ["normal", "volador"]},
+    {name: "164 Noctowl", types: ["normal", "volador"]},
+    {name: "165 Ledyba", types: ["bicho", "volador"]},
+    {name: "166 Ledian", types: ["bicho", "volador"]},
+    {name: "167 Spinarak", types: ["bicho", "veneno"]},
+    {name: "168 Ariados", types: ["bicho", "veneno"]},
+    {name: "169 Crobat", types: ["veneno", "volador"]},
+    {name: "170 Chinchou", types: ["agua", "electrico"]},
+    {name: "171 Lanturn", types: ["agua", "electrico"]},
+    {name: "172 Pichu", types: ["electrico"]},
+    {name: "173 Cleffa", types: ["hada"]},
+    {name: "174 Igglybuff", types: ["normal", "hada"]},
+    {name: "175 Togepi", types: ["hada"]},
+    {name: "176 Togetic", types: ["hada", "volador"]},
+    {name: "177 Natu", types: ["psiquico", "volador"]},
+    {name: "178 Xatu", types: ["psiquico", "volador"]},
+    {name: "179 Mareep", types: ["electrico"]},
+    {name: "180 Flaaffy", types: ["electrico"]},
+    {name: "181 Ampharos", types: ["electrico"]},
+    {name: "182 Bellossom", types: ["planta"]},
+    {name: "183 Marill", types: ["agua", "hada"]},
+    {name: "184 Azumarill", types: ["agua", "hada"]},
+    {name: "185 Sudowoodo", types: ["roca"]},
+    {name: "186 Politoed", types: ["agua"]},
+    {name: "187 Hoppip", types: ["planta", "volador"]},
+    {name: "188 Skiploom", types: ["planta", "volador"]},
+    {name: "189 Jumpluff", types: ["planta", "volador"]},
+    {name: "190 Aipom", types: ["normal"]},
+    {name: "191 Sunkern", types: ["planta"]},
+    {name: "192 Sunflora", types: ["planta"]},
+    {name: "193 Yanma", types: ["bicho", "volador"]},
+    {name: "194 Wooper", types: ["agua", "tierra"]},
+    {name: "195 Quagsire", types: ["agua", "tierra"]},
+    {name: "196 Espeon", types: ["psiquico"]},
+    {name: "197 Umbreon", types: ["siniestro"]},
+    {name: "198 Murkrow", types: ["siniestro", "volador"]},
+    {name: "199 Slowking", types: ["agua", "psiquico"]},
+    {name: "200 Misdreavus", types: ["fantasma"]},
+    {name: "201 Unown", types: ["psiquico"]},
+    {name: "202 Wobbuffet", types: ["psiquico"]},
+    {name: "203 Girafarig", types: ["normal", "psiquico"]},
+    {name: "204 Pineco", types: ["bicho"]},
+    {name: "205 Forretress", types: ["bicho", "acero"]},
+    {name: "206 Dunsparce", types: ["normal"]},
+    {name: "207 Gligar", types: ["tierra", "volador"]},
+    {name: "208 Steelix", types: ["acero", "tierra"]},
+    {name: "209 Snubbull", types: ["hada"]},
+    {name: "210 Granbull", types: ["hada"]},
+    {name: "211 Qwilfish", types: ["agua", "veneno"]},
+    {name: "212 Scizor", types: ["bicho", "acero"]},
+    {name: "213 Shuckle", types: ["bicho", "roca"]},
+    {name: "214 Heracross", types: ["bicho", "lucha"]},
+    {name: "215 Sneasel", types: ["siniestro", "hielo"]},
+    {name: "216 Teddiursa", types: ["normal"]},
+    {name: "217 Ursaring", types: ["normal"]},
+    {name: "218 Slugma", types: ["fuego"]},
+    {name: "219 Magcargo", types: ["fuego", "roca"]},
+    {name: "220 Swinub", types: ["hielo", "tierra"]},
+    {name: "221 Piloswine", types: ["hielo", "tierra"]},
+    {name: "222 Corsola", types: ["agua", "roca"]},
+    {name: "223 Remoraid", types: ["agua"]},
+    {name: "224 Octillery", types: ["agua"]},
+    {name: "225 Delibird", types: ["hielo", "volador"]},
+    {name: "226 Mantine", types: ["agua", "volador"]},
+    {name: "227 Skarmory", types: ["acero", "volador"]},
+    {name: "228 Houndour", types: ["siniestro", "fuego"]},
+    {name: "229 Houndoom", types: ["siniestro", "fuego"]},
+    {name: "230 Kingdra", types: ["agua", "dragon"]},
+    {name: "231 Phanpy", types: ["tierra"]},
+    {name: "232 Donphan", types: ["tierra"]},
+    {name: "233 Porygon2", types: ["normal"]},
+    {name: "234 Stantler", types: ["normal"]},
+    {name: "235 Smeargle", types: ["normal"]},
+    {name: "236 Tyrogue", types: ["lucha"]},
+    {name: "237 Hitmontop", types: ["lucha"]},
+    {name: "238 Smoochum", types: ["hielo", "psiquico"]},
+    {name: "239 Elekid", types: ["electrico"]},
+    {name: "240 Magby", types: ["fuego"]},
+    {name: "241 Miltank", types: ["normal"]},
+    {name: "242 Blissey", types: ["normal"]},
+    {name: "243 Raikou", types: ["electrico"]},
+    {name: "244 Entei", types: ["fuego"]},
+    {name: "245 Suicune", types: ["agua"]},
+    {name: "246 Larvitar", types: ["roca", "tierra"]},
+    {name: "247 Pupitar", types: ["roca", "tierra"]},
+    {name: "248 Tyranitar", types: ["roca", "siniestro"]},
+    {name: "249 Lugia", types: ["psiquico", "volador"]},
+    {name: "250 Ho-Oh", types: ["fuego", "volador"]},
+    {name: "251 Celebi", types: ["psiquico", "planta"]},
+    {name: "252 Treecko", types: ["planta"]},
+    {name: "253 Grovyle", types: ["planta"]},
+    {name: "254 Sceptile", types: ["planta"]},
+    {name: "255 Torchic", types: ["fuego"]},
+    {name: "256 Combusken", types: ["fuego", "lucha"]},
+    {name: "257 Blaziken", types: ["fuego", "lucha"]},
+    {name: "258 Mudkip", types: ["agua"]},
+    {name: "259 Marshtomp", types: ["agua", "tierra"]},
+    {name: "260 Swampert", types: ["agua", "tierra"]},
+    {name: "261 Poochyena", types: ["siniestro"]},
+    {name: "262 Mightyena", types: ["siniestro"]},
+    {name: "263 Zigzagoon", types: ["normal"]},
+    {name: "264 Linoone", types: ["normal"]},
+    {name: "265 Wurmple", types: ["bicho"]},
+    {name: "266 Silcoon", types: ["bicho"]},
+    {name: "267 Beautifly", types: ["bicho", "volador"]},
+    {name: "268 Cascoon", types: ["bicho"]},
+    {name: "269 Dustox", types: ["bicho", "veneno"]},
+    {name: "270 Lotad", types: ["agua", "planta"]},
+    {name: "271 Lombre", types: ["agua", "planta"]},
+    {name: "272 Ludicolo", types: ["agua", "planta"]},
+    {name: "273 Seedot", types: ["planta"]},
+    {name: "274 Nuzleaf", types: ["planta", "siniestro"]},
+    {name: "275 Shiftry", types: ["planta", "siniestro"]},
+    {name: "276 Taillow", types: ["normal", "volador"]},
+    {name: "277 Swellow", types: ["normal", "volador"]},
+    {name: "278 Wingull", types: ["agua", "volador"]},
+    {name: "279 Pelipper", types: ["agua", "volador"]},
+    {name: "280 Ralts", types: ["psiquico", "hada"]},
+    {name: "281 Kirlia", types: ["psiquico", "hada"]},
+    {name: "282 Gardevoir", types: ["psiquico", "hada"]},
+    {name: "283 Surskit", types: ["bicho", "agua"]},
+    {name: "284 Masquerain", types: ["bicho", "volador"]},
+    {name: "285 Shroomish", types: ["planta"]},
+    {name: "286 Breloom", types: ["planta", "lucha"]},
+    {name: "287 Slakoth", types: ["normal"]},
+    {name: "288 Vigoroth", types: ["normal"]},
+    {name: "289 Slaking", types: ["normal"]},
+    {name: "290 Nincada", types: ["bicho", "tierra"]},
+    {name: "291 Ninjask", types: ["bicho", "volador"]},
+    {name: "292 Shedinja", types: ["bicho", "fantasma"]},
+    {name: "293 Whismur", types: ["normal"]},
+    {name: "294 Loudred", types: ["normal"]},
+    {name: "295 Exploud", types: ["normal"]},
+    {name: "296 Makuhita", types: ["lucha"]},
+    {name: "297 Hariyama", types: ["lucha"]},
+    {name: "298 Azurill", types: ["normal", "hada"]},
+    {name: "299 Nosepass", types: ["roca"]},
+    {name: "300 Skitty", types: ["normal"]},
+    {name: "301 Delcatty", types: ["normal"]},
+    {name: "302 Sableye", types: ["siniestro", "fantasma"]},
+    {name: "303 Mawile", types: ["acero", "hada"]},
+    {name: "304 Aron", types: ["acero", "roca"]},
+    {name: "305 Lairon", types: ["acero", "roca"]},
+    {name: "306 Aggron", types: ["acero", "roca"]},
+    {name: "307 Meditite", types: ["lucha", "psiquico"]},
+    {name: "308 Medicham", types: ["lucha", "psiquico"]},
+    {name: "309 Electrike", types: ["electrico"]},
+    {name: "310 Manectric", types: ["electrico"]},
+    {name: "311 Plusle", types: ["electrico"]},
+    {name: "312 Minun", types: ["electrico"]},
+    {name: "313 Volbeat", types: ["bicho"]},
+    {name: "314 Illumise", types: ["bicho"]},
+    {name: "315 Roselia", types: ["planta", "veneno"]},
+    {name: "316 Gulpin", types: ["veneno"]},
+    {name: "317 Swalot", types: ["veneno"]},
+    {name: "318 Carvanha", types: ["agua", "siniestro"]},
+    {name: "319 Sharpedo", types: ["agua", "siniestro"]},
+    {name: "320 Wailmer", types: ["agua"]},
+    {name: "321 Wailord", types: ["agua"]},
+    {name: "322 Numel", types: ["fuego", "tierra"]},
+    {name: "323 Camerupt", types: ["fuego", "tierra"]},
+    {name: "324 Torkoal", types: ["fuego"]},
+    {name: "325 Spoink", types: ["psiquico"]},
+    {name: "326 Grumpig", types: ["psiquico"]},
+    {name: "327 Spinda", types: ["normal"]},
+    {name: "328 Trapinch", types: ["tierra"]},
+    {name: "329 Vibrava", types: ["tierra", "dragon"]},
+    {name: "330 Flygon", types: ["tierra", "dragon"]},
+    {name: "331 Cacnea", types: ["planta"]},
+    {name: "332 Cacturne", types: ["planta", "siniestro"]},
+    {name: "333 Swablu", types: ["normal", "volador"]},
+    {name: "334 Altaria", types: ["dragon", "volador"]},
+    {name: "335 Zangoose", types: ["normal"]},
+    {name: "336 Seviper", types: ["veneno"]},
+    {name: "337 Lunatone", types: ["roca", "psiquico"]},
+    {name: "338 Solrock", types: ["roca", "psiquico"]},
+    {name: "339 Barboach", types: ["agua", "tierra"]},
+    {name: "340 Whiscash", types: ["agua", "tierra"]},
+    {name: "341 Corphish", types: ["agua"]},
+    {name: "342 Crawdaunt", types: ["agua", "siniestro"]},
+    {name: "343 Baltoy", types: ["tierra", "psiquico"]},
+    {name: "344 Claydol", types: ["tierra", "psiquico"]},
+    {name: "345 Lileep", types: ["roca", "planta"]},
+    {name: "346 Cradily", types: ["roca", "planta"]},
+    {name: "347 Anorith", types: ["roca", "bicho"]},
+    {name: "348 Armaldo", types: ["roca", "bicho"]},
+    {name: "349 Feebas", types: ["agua"]},
+    {name: "350 Milotic", types: ["agua"]},
+    {name: "351 Castform", types: ["normal"]},
+    {name: "352 Kecleon", types: ["normal"]},
+    {name: "353 Shuppet", types: ["fantasma"]},
+    {name: "354 Banette", types: ["fantasma"]},
+    {name: "355 Duskull", types: ["fantasma"]},
+    {name: "356 Dusclops", types: ["fantasma"]},
+    {name: "357 Tropius", types: ["planta", "volador"]},
+    {name: "358 Chimecho", types: ["psiquico"]},
+    {name: "359 Absol", types: ["siniestro"]},
+    {name: "360 Wynaut", types: ["psiquico"]},
+    {name: "361 Snorunt", types: ["hielo"]},
+    {name: "362 Glalie", types: ["hielo"]},
+    {name: "363 Spheal", types: ["hielo", "agua"]},
+    {name: "364 Sealeo", types: ["hielo", "agua"]},
+    {name: "365 Walrein", types: ["hielo", "agua"]},
+    {name: "366 Clamperl", types: ["agua"]},
+    {name: "367 Huntail", types: ["agua"]},
+    {name: "368 Gorebyss", types: ["agua"]},
+    {name: "369 Relicanth", types: ["agua", "roca"]},
+    {name: "370 Luvdisc", types: ["agua"]},
+    {name: "371 Bagon", types: ["dragon"]},
+    {name: "372 Shelgon", types: ["dragon"]},
+    {name: "373 Salamence", types: ["dragon", "volador"]},
+    {name: "374 Beldum", types: ["acero", "psiquico"]},
+    {name: "375 Metang", types: ["acero", "psiquico"]},
+    {name: "376 Metagross", types: ["acero", "psiquico"]},
+    {name: "377 Regirock", types: ["roca"]},
+    {name: "378 Regice", types: ["hielo"]},
+    {name: "379 Registeel", types: ["acero"]},
+    {name: "380 Latias", types: ["dragon", "psiquico"]},
+    {name: "381 Latios", types: ["dragon", "psiquico"]},
+    {name: "382 Kyogre", types: ["agua"]},
+    {name: "383 Groudon", types: ["tierra"]},
+    {name: "384 Rayquaza", types: ["dragon", "volador"]},
+    {name: "385 Jirachi", types: ["acero", "psiquico"]},
+    {name: "386 Deoxys", types: ["psiquico"]},
+    {name: "387 Turtwig", types: ["planta"]},
+    {name: "388 Grotle", types: ["planta"]},
+    {name: "389 Torterra", types: ["planta", "tierra"]},
+    {name: "390 Chimchar", types: ["fuego"]},
+    {name: "391 Monferno", types: ["fuego", "lucha"]},
+    {name: "392 Infernape", types: ["fuego", "lucha"]},
+    {name: "393 Piplup", types: ["agua"]},
+    {name: "394 Prinplup", types: ["agua"]},
+    {name: "395 Empoleon", types: ["agua", "acero"]},
+    {name: "396 Starly", types: ["normal", "volador"]},
+    {name: "397 Staravia", types: ["normal", "volador"]},
+    {name: "398 Staraptor", types: ["normal", "volador"]},
+    {name: "399 Bidoof", types: ["normal"]},
+    {name: "400 Bibarel", types: ["normal", "agua"]},
+    {name: "401 Kricketot", types: ["bicho"]},
+    {name: "402 Kricketune", types: ["bicho"]},
+    {name: "403 Shinx", types: ["electrico"]},
+    {name: "404 Luxio", types: ["electrico"]},
+    {name: "405 Luxray", types: ["electrico"]},
+    {name: "406 Budew", types: ["planta", "veneno"]},
+    {name: "407 Roserade", types: ["planta", "veneno"]},
+    {name: "408 Cranidos", types: ["roca"]},
+    {name: "409 Rampardos", types: ["roca"]},
+    {name: "410 Shieldon", types: ["roca", "acero"]},
+    {name: "411 Bastiodon", types: ["roca", "acero"]},
+    {name: "412 Burmy", types: ["bicho"]},
+    {name: "413 Wormadam", types: ["bicho", "planta"]},
+    {name: "414 Mothim", types: ["bicho", "volador"]},
+    {name: "415 Combee", types: ["bicho", "volador"]},
+    {name: "416 Vespiquen", types: ["bicho", "volador"]},
+    {name: "417 Pachirisu", types: ["electrico"]},
+    {name: "418 Buizel", types: ["agua"]},
+    {name: "419 Floatzel", types: ["agua"]},
+    {name: "420 Cherubi", types: ["planta"]},
+    {name: "421 Cherrim", types: ["planta"]},
+    {name: "422 Shellos", types: ["agua"]},
+    {name: "423 Gastrodon", types: ["agua", "tierra"]},
+    {name: "424 Ambipom", types: ["normal"]},
+    {name: "425 Drifloon", types: ["fantasma", "volador"]},
+    {name: "426 Drifblim", types: ["fantasma", "volador"]},
+    {name: "427 Buneary", types: ["normal"]},
+    {name: "428 Lopunny", types: ["normal"]},
+    {name: "429 Mismagius", types: ["fantasma"]},
+    {name: "430 Honchkrow", types: ["siniestro", "volador"]},
+    {name: "431 Glameow", types: ["normal"]},
+    {name: "432 Purugly", types: ["normal"]},
+    {name: "433 Chingling", types: ["psiquico"]},
+    {name: "434 Stunky", types: ["veneno", "siniestro"]},
+    {name: "435 Skuntank", types: ["veneno", "siniestro"]},
+    {name: "436 Bronzor", types: ["acero", "psiquico"]},
+    {name: "437 Bronzong", types: ["acero", "psiquico"]},
+    {name: "438 Bonsly", types: ["roca"]},
+    {name: "439 Mime Jr.", types: ["psiquico", "hada"]},
+    {name: "440 Happiny", types: ["normal"]},
+    {name: "441 Chatot", types: ["normal", "volador"]},
+    {name: "442 Spiritomb", types: ["fantasma", "siniestro"]},
+    {name: "443 Gible", types: ["dragon", "tierra"]},
+    {name: "444 Gabite", types: ["dragon", "tierra"]},
+    {name: "445 Garchomp", types: ["dragon", "tierra"]},
+    {name: "446 Munchlax", types: ["normal"]},
+    {name: "447 Riolu", types: ["lucha"]},
+    {name: "448 Lucario", types: ["lucha", "acero"]},
+    {name: "449 Hippopotas", types: ["tierra"]},
+    {name: "450 Hippowdon", types: ["tierra"]},
+    {name: "451 Skorupi", types: ["veneno", "bicho"]},
+    {name: "452 Drapion", types: ["veneno", "siniestro"]},
+    {name: "453 Croagunk", types: ["veneno", "lucha"]},
+    {name: "454 Toxicroak", types: ["veneno", "lucha"]},
+    {name: "455 Carnivine", types: ["planta"]},
+    {name: "456 Finneon", types: ["agua"]},
+    {name: "457 Lumineon", types: ["agua"]},
+    {name: "458 Mantyke", types: ["agua", "volador"]},
+    {name: "459 Snover", types: ["planta", "hielo"]},
+    {name: "460 Abomasnow", types: ["planta", "hielo"]},
+    {name: "461 Weavile", types: ["siniestro", "hielo"]},
+    {name: "462 Magnezone", types: ["electrico", "acero"]},
+    {name: "463 Lickilicky", types: ["normal"]},
+    {name: "464 Rhyperior", types: ["tierra", "roca"]},
+    {name: "465 Tangrowth", types: ["planta"]},
+    {name: "466 Electivire", types: ["electrico"]},
+    {name: "467 Magmortar", types: ["fuego"]},
+    {name: "468 Togekiss", types: ["hada", "volador"]},
+    {name: "469 Yanmega", types: ["bicho", "volador"]},
+    {name: "470 Leafeon", types: ["planta"]},
+    {name: "471 Glaceon", types: ["hielo"]},
+    {name: "472 Gliscor", types: ["tierra", "volador"]},
+    {name: "473 Mamoswine", types: ["hielo", "tierra"]},
+    {name: "474 Porygon-Z", types: ["normal"]},
+    {name: "475 Gallade", types: ["psiquico", "lucha"]},
+    {name: "476 Probopass", types: ["roca", "acero"]},
+    {name: "477 Dusknoir", types: ["fantasma"]},
+    {name: "478 Froslass", types: ["hielo", "fantasma"]},
+    {name: "479 Rotom", types: ["electrico", "fantasma"]},
+    {name: "480 Uxie", types: ["psiquico"]},
+    {name: "481 Mesprit", types: ["psiquico"]},
+    {name: "482 Azelf", types: ["psiquico"]},
+    {name: "483 Dialga", types: ["acero", "dragon"]},
+    {name: "484 Palkia", types: ["agua", "dragon"]},
+    {name: "485 Heatran", types: ["fuego", "acero"]},
+    {name: "486 Regigigas", types: ["normal"]},
+    {name: "487 Giratina", types: ["fantasma", "dragon"]},
+    {name: "488 Cresselia", types: ["psiquico"]},
+    {name: "489 Phione", types: ["agua"]},
+    {name: "490 Manaphy", types: ["agua"]},
+    {name: "491 Darkrai", types: ["siniestro"]},
+    {name: "492 Shaymin", types: ["planta"]},
+    {name: "493 Arceus", types: ["normal"]},
+    {name: "494 Victini", types: ["psiquico", "fuego"]},
+    {name: "495 Snivy", types: ["planta"]},
+    {name: "496 Servine", types: ["planta"]},
+    {name: "497 Serperior", types: ["planta"]},
+    {name: "498 Tepig", types: ["fuego"]},
+    {name: "499 Pignite", types: ["fuego", "lucha"]},
+    {name: "500 Emboar", types: ["fuego", "lucha"]},
+    {name: "501 Oshawott", types: ["agua"]},
+    {name: "502 Dewott", types: ["agua"]},
+    {name: "503 Samurott", types: ["agua"]},
+    {name: "504 Patrat", types: ["normal"]},
+    {name: "505 Watchog", types: ["normal"]},
+    {name: "506 Lillipup", types: ["normal"]},
+    {name: "507 Herdier", types: ["normal"]},
+    {name: "508 Stoutland", types: ["normal"]},
+    {name: "509 Purrloin", types: ["siniestro"]},
+    {name: "510 Liepard", types: ["siniestro"]},
+    {name: "511 Pansage", types: ["planta"]},
+    {name: "512 Simisage", types: ["planta"]},
+    {name: "513 Pansear", types: ["fuego"]},
+    {name: "514 Simisear", types: ["fuego"]},
+    {name: "515 Panpour", types: ["agua"]},
+    {name: "516 Simipour", types: ["agua"]},
+    {name: "517 Munna", types: ["psiquico"]},
+    {name: "518 Musharna", types: ["psiquico"]},
+    {name: "519 Pidove", types: ["normal", "volador"]},
+    {name: "520 Tranquill", types: ["normal", "volador"]},
+    {name: "521 Unfezant", types: ["normal", "volador"]},
+    {name: "522 Blitzle", types: ["electrico"]},
+    {name: "523 Zebstrika", types: ["electrico"]},
+    {name: "524 Roggenrola", types: ["roca"]},
+    {name: "525 Boldore", types: ["roca"]},
+    {name: "526 Gigalith", types: ["roca"]},
+    {name: "527 Woobat", types: ["psiquico", "volador"]},
+    {name: "528 Swoobat", types: ["psiquico", "volador"]},
+    {name: "529 Drilbur", types: ["tierra"]},
+    {name: "530 Excadrill", types: ["tierra", "acero"]},
+    {name: "531 Audino", types: ["normal"]},
+    {name: "532 Timburr", types: ["lucha"]},
+    {name: "533 Gurdurr", types: ["lucha"]},
+    {name: "534 Conkeldurr", types: ["lucha"]},
+    {name: "535 Tympole", types: ["agua"]},
+    {name: "536 Palpitoad", types: ["agua", "tierra"]},
+    {name: "537 Seismitoad", types: ["agua", "tierra"]},
+    {name: "538 Throh", types: ["lucha"]},
+    {name: "539 Sawk", types: ["lucha"]},
+    {name: "540 Sewaddle", types: ["bicho", "planta"]},
+    {name: "541 Swadloon", types: ["bicho", "planta"]},
+    {name: "542 Leavanny", types: ["bicho", "planta"]},
+    {name: "543 Venipede", types: ["bicho", "veneno"]},
+    {name: "544 Whirlipede", types: ["bicho", "veneno"]},
+    {name: "545 Scolipede", types: ["bicho", "veneno"]},
+    {name: "546 Cottonee", types: ["planta", "hada"]},
+    {name: "547 Whimsicott", types: ["planta", "hada"]},
+    {name: "548 Petilil", types: ["planta"]},
+    {name: "549 Lilligant", types: ["planta"]},
+    {name: "550 Basculin", types: ["agua"]},
+    {name: "551 Sandile", types: ["tierra", "siniestro"]},
+    {name: "552 Krokorok", types: ["tierra", "siniestro"]},
+    {name: "553 Krookodile", types: ["tierra", "siniestro"]},
+    {name: "554 Darumaka", types: ["fuego"]},
+    {name: "555 Darmanitan", types: ["fuego"]},
+    {name: "556 Maractus", types: ["planta"]},
+    {name: "557 Dwebble", types: ["bicho", "roca"]},
+    {name: "558 Crustle", types: ["bicho", "roca"]},
+    {name: "559 Scraggy", types: ["siniestro", "lucha"]},
+    {name: "560 Scrafty", types: ["siniestro", "lucha"]},
+    {name: "561 Sigilyph", types: ["psiquico", "volador"]},
+    {name: "562 Yamask", types: ["fantasma"]},
+    {name: "563 Cofagrigus", types: ["fantasma"]},
+    {name: "564 Tirtouga", types: ["agua", "roca"]},
+    {name: "565 Carracosta", types: ["agua", "roca"]},
+    {name: "566 Archen", types: ["roca", "volador"]},
+    {name: "567 Archeops", types: ["roca", "volador"]},
+    {name: "568 Trubbish", types: ["veneno"]},
+    {name: "569 Garbodor", types: ["veneno"]},
+    {name: "570 Zorua", types: ["siniestro"]},
+    {name: "571 Zoroark", types: ["siniestro"]},
+    {name: "572 Minccino", types: ["normal"]},
+    {name: "573 Cinccino", types: ["normal"]},
+    {name: "574 Gothita", types: ["psiquico"]},
+    {name: "575 Gothorita", types: ["psiquico"]},
+    {name: "576 Gothitelle", types: ["psiquico"]},
+    {name: "577 Solosis", types: ["psiquico"]},
+    {name: "578 Duosion", types: ["psiquico"]},
+    {name: "579 Reuniclus", types: ["psiquico"]},
+    {name: "580 Ducklett", types: ["agua", "volador"]},
+    {name: "581 Swanna", types: ["agua", "volador"]},
+    {name: "582 Vanillite", types: ["hielo"]},
+    {name: "583 Vanillish", types: ["hielo"]},
+    {name: "584 Vanilluxe", types: ["hielo"]},
+    {name: "585 Deerling", types: ["normal", "planta"]},
+    {name: "586 Sawsbuck", types: ["normal", "planta"]},
+    {name: "587 Emolga", types: ["electrico", "volador"]},
+    {name: "588 Karrablast", types: ["bicho"]},
+    {name: "589 Escavalier", types: ["bicho", "acero"]},
+    {name: "590 Foongus", types: ["planta", "veneno"]},
+    {name: "591 Amoonguss", types: ["planta", "veneno"]},
+    {name: "592 Frillish", types: ["agua", "fantasma"]},
+    {name: "593 Jellicent", types: ["agua", "fantasma"]},
+    {name: "594 Alomomola", types: ["agua"]},
+    {name: "595 Joltik", types: ["bicho", "electrico"]},
+    {name: "596 Galvantula", types: ["bicho", "electrico"]},
+    {name: "597 Ferroseed", types: ["planta", "acero"]},
+    {name: "598 Ferrothorn", types: ["planta", "acero"]},
+    {name: "599 Klink", types: ["acero"]},
+    {name: "600 Klang", types: ["acero"]},
+    {name: "601 Klinklang", types: ["acero"]},
+    {name: "602 Tynamo", types: ["electrico"]},
+    {name: "603 Eelektrik", types: ["electrico"]},
+    {name: "604 Eelektross", types: ["electrico"]},
+    {name: "605 Elgyem", types: ["psiquico"]},
+    {name: "606 Beheeyem", types: ["psiquico"]},
+    {name: "607 Litwick", types: ["fantasma", "fuego"]},
+    {name: "608 Lampent", types: ["fantasma", "fuego"]},
+    {name: "609 Chandelure", types: ["fantasma", "fuego"]},
+    {name: "610 Axew", types: ["dragon"]},
+    {name: "611 Fraxure", types: ["dragon"]},
+    {name: "612 Haxorus", types: ["dragon"]},
+    {name: "613 Cubchoo", types: ["hielo"]},
+    {name: "614 Beartic", types: ["hielo"]},
+    {name: "615 Cryogonal", types: ["hielo"]},
+    {name: "616 Shelmet", types: ["bicho"]},
+    {name: "617 Accelgor", types: ["bicho"]},
+    {name: "618 Stunfisk", types: ["tierra", "electrico"]},
+    {name: "619 Mienfoo", types: ["lucha"]},
+    {name: "620 Mienshao", types: ["lucha"]},
+    {name: "621 Druddigon", types: ["dragon"]},
+    {name: "622 Golett", types: ["tierra", "fantasma"]},
+    {name: "623 Golurk", types: ["tierra", "fantasma"]},
+    {name: "624 Pawniard", types: ["siniestro", "acero"]},
+    {name: "625 Bisharp", types: ["siniestro", "acero"]},
+    {name: "626 Bouffalant", types: ["normal"]},
+    {name: "627 Rufflet", types: ["normal", "volador"]},
+    {name: "628 Braviary", types: ["normal", "volador"]},
+    {name: "629 Vullaby", types: ["siniestro", "volador"]},
+    {name: "630 Mandibuzz", types: ["siniestro", "volador"]},
+    {name: "631 Heatmor", types: ["fuego"]},
+    {name: "632 Durant", types: ["bicho", "acero"]},
+    {name: "633 Deino", types: ["siniestro", "dragon"]},
+    {name: "634 Zweilous", types: ["siniestro", "dragon"]},
+    {name: "635 Hydreigon", types: ["siniestro", "dragon"]},
+    {name: "636 Larvesta", types: ["bicho", "fuego"]},
+    {name: "637 Volcarona", types: ["bicho", "fuego"]},
+    {name: "638 Cobalion", types: ["acero", "lucha"]},
+    {name: "639 Terrakion", types: ["roca", "lucha"]},
+    {name: "640 Virizion", types: ["planta", "lucha"]},
+    {name: "641 Tornadus", types: ["volador"]},
+    {name: "642 Thundurus", types: ["electrico", "volador"]},
+    {name: "643 Reshiram", types: ["dragon", "fuego"]},
+    {name: "644 Zekrom", types: ["dragon", "electrico"]},
+    {name: "645 Landorus", types: ["tierra", "volador"]},
+    {name: "646 Kyurem", types: ["dragon", "hielo"]},
+    {name: "647 Keldeo", types: ["agua", "lucha"]},
+    {name: "648 Meloetta", types: ["normal", "psiquico"]},
+    {name: "649 Genesect", types: ["bicho", "acero"]}
+  ],
+
+  gen6: [
+        {name: "650 Chespin", types: ["planta"]},
+    {name: "651 Quilladin", types: ["planta"]},
+    {name: "652 Chesnaught", types: ["planta", "lucha"]},
+    {name: "653 Fennekin", types: ["fuego"]},
+    {name: "654 Braixen", types: ["fuego"]},
+    {name: "655 Delphox", types: ["fuego", "psiquico"]},
+    {name: "656 Froakie", types: ["agua"]},
+    {name: "657 Frogadier", types: ["agua"]},
+    {name: "658 Greninja", types: ["agua", "siniestro"]},
+    {name: "659 Bunnelby", types: ["normal"]},
+    {name: "660 Diggersby", types: ["normal", "tierra"]},
+    {name: "661 Fletchling", types: ["normal", "volador"]},
+    {name: "662 Fletchinder", types: ["fuego", "volador"]},
+    {name: "663 Talonflame", types: ["fuego", "volador"]},
+    {name: "664 Scatterbug", types: ["bicho"]},
+    {name: "665 Spewpa", types: ["bicho"]},
+    {name: "666 Vivillon", types: ["bicho", "volador"]},
+    {name: "667 Litleo", types: ["fuego", "normal"]},
+    {name: "668 Pyroar", types: ["fuego", "normal"]},
+    {name: "669 Flabébé", types: ["hada"]},
+    {name: "670 Floette", types: ["hada"]},
+    {name: "671 Florges", types: ["hada"]},
+    {name: "672 Skiddo", types: ["planta"]},
+    {name: "673 Gogoat", types: ["planta"]},
+    {name: "674 Pancham", types: ["lucha"]},
+    {name: "675 Pangoro", types: ["lucha", "siniestro"]},
+    {name: "676 Furfrou", types: ["normal"]},
+    {name: "677 Espurr", types: ["psiquico"]},
+    {name: "678 Meowstic", types: ["psiquico"]},
+    {name: "679 Honedge", types: ["acero", "fantasma"]},
+    {name: "680 Doublade", types: ["acero", "fantasma"]},
+    {name: "681 Aegislash", types: ["acero", "fantasma"]},
+    {name: "682 Spritzee", types: ["hada"]},
+    {name: "683 Aromatisse", types: ["hada"]},
+    {name: "684 Swirlix", types: ["hada"]},
+    {name: "685 Slurpuff", types: ["hada"]},
+    {name: "686 Inkay", types: ["siniestro", "psiquico"]},
+    {name: "687 Malamar", types: ["siniestro", "psiquico"]},
+    {name: "688 Binacle", types: ["roca", "agua"]},
+    {name: "689 Barbaracle", types: ["roca", "agua"]},
+    {name: "690 Skrelp", types: ["veneno", "agua"]},
+    {name: "691 Dragalge", types: ["veneno", "dragon"]},
+    {name: "692 Clauncher", types: ["agua"]},
+    {name: "693 Clawitzer", types: ["agua"]},
+    {name: "694 Helioptile", types: ["electrico", "normal"]},
+    {name: "695 Heliolisk", types: ["electrico", "normal"]},
+    {name: "696 Tyrunt", types: ["roca", "dragon"]},
+    {name: "697 Tyrantrum", types: ["roca", "dragon"]},
+    {name: "698 Amaura", types: ["roca", "hielo"]},
+    {name: "699 Aurorus", types: ["roca", "hielo"]},
+    {name: "700 Sylveon", types: ["hada"]},
+    {name: "701 Hawlucha", types: ["lucha", "volador"]},
+    {name: "702 Dedenne", types: ["electrico", "hada"]},
+    {name: "703 Carbink", types: ["roca", "hada"]},
+    {name: "704 Goomy", types: ["dragon"]},
+    {name: "705 Sliggoo", types: ["dragon"]},
+    {name: "706 Goodra", types: ["dragon"]},
+    {name: "707 Klefki", types: ["acero", "hada"]},
+    {name: "708 Phantump", types: ["fantasma", "planta"]},
+    {name: "709 Trevenant", types: ["fantasma", "planta"]},
+    {name: "710 Pumpkaboo", types: ["fantasma", "planta"]},
+    {name: "711 Gourgeist", types: ["fantasma", "planta"]},
+    {name: "712 Bergmite", types: ["hielo"]},
+    {name: "713 Avalugg", types: ["hielo"]},
+    {name: "714 Noibat", types: ["volador", "dragon"]},
+    {name: "715 Noivern", types: ["volador", "dragon"]},
+    {name: "716 Xerneas", types: ["hada"]},
+    {name: "717 Yveltal", types: ["siniestro", "volador"]},
+    {name: "718 Zygarde", types: ["dragon", "tierra"]},
+    {name: "719 Diancie", types: ["roca", "hada"]},
+    {name: "720 Hoopa", types: ["psiquico", "fantasma"]},
+    {name: "721 Volcanion", types: ["fuego", "agua"]},
+    {name: "722 Rowlet", types: ["planta", "volador"]},
+    {name: "723 Dartrix", types: ["planta", "volador"]},
+    {name: "724 Decidueye", types: ["planta", "fantasma"]},
+    {name: "725 Litten", types: ["fuego"]},
+    {name: "726 Torracat", types: ["fuego"]},
+    {name: "727 Incineroar", types: ["fuego", "siniestro"]},
+    {name: "728 Popplio", types: ["agua"]},
+    {name: "729 Brionne", types: ["agua"]},
+    {name: "730 Primarina", types: ["agua", "hada"]},
+    {name: "731 Pikipek", types: ["normal", "volador"]},
+    {name: "732 Trumbeak", types: ["normal", "volador"]},
+    {name: "733 Toucannon", types: ["normal", "volador"]},
+    {name: "734 Yungoos", types: ["normal"]},
+    {name: "735 Gumshoos", types: ["normal"]},
+    {name: "736 Grubbin", types: ["bicho"]},
+    {name: "737 Charjabug", types: ["bicho", "electrico"]},
+    {name: "738 Vikavolt", types: ["bicho", "electrico"]},
+    {name: "739 Crabrawler", types: ["lucha"]},
+    {name: "740 Crabominable", types: ["lucha", "hielo"]},
+    {name: "741 Oricorio", types: ["fuego", "volador"]},
+    {name: "742 Cutiefly", types: ["bicho", "hada"]},
+    {name: "743 Ribombee", types: ["bicho", "hada"]},
+    {name: "744 Rockruff", types: ["roca"]},
+    {name: "745 Lycanroc", types: ["roca"]},
+    {name: "746 Wishiwashi", types: ["agua"]},
+    {name: "747 Mareanie", types: ["veneno", "agua"]},
+    {name: "748 Toxapex", types: ["veneno", "agua"]},
+    {name: "749 Mudbray", types: ["tierra"]},
+    {name: "750 Mudsdale", types: ["tierra"]},
+    {name: "751 Dewpider", types: ["agua", "bicho"]},
+    {name: "752 Araquanid", types: ["agua", "bicho"]},
+    {name: "753 Fomantis", types: ["planta"]},
+    {name: "754 Lurantis", types: ["planta"]},
+    {name: "755 Morelull", types: ["planta", "hada"]},
+    {name: "756 Shiinotic", types: ["planta", "hada"]},
+    {name: "757 Salandit", types: ["veneno", "fuego"]},
+    {name: "758 Salazzle", types: ["veneno", "fuego"]},
+    {name: "759 Stufful", types: ["normal", "lucha"]},
+    {name: "760 Bewear", types: ["normal", "lucha"]},
+    {name: "761 Bounsweet", types: ["planta"]},
+    {name: "762 Steenee", types: ["planta"]},
+    {name: "763 Tsareena", types: ["planta"]},
+    {name: "764 Comfey", types: ["hada"]},
+    {name: "765 Oranguru", types: ["normal", "psiquico"]},
+    {name: "766 Passimian", types: ["lucha"]},
+    {name: "767 Wimpod", types: ["bicho", "agua"]},
+    {name: "768 Golisopod", types: ["bicho", "agua"]},
+    {name: "769 Sandygast", types: ["fantasma", "tierra"]},
+    {name: "770 Palossand", types: ["fantasma", "tierra"]},
+    {name: "771 Pyukumuku", types: ["agua"]},
+    {name: "772 Tipo: Nulo", types: ["normal"]},
+    {name: "773 Silvally", types: ["normal"]},
+    {name: "774 Minior", types: ["roca", "volador"]},
+    {name: "775 Komala", types: ["normal"]},
+    {name: "776 Turtonator", types: ["fuego", "dragon"]},
+    {name: "777 Togedemaru", types: ["electrico", "acero"]},
+    {name: "778 Mimikyu", types: ["fantasma", "hada"]},
+    {name: "779 Bruxish", types: ["agua", "psiquico"]},
+    {name: "780 Drampa", types: ["normal", "dragon"]},
+    {name: "781 Dhelmise", types: ["fantasma", "planta"]},
+    {name: "782 Jangmo-o", types: ["dragon"]},
+    {name: "783 Hakamo-o", types: ["dragon", "lucha"]},
+    {name: "784 Kommo-o", types: ["dragon", "lucha"]},
+    {name: "785 Tapu Koko", types: ["electrico", "hada"]},
+    {name: "786 Tapu Lele", types: ["psiquico", "hada"]},
+    {name: "787 Tapu Bulu", types: ["planta", "hada"]},
+    {name: "788 Tapu Fini", types: ["agua", "hada"]},
+    {name: "789 Cosmog", types: ["psiquico"]},
+    {name: "790 Cosmoem", types: ["psiquico"]},
+    {name: "791 Solgaleo", types: ["psiquico", "acero"]},
+    {name: "792 Lunala", types: ["psiquico", "fantasma"]},
+    {name: "793 Nihilego", types: ["roca", "veneno"]},
+    {name: "794 Buzzwole", types: ["bicho", "lucha"]},
+    {name: "795 Pheromosa", types: ["bicho", "lucha"]},
+    {name: "796 Xurkitree", types: ["electrico"]},
+    {name: "797 Celesteela", types: ["acero", "volador"]},
+    {name: "798 Kartana", types: ["planta", "acero"]},
+    {name: "799 Guzzlord", types: ["siniestro", "dragon"]},
+    {name: "800 Necrozma", types: ["psiquico"]},
+    {name: "801 Magearna", types: ["acero", "hada"]},
+    {name: "802 Marshadow", types: ["lucha", "fantasma"]},
+    {name: "803 Poipole", types: ["veneno"]},
+    {name: "804 Naganadel", types: ["veneno", "dragon"]},
+    {name: "805 Stakataka", types: ["roca", "acero"]},
+    {name: "806 Blacephalon", types: ["fuego", "fantasma"]},
+    {name: "807 Zeraora", types: ["electrico"]},
+    {name: "808 Meltan", types: ["acero"]},
+    {name: "809 Melmetal", types: ["acero"]},
+    {name: "810 Grookey", types: ["planta"]},
+    {name: "811 Thwackey", types: ["planta"]},
+    {name: "812 Rillaboom", types: ["planta"]},
+    {name: "813 Scorbunny", types: ["fuego"]},
+    {name: "814 Raboot", types: ["fuego"]},
+    {name: "815 Cinderace", types: ["fuego"]},
+    {name: "816 Sobble", types: ["agua"]},
+    {name: "817 Drizzile", types: ["agua"]},
+    {name: "818 Inteleon", types: ["agua"]},
+    {name: "819 Skwovet", types: ["normal"]},
+    {name: "820 Greedent", types: ["normal"]},
+    {name: "821 Rookidee", types: ["volador"]},
+    {name: "822 Corvisquire", types: ["volador"]},
+    {name: "823 Corviknight", types: ["volador", "acero"]},
+    {name: "824 Blipbug", types: ["bicho"]},
+    {name: "825 Dottler", types: ["bicho", "psiquico"]},
+    {name: "826 Orbeetle", types: ["bicho", "psiquico"]},
+    {name: "827 Nickit", types: ["siniestro"]},
+    {name: "828 Thievul", types: ["siniestro"]},
+    {name: "829 Gossifleur", types: ["planta"]},
+    {name: "830 Eldegoss", types: ["planta"]},
+    {name: "831 Wooloo", types: ["normal"]},
+    {name: "832 Dubwool", types: ["normal"]},
+    {name: "833 Chewtle", types: ["agua"]},
+    {name: "834 Drednaw", types: ["agua", "roca"]},
+    {name: "835 Yamper", types: ["electrico"]},
+    {name: "836 Boltund", types: ["electrico"]},
+    {name: "837 Rolycoly", types: ["roca"]},
+    {name: "838 Carkol", types: ["roca", "fuego"]},
+    {name: "839 Coalossal", types: ["roca", "fuego"]},
+    {name: "840 Applin", types: ["planta", "dragon"]},
+    {name: "841 Flapple", types: ["planta", "dragon"]},
+    {name: "842 Appletun", types: ["planta", "dragon"]},
+    {name: "843 Silicobra", types: ["tierra"]},
+    {name: "844 Sandaconda", types: ["tierra"]},
+    {name: "845 Cramorant", types: ["volador", "agua"]},
+    {name: "846 Arrokuda", types: ["agua"]},
+    {name: "847 Barraskewda", types: ["agua"]},
+    {name: "848 Toxel", types: ["electrico", "veneno"]},
+    {name: "849 Toxtricity", types: ["electrico", "veneno"]},
+    {name: "850 Sizzlipede", types: ["fuego", "bicho"]},
+    {name: "851 Centiskorch", types: ["fuego", "bicho"]},
+    {name: "852 Clobbopus", types: ["lucha"]},
+    {name: "853 Grapploct", types: ["lucha"]},
+    {name: "854 Sinistea", types: ["fantasma"]},
+    {name: "855 Polteageist", types: ["fantasma"]},
+    {name: "856 Hatenna", types: ["psiquico"]},
+    {name: "857 Hattrem", types: ["psiquico"]},
+    {name: "858 Hatterene", types: ["psiquico", "hada"]},
+    {name: "859 Impidimp", types: ["siniestro", "hada"]},
+    {name: "860 Morgrem", types: ["siniestro", "hada"]},
+    {name: "861 Grimmsnarl", types: ["siniestro", "hada"]},
+    {name: "862 Obstagoon", types: ["siniestro", "normal"]},
+    {name: "863 Perrserker", types: ["acero"]},
+    {name: "864 Cursola", types: ["fantasma"]},
+    {name: "865 Sirfetch'd", types: ["lucha"]},
+    {name: "866 Mr. Rime", types: ["hielo", "psiquico"]},
+    {name: "867 Runerigus", types: ["tierra", "fantasma"]},
+    {name: "868 Milcery", types: ["hada"]},
+    {name: "869 Alcremie", types: ["hada"]},
+    {name: "870 Falinks", types: ["lucha"]},
+    {name: "871 Pincurchin", types: ["electrico"]},
+    {name: "872 Snom", types: ["hielo", "bicho"]},
+    {name: "873 Frosmoth", types: ["hielo", "bicho"]},
+    {name: "874 Stonjourner", types: ["roca"]},
+    {name: "875 Eiscue", types: ["hielo"]},
+    {name: "876 Indeedee", types: ["psiquico", "normal"]},
+    {name: "877 Morpeko", types: ["electrico", "siniestro"]},
+    {name: "878 Cufant", types: ["acero"]},
+    {name: "879 Copperajah", types: ["acero"]},
+    {name: "880 Dracozolt", types: ["electrico", "dragon"]},
+    {name: "881 Arctozolt", types: ["electrico", "hielo"]},
+    {name: "882 Dracovish", types: ["agua", "dragon"]},
+    {name: "883 Arctovish", types: ["agua", "hielo"]},
+    {name: "884 Duraludon", types: ["acero", "dragon"]},
+    {name: "885 Dreepy", types: ["dragon", "fantasma"]},
+    {name: "886 Drakloak", types: ["dragon", "fantasma"]},
+    {name: "887 Dragapult", types: ["dragon", "fantasma"]},
+    {name: "888 Zacian", types: ["hada"]},
+    {name: "889 Zamazenta", types: ["lucha"]},
+    {name: "890 Eternatus", types: ["veneno", "dragon"]},
+    {name: "891 Kubfu", types: ["lucha"]},
+    {name: "892 Urshifu", types: ["lucha", "siniestro"]},
+    {name: "893 Zarude", types: ["siniestro", "planta"]},
+    {name: "894 Regieleki", types: ["electrico"]},
+    {name: "895 Regidrago", types: ["dragon"]},
+    {name: "896 Glastrier", types: ["hielo"]},
+    {name: "897 Spectrier", types: ["fantasma"]},
+    {name: "898 Calyrex", types: ["psiquico", "planta"]},
+    {name: "899 Wyrdeer", types: ["normal", "psiquico"]},
+    {name: "900 Kleavor", types: ["bicho", "roca"]},
+    {name: "901 Ursaluna", types: ["tierra", "normal"]},
+    {name: "902 Basculegion", types: ["agua", "fantasma"]},
+    {name: "903 Sneasler", types: ["lucha", "veneno"]},
+    {name: "904 Overqwil", types: ["siniestro", "veneno"]},
+    {name: "905 Enamorus", types: ["hada", "volador"]},
+    {name: "906 Sprigatito", types: ["planta"]},
+    {name: "907 Floragato", types: ["planta"]},
+    {name: "908 Meowscarada", types: ["planta", "siniestro"]},
+    {name: "909 Fuecoco", types: ["fuego"]},
+    {name: "910 Crocalor", types: ["fuego"]},
+    {name: "911 Skeledirge", types: ["fuego", "fantasma"]},
+    {name: "912 Quaxly", types: ["agua"]},
+    {name: "913 Quaxwell", types: ["agua"]},
+    {name: "914 Quaquaval", types: ["agua", "lucha"]},
+    {name: "915 Lechonk", types: ["normal"]},
+    {name: "916 Oinkologne", types: ["normal"]},
+    {name: "917 Tarountula", types: ["bicho"]},
+    {name: "918 Spidops", types: ["bicho"]},
+    {name: "919 Nymble", types: ["bicho"]},
+    {name: "920 Lokix", types: ["bicho", "siniestro"]},
+    {name: "921 Pawmi", types: ["electrico"]},
+    {name: "922 Pawmo", types: ["electrico", "lucha"]},
+    {name: "923 Pawmot", types: ["electrico", "lucha"]},
+    {name: "924 Tandemaus", types: ["normal"]},
+    {name: "925 Maushold", types: ["normal"]},
+    {name: "926 Fidough", types: ["hada"]},
+    {name: "927 Dachsbun", types: ["hada"]},
+    {name: "928 Smoliv", types: ["planta", "normal"]},
+    {name: "929 Dolliv", types: ["planta", "normal"]},
+    {name: "930 Arboliva", types: ["planta", "normal"]},
+    {name: "931 Squawkabilly", types: ["normal", "volador"]},
+    {name: "932 Nacli", types: ["roca"]},
+    {name: "933 Naclstack", types: ["roca"]},
+    {name: "934 Garganacl", types: ["roca"]},
+    {name: "935 Charcadet", types: ["fuego"]},
+    {name: "936 Armarouge", types: ["fuego", "psiquico"]},
+    {name: "937 Ceruledge", types: ["fuego", "fantasma"]},
+    {name: "938 Tadbulb", types: ["electrico"]},
+    {name: "939 Bellibolt", types: ["electrico"]},
+    {name: "940 Wattrel", types: ["electrico", "volador"]},
+    {name: "941 Kilowattrel", types: ["electrico", "volador"]},
+    {name: "942 Maschiff", types: ["siniestro"]},
+    {name: "943 Mabosstiff", types: ["siniestro"]},
+    {name: "944 Shroodle", types: ["veneno", "normal"]},
+    {name: "945 Grafaiai", types: ["veneno", "normal"]},
+    {name: "946 Bramblin", types: ["planta", "fantasma"]},
+    {name: "947 Brambleghast", types: ["planta", "fantasma"]},
+    {name: "948 Toedscool", types: ["tierra", "planta"]},
+    {name: "949 Toedscruel", types: ["tierra", "planta"]},
+    {name: "950 Klawf", types: ["roca"]},
+    {name: "951 Capsakid", types: ["planta"]},
+    {name: "952 Scovillain", types: ["planta", "fuego"]},
+    {name: "953 Rellor", types: ["bicho"]},
+    {name: "954 Rabsca", types: ["bicho", "psiquico"]},
+    {name: "955 Flittle", types: ["psiquico"]},
+    {name: "956 Espathra", types: ["psiquico"]},
+    {name: "957 Tinkatink", types: ["hada", "acero"]},
+    {name: "958 Tinkatuff", types: ["hada", "acero"]},
+    {name: "959 Tinkaton", types: ["hada", "acero"]},
+    {name: "960 Wiglett", types: ["agua"]},
+    {name: "961 Wugtrio", types: ["agua"]},
+    {name: "962 Bombirdier", types: ["volador", "siniestro"]},
+    {name: "963 Finizen", types: ["agua"]},
+    {name: "964 Palafin", types: ["agua"]},
+    {name: "965 Varoom", types: ["acero", "veneno"]},
+    {name: "966 Revavroom", types: ["acero", "veneno"]},
+    {name: "967 Cyclizar", types: ["dragon", "normal"]},
+    {name: "968 Orthworm", types: ["acero"]},
+    {name: "969 Glimmet", types: ["roca", "veneno"]},
+    {name: "970 Glimmora", types: ["roca", "veneno"]},
+    {name: "971 Greavard", types: ["fantasma"]},
+    {name: "972 Houndstone", types: ["fantasma"]},
+    {name: "973 Flamigo", types: ["volador", "lucha"]},
+    {name: "974 Cetoddle", types: ["hielo"]},
+    {name: "975 Cetitan", types: ["hielo"]},
+    {name: "976 Veluza", types: ["agua", "psiquico"]},
+    {name: "977 Dondozo", types: ["agua"]},
+    {name: "978 Tatsugiri", types: ["dragon", "agua"]},
+    {name: "979 Annihilape", types: ["lucha", "fantasma"]},
+    {name: "980 Clodsire", types: ["veneno", "tierra"]},
+    {name: "981 Farigiraf", types: ["normal", "psiquico"]},
+    {name: "982 Dudunsparce", types: ["normal"]},
+    {name: "983 Kingambit", types: ["siniestro", "acero"]},
+    {name: "984 Great Tusk", types: ["tierra", "lucha"]},
+    {name: "985 Scream Tail", types: ["hada", "psiquico"]},
+    {name: "986 Brute Bonnet", types: ["planta", "siniestro"]},
+    {name: "987 Flutter Mane", types: ["fantasma", "hada"]},
+    {name: "988 Slither Wing", types: ["bicho", "lucha"]},
+    {name: "989 Sandy Shocks", types: ["electrico", "tierra"]},
+    {name: "990 Iron Treads", types: ["tierra", "acero"]},
+    {name: "991 Iron Bundle", types: ["hielo", "agua"]},
+    {name: "992 Iron Hands", types: ["lucha", "electrico"]},
+    {name: "993 Iron Jugulis", types: ["siniestro", "volador"]},
+    {name: "994 Iron Moth", types: ["fuego", "veneno"]},
+    {name: "995 Iron Thorns", types: ["roca", "electrico"]},
+    {name: "996 Frigibax", types: ["dragon", "hielo"]},
+    {name: "997 Arctibax", types: ["dragon", "hielo"]},
+    {name: "998 Baxcalibur", types: ["dragon", "hielo"]},
+    {name: "999 Gimmighoul", types: ["fantasma"]},
+    {name: "1000 Gholdengo", types: ["acero", "fantasma"]},
+    {name: "1001 Wo-Chien", types: ["siniestro", "planta"]},
+    {name: "1002 Chien-Pao", types: ["siniestro", "hielo"]},
+    {name: "1003 Ting-Lu", types: ["siniestro", "tierra"]},
+    {name: "1004 Chi-Yu", types: ["siniestro", "fuego"]},
+    {name: "1005 Roaring Moon", types: ["dragon", "siniestro"]},
+    {name: "1006 Iron Valiant", types: ["hada", "lucha"]},
+    {name: "1007 Koraidon", types: ["lucha", "dragon"]},
+    {name: "1008 Miraidon", types: ["electrico", "dragon"]},
+    {name: "1009 Walking Wake", types: ["agua", "dragon"]},
+    {name: "1010 Iron Leaves", types: ["planta", "psiquico"]},
+    {name: "1011 Dipplin", types: ["planta", "dragon"]},
+    {name: "1012 Poltchageist", types: ["planta", "fantasma"]},
+    {name: "1013 Sinistcha", types: ["planta", "fantasma"]},
+    {name: "1014 Okidogi", types: ["veneno", "lucha"]},
+    {name: "1015 Munkidori", types: ["veneno", "psiquico"]},
+    {name: "1016 Fezandipiti", types: ["veneno", "hada"]},
+    {name: "1017 Ogerpon", types: ["planta"]},
+    {name: "1018 Archaludon", types: ["acero", "dragon"]},
+    {name: "1019 Hydrapple", types: ["planta", "dragon"]},
+    {name: "1020 Gouging Fire", types: ["fuego", "dragon"]},
+    {name: "1021 Raging Bolt", types: ["electrico", "dragon"]},
+    {name: "1022 Iron Boulder", types: ["roca", "psiquico"]},
+    {name: "1023 Iron Crown", types: ["acero", "psiquico"]},
+    {name: "1024 Terapagos", types: ["normal"]},
+    {name: "1025 Pecharunt", types: ["veneno", "fantasma"]}
+            ]
+        };
     </script>
 </body>
 </html>
