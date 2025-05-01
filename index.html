@@ -686,9 +686,10 @@
 
         <!-- Selector de Pokémon para Gen 1 -->
         <div class="pokemon-selector">
-            <div class="pokemon-search">
-    <input type="text" id="gen1-search" placeholder="Buscar Pokémon...">
-    <button class="button" onclick="filterPokemon('gen1')">Buscar</button>
+            div class="pokemon-scroll-list">
+    <div class="pokemon-grid" id="gen1-pokemon-list">
+        <!-- Los Pokémon aparecerán aquí automáticamente -->
+    </div>
 </div>
             <div class="pokemon-grid" id="gen1-pokemon-list">
                 <!-- Lista de Pokémon se llenará con JavaScript -->
@@ -1282,12 +1283,11 @@
 
         <!-- Selector de Pokémon para Gen 2-5 -->
         <div class="pokemon-selector">
-            <div class="pokemon-search">
-                <input type="text" id="gen2-search" placeholder="Buscar Pokémon..." oninput="filterPokemon('gen2')">
-            </div>
-            <div class="pokemon-grid" id="gen2-pokemon-list">
-                <!-- Lista de Pokémon se llenará con JavaScript -->
-            </div>
+            div class="pokemon-scroll-list">
+    <div class="pokemon-grid" id="gen1-pokemon-list">
+        <!-- Los Pokémon aparecerán aquí automáticamente -->
+    </div>
+</div>
         </div>
 
         <!-- Resultado de Pokémon seleccionado -->
@@ -1922,12 +1922,11 @@
 
         <!-- Selector de Pokémon para Gen 6+ -->
         <div class="pokemon-selector">
-            <div class="pokemon-search">
-                <input type="text" id="gen6-search" placeholder="Buscar Pokémon..." oninput="filterPokemon('gen6')">
-            </div>
-            <div class="pokemon-grid" id="gen6-pokemon-list">
-                <!-- Lista de Pokémon se llenará con JavaScript -->
-            </div>
+            div class="pokemon-scroll-list">
+    <div class="pokemon-grid" id="gen1-pokemon-list">
+        <!-- Los Pokémon aparecerán aquí automáticamente -->
+    </div>
+</div>
         </div>
 
         <!-- Resultado de Pokémon seleccionado -->
