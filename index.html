@@ -134,6 +134,7 @@
         <a href="#gen1" class="button">Gen 1</a>
         <a href="#gen2" class="button">Gen 2-5</a>
         <a href="#gen6" class="button">Gen 6+</a>
+        <a href="#search" class="button">Buscar Pokémon</a> <!-- Nuevo botón -->
     </div>
 
     <!-- GENERACIÓN 1 -->
@@ -1809,7 +1810,23 @@
             <a href="#" class="button">Volver</a>
         </div>
     </div>
+<div id="search" class="content">
+        <h2>Buscar Pokémon</h2>
+        
+        <div class="search-box">
+            <input type="text" id="pokemonInput" class="search-input" placeholder="Ej: ditto" onkeypress="if(event.keyCode==13) searchPokemon()">
+            <button class="button" onclick="searchPokemon()">Buscar</button>
+        </div>
 
+        <div id="pokemonResult" class="pokemon-data" style="display:none;">
+            <img id="pokemonSprite" class="pokemon-sprite" src="" alt="Sprite Pokémon">
+            <div class="pokemon-name" id="pokemonName"></div>
+            <div class="pokemon-types" id="pokemonTypes"></div>
+            <div class="pokemon-stat"><strong>Altura:</strong> <span id="pokemonHeight"></span> dm</div>
+            <div class="pokemon-stat"><strong>Peso:</strong> <span id="pokemonWeight"></span> hg</div>
+            <div class="pokemon-stat"><strong>Habilidades:</strong> <span id="pokemonAbilities"></span></div>
+        </div>
+    </div>
     <script>
         function showType(typeId) {
             // Oculta todos los detalles primero
