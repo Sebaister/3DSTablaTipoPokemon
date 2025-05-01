@@ -4,7 +4,6 @@
     <title>Tablas Pokémon 3DS</title>
     <meta charset="utf-8">
     <style>
-        /* Estilos simples para la 3DS */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -26,17 +25,18 @@
             border-radius: 5px;
             font-size: 16px;
         }
-        .button:hover {
-            background-color: #cc0000;
-        }
         img {
             max-width: 100%;
             height: auto;
             margin-top: 10px;
             border: 2px solid #e60000;
         }
-        .hidden {
+        /* Ocultar todas las secciones excepto la primera */
+        .tab-content {
             display: none;
+        }
+        .tab-content:target {
+            display: block;
         }
     </style>
 </head>
@@ -48,40 +48,23 @@
     <a href="#gen2-5" class="button">Generaciones 2-5</a>
     <a href="#gen6" class="button">Generación 6+</a>
     
-    <!-- Imágenes (ocultas inicialmente) -->
-    <div id="gen1" class="hidden">
-        <img src="gen1.jpg" alt="Primera Generación">
+    <!-- Contenido de cada pestaña -->
+    <div id="gen1" class="tab-content">
+        <img src="tabla-gen1.jpg" alt="Primera Generación">
         <br>
         <a href="#" class="button">Volver</a>
     </div>
     
-    <div id="gen2-5" class="hidden">
-        <img src="gen2-5.jpg" alt="Generaciones 2-5">
+    <div id="gen2-5" class="tab-content">
+        <img src="tabla-gen2-5.jpg" alt="Generaciones 2-5">
         <br>
         <a href="#" class="button">Volver</a>
     </div>
     
-    <div id="gen6" class="hidden">
-        <img src="gen6.jpg" alt="Generación 6+">
+    <div id="gen6" class="tab-content">
+        <img src="tabla-gen6.jpg" alt="Generación 6+">
         <br>
         <a href="#" class="button">Volver</a>
     </div>
-    
-    <!-- Mini-script para navegación básica (funciona en 3DS) -->
-    <script>
-        // Muestra solo la sección seleccionada
-        document.querySelectorAll('a[href^="#"]').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelectorAll('div').forEach(div => {
-                    div.classList.add('hidden');
-                });
-                const target = this.getAttribute('href');
-                if (target !== '#') {
-                    document.querySelector(target).classList.remove('hidden');
-                }
-            });
-        });
-    </script>
 </body>
 </html>
