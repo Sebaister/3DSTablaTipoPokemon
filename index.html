@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tablas de Tipos Pokémon</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 5px;
+            font-size: 12px;
+        }
+        h1 {
+            color: #FF0000;
+            font-size: 16px;
+            margin: 5px 0;
+            text-align: center;
+        }
+        h2 {
+            color: #FFCC00;
+            font-size: 14px;
+            margin: 5px 0;
+            text-align: center;
+        }
+        .menu {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0;
+        }
+        .button {
+            display: block;
+            padding: 6px 8px;
+            background-color: #E60000;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 12px;
+            min-width: 80px;
+            text-align: center;
+            margin: 2px;
+        }
+        .content {
+            display: none;
+            margin-top: 5px;
+        }
+        .content:target {
+            display: block;
+        }
+        .type-table {
+            width: 100%;
+            overflow-x: auto;
+            margin: 5px 0;
+            border: 1px solid #444444;
+        }
+        .type-table table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .type-table th, .type-table td {
+            border: 1px solid #444444;
+            padding: 4px;
+            text-align: center;
+            font-size: 11px;
+        }
+        .type-table th {
+            background-color: #333333;
+            color: white;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+        .type-name {
+            display: inline-block;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            margin: 2px;
+            min-width: 70px;
+            text-align: center;
+        }
+        /* Colores de tipos */
+        .normal { background-color: #A8A878; }
+        .fuego { background-color: #F08030; }
+        .agua { background-color: #6890F0; }
+        .planta { background-color: #78C850; }
+        .electrico { background-color: #F8D030; }
+        .hielo { background-color: #98D8D8; }
+        .lucha { background-color: #C03028; }
+        .veneno { background-color: #A040A0; }
+        .tierra { background-color: #E0C068; }
+        .volador { background-color: #A890F0; }
+        .psiquico { background-color: #F85888; }
+        .bicho { background-color: #A8B820; }
+        .roca { background-color: #B8A038; }
+        .fantasma { background-color: #705898; }
+        .dragon { background-color: #7038F8; }
+        .siniestro { background-color: #705848; }
+        .acero { background-color: #B8B8D0; }
+        .hada { background-color: #EE99AC; }
+        /* Efectividad */
+        .effective { background-color: #4CAF50; color: white; }
+        .weak { background-color: #F44336; color: white; }
+        .immune { background-color: #9E9E9E; color: white; }
+        .note {
+            font-size: 11px;
+            margin: 8px 0;
+            padding: 0 5px;
+            text-align: left;
+        }
+        .section {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tablas de Tipos Pokémon</h1>
+    
+    <div class="menu">
+        <a href="#gen1" class="button">Generación 1</a>
+        <a href="#gen2" class="button">Generación 2-5</a>
+        <a href="#gen6" class="button">Generación 6+</a>
+    </div>
+
+    <!-- GENERACIÓN 1 -->
+    <div id="gen1" class="content">
+        <div class="section">
+            <h2>Generación 1 (Rojo/Azul/Amarillo)</h2>
+            <div class="note">
+                <strong>Nota:</strong> Los movimientos de tipo hielo hacen daño normal a los Pokémon de tipo fuego.
+            </div>
+            <div class="type-table">
+                <table>
+                    <tr>
+                        <th rowspan="2">Tipo Ataque</th>
+                        <th colspan="15">Tipo Defensa</th>
+                    </tr>
+                    <tr>
+                        <th><div class="type-name agua">Agua</div></th>
+                        <th><div class="type-name bicho">Bicho</div></th>
+                        <th><div class="type-name dragon">Dragón</div></th>
+                        <th><div class="type-name electrico">Eléctrico</div></th>
+                        <th><div class="type-name fantasma">Fantasma</div></th>
+                        <th><div class="type-name fuego">Fuego</div></th>
+                        <th><div class="type-name hielo">Hielo</div></th>
+                        <th><div class="type-name lucha">Lucha</div></th>
+                        <th><div class="type-name normal">Normal</div></th>
+                        <th><div class="type-name planta">Planta</div></th>
+                        <th><div class="type-name psiquico">Psíquico</div></th>
+                        <th><div class="type-name roca">Roca</div></th>
+                        <th><div class="type-name tierra">Tierra</div></th>
+                        <th><div class="type-name veneno">Veneno</div></th>
+                        <th><div class="type-name volador">Volador</div></th>
+                    </tr>
+                    <!-- Fila Agua -->
+                    <tr>
+                        <td><div class="type-name agua">Agua</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Bicho -->
+                    <tr>
+                        <td><div class="type-name bicho">Bicho</div></td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                    </tr>
+                    <!-- Fila Dragón -->
+                    <tr>
+                        <td><div class="type-name dragon">Dragón</div></td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Eléctrico -->
+                    <tr>
+                        <td><div class="type-name electrico">Eléctrico</div></td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                    </tr>
+                    <!-- Fila Fantasma -->
+                    <tr>
+                        <td><div class="type-name fantasma">Fantasma</div></td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Fuego -->
+                    <tr>
+                        <td><div class="type-name fuego">Fuego</div></td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Hielo -->
+                    <tr>
+                        <td><div class="type-name hielo">Hielo</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                    </tr>
+                    <!-- Fila Lucha -->
+                    <tr>
+                        <td><div class="type-name lucha">Lucha</div></td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                    </tr>
+                    <!-- Fila Normal -->
+                    <tr>
+                        <td><div class="type-name normal">Normal</div></td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Planta -->
+                    <tr>
+                        <td><div class="type-name planta">Planta</div></td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                    </tr>
+                    <!-- Fila Psíquico -->
+                    <tr>
+                        <td><div class="type-name psiquico">Psíquico</div></td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Roca -->
+                    <tr>
+                        <td><div class="type-name roca">Roca</div></td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                    </tr>
+                    <!-- Fila Tierra -->
+                    <tr>
+                        <td><div class="type-name tierra">Tierra</div></td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td class="immune">0×</td>
+                    </tr>
+                    <!-- Fila Veneno -->
+                    <tr>
+                        <td><div class="type-name veneno">Veneno</div></td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Volador -->
+                    <tr>
+                        <td><div class="type-name volador">Volador</div></td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <a href="#" class="button">Volver</a>
+    </div>
+
+    <!-- GENERACIÓN 2-5 -->
+    <div id="gen2" class="content">
+        <div class="section">
+            <h2>Generaciones 2-5 (Oro/Plata a Negro/Blanco)</h2>
+            <div class="type-table">
+                <table>
+                    <tr>
+                        <th rowspan="2">Tipo Ataque</th>
+                        <th colspan="17">Tipo Defensa</th>
+                    </tr>
+                    <tr>
+                        <th><div class="type-name acero">Acero</div></th>
+                        <th><div class="type-name agua">Agua</div></th>
+                        <th><div class="type-name bicho">Bicho</div></th>
+                        <th><div class="type-name dragon">Dragón</div></th>
+                        <th><div class="type-name electrico">Eléctrico</div></th>
+                        <th><div class="type-name fantasma">Fantasma</div></th>
+                        <th><div class="type-name fuego">Fuego</div></th>
+                        <th><div class="type-name hielo">Hielo</div></th>
+                        <th><div class="type-name lucha">Lucha</div></th>
+                        <th><div class="type-name normal">Normal</div></th>
+                        <th><div class="type-name planta">Planta</div></th>
+                        <th><div class="type-name psiquico">Psíquico</div></th>
+                        <th><div class="type-name roca">Roca</div></th>
+                        <th><div class="type-name siniestro">Siniestro</div></th>
+                        <th><div class="type-name tierra">Tierra</div></th>
+                        <th><div class="type-name veneno">Veneno</div></th>
+                        <th><div class="type-name volador">Volador</div></th>
+                    </tr>
+                    <!-- Fila Acero -->
+                    <tr>
+                        <td><div class="type-name acero">Acero</div></td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Agua -->
+                    <tr>
+                        <td><div class="type-name agua">Agua</div></td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Bicho -->
+                    <tr>
+                        <td><div class="type-name bicho">Bicho</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                    </tr>
+                    <!-- Fila Dragón -->
+                    <tr>
+                        <td><div class="type-name dragon">Dragón</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Eléctrico -->
+                    <tr>
+                        <td><div class="type-name electrico">Eléctrico</div></td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                    </tr>
+                    <!-- Fila Fantasma -->
+                    <tr>
+                        <td><div class="type-name fantasma">Fantasma</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Fuego -->
+                    <tr>
+                        <td><div class="type-name fuego">Fuego</div></td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Hielo -->
+                    <tr>
+                        <td><div class="type-name hielo">Hielo</div></td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                    </tr>
+                    <!-- Fila Lucha -->
+                    <tr>
+                        <td><div class="type-name lucha">Lucha</div></td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                    </tr>
+                    <!-- Fila Normal -->
+                    <tr>
+                        <td><div class="type-name normal">Normal</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Planta -->
+                    <tr>
+                        <td><div class="type-name planta">Planta</div></td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                    </tr>
+                    <!-- Fila Psíquico -->
+                    <tr>
+                        <td><div class="type-name psiquico">Psíquico</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Roca -->
+                    <tr>
+                        <td><div class="type-name roca">Roca</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                    </tr>
+                    <!-- Fila Siniestro -->
+                    <tr>
+                        <td><div class="type-name siniestro">Siniestro</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Tierra -->
+                    <tr>
+                        <td><div class="type-name tierra">Tierra</div></td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Veneno -->
+                    <tr>
+                        <td><div class="type-name veneno">Veneno</div></td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Volador -->
+                    <tr>
+                        <td><div class="type-name volador">Volador</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <a href="#" class="button">Volver</a>
+    </div>
+
+    <!-- GENERACIÓN 6+ -->
+    <div id="gen6" class="content">
+        <div class="section">
+            <h2>Generación 6+ (X/Y - Escarlata/Violeta)</h2>
+            <div class="note">
+                <strong>Cambios importantes:</strong><br>
+                • Tipo Hada añadido (fuerte contra Dragón, Siniestro y Lucha)<br>
+                • Acero ya no resiste Siniestro y Fantasma<br>
+                • Planta ya no resiste Hada<br>
+                • Nuevas inmunidades y debilidades ajustadas
+            </div>
+            <div class="type-table">
+                <table>
+                    <tr>
+                        <th rowspan="2">Tipo Ataque</th>
+                        <th colspan="18">Tipo Defensa</th>
+                    </tr>
+                    <tr>
+                        <th><div class="type-name acero">Acero</div></th>
+                        <th><div class="type-name agua">Agua</div></th>
+                        <th><div class="type-name bicho">Bicho</div></th>
+                        <th><div class="type-name dragon">Dragón</div></th>
+                        <th><div class="type-name electrico">Eléctrico</div></th>
+                        <th><div class="type-name fantasma">Fantasma</div></th>
+                        <th><div class="type-name fuego">Fuego</div></th>
+                        <th><div class="type-name hada">Hada</div></th>
+                        <th><div class="type-name hielo">Hielo</div></th>
+                        <th><div class="type-name lucha">Lucha</div></th>
+                        <th><div class="type-name normal">Normal</div></th>
+                        <th><div class="type-name planta">Planta</div></th>
+                        <th><div class="type-name psiquico">Psíquico</div></th>
+                        <th><div class="type-name roca">Roca</div></th>
+                        <th><div class="type-name siniestro">Siniestro</div></th>
+                        <th><div class="type-name tierra">Tierra</div></th>
+                        <th><div class="type-name veneno">Veneno</div></th>
+                        <th><div class="type-name volador">Volador</div></th>
+                    </tr>
+                    <!-- Fila Acero -->
+                    <tr>
+                        <td><div class="type-name acero">Acero</div></td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Agua -->
+                    <tr>
+                        <td><div class="type-name agua">Agua</div></td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Bicho -->
+                    <tr>
+                        <td><div class="type-name bicho">Bicho</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                    </tr>
+                    <!-- Fila Dragón -->
+                    <tr>
+                        <td><div class="type-name dragon">Dragón</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Eléctrico -->
+                    <tr>
+                        <td><div class="type-name electrico">Eléctrico</div></td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                    </tr>
+                    <!-- Fila Fantasma -->
+                    <tr>
+                        <td><div class="type-name fantasma">Fantasma</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Fuego -->
+                    <tr>
+                        <td><div class="type-name fuego">Fuego</div></td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Hada -->
+                    <tr>
+                        <td><div class="type-name hada">Hada</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Hielo -->
+                    <tr>
+                        <td><div class="type-name hielo">Hielo</div></td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                    </tr>
+                    <!-- Fila Lucha -->
+                    <tr>
+                        <td><div class="type-name lucha">Lucha</div></td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                    </tr>
+                    <!-- Fila Normal -->
+                    <tr>
+                        <td><div class="type-name normal">Normal</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Planta -->
+                    <tr>
+                        <td><div class="type-name planta">Planta</div></td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                    </tr>
+                    <!-- Fila Psíquico -->
+                    <tr>
+                        <td><div class="type-name psiquico">Psíquico</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Roca -->
+                    <tr>
+                        <td><div class="type-name roca">Roca</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                    </tr>
+                    <!-- Fila Siniestro -->
+                    <tr>
+                        <td><div class="type-name siniestro">Siniestro</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Tierra -->
+                    <tr>
+                        <td><div class="type-name tierra">Tierra</div></td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="effective">2×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Veneno -->
+                    <tr>
+                        <td><div class="type-name veneno">Veneno</div></td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                    </tr>
+                    <!-- Fila Volador -->
+                    <tr>
+                        <td><div class="type-name volador">Volador</div></td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td>1×</td>
+                        <td class="effective">2×</td>
+                        <td class="weak">½×</td>
+                        <td>1×</td>
+                        <td class="immune">0×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                        <td>1×</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <a href="#" class="button">Volver</a>
+    </div>
+</body>
+</html>
