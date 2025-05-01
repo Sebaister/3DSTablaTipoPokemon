@@ -1,71 +1,186 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Tablas Tipo Juegos Pokémon</title>
+    <title>Tablas de Tipos Pokémon</title>
     <meta charset="utf-8">
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #000000;
+            color: white;
             text-align: center;
-            background-color: #000000; /* Fondo negro */
             margin: 0;
             padding: 10px;
-            color: white; /* Texto blanco para contraste */
         }
         h1 {
-            color: #e60000; /* Rojo Pokémon */
-            font-size: 24px;
-            text-shadow: 0 0 5px #ff0000; /* Efecto brillo para el título */
+            color: #e60000;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        .generation {
+            display: none;
+            margin: 10px auto;
+            max-width: 400px;
+        }
+        .generation:target {
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            background-color: #222;
+        }
+        th, td {
+            border: 1px solid #e60000;
+            padding: 3px;
+            font-size: 12px;
+        }
+        th {
+            background-color: #e60000;
+            color: white;
         }
         .button {
             display: inline-block;
             margin: 5px;
-            padding: 8px 15px;
+            padding: 8px 12px;
             background-color: #e60000;
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            font-size: 16px;
+            font-size: 14px;
         }
-        img {
-            max-width: 100%;
-            height: auto;
-            margin-top: 10px;
-            border: 2px solid #e60000;
+        .button:hover {
+            background-color: #ff3333;
         }
-        /* Ocultar todas las secciones excepto la primera */
-        .tab-content {
-            display: none;
-        }
-        .tab-content:target {
-            display: block;
+        .type {
+            display: inline-block;
+            width: 60px;
+            margin: 2px;
+            padding: 2px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 11px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <h1>Tablas de tipos Pokémon</h1>
+    <h1>Tablas de Tipos Pokémon</h1>
     
     <!-- Botones de navegación -->
-    <a href="#gen1" class="button">Primera Generación</a>
-    <a href="#gen2-5" class="button">Generaciones 2-5</a>
+    <a href="#gen1" class="button">Generación 1</a>
+    <a href="#gen2" class="button">Generación 2-5</a>
     <a href="#gen6" class="button">Generación 6+</a>
     
-    <!-- Contenido de cada pestaña -->
-    <div id="gen1" class="tab-content">
-        <img src="tabla-gen1.jpg" alt="Primera Generación">
-        <br>
+    <!-- Generación 1 -->
+    <div id="gen1" class="generation">
+        <h2>Generación 1 (Rojo/Azul/Amarillo)</h2>
+        <table>
+            <tr>
+                <th>Ataque\Defensa</th>
+                <th>Normal</th>
+                <th>Fuego</th>
+                <th>Agua</th>
+                <th>Eléctrico</th>
+                <th>Planta</th>
+                <th>Hielo</th>
+                <th>Lucha</th>
+                <th>Veneno</th>
+                <th>Tierra</th>
+            </tr>
+            <tr>
+                <td>Normal</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+            </tr>
+            <tr>
+                <td>Fuego</td>
+                <td>1×</td>
+                <td>½×</td>
+                <td>½×</td>
+                <td>1×</td>
+                <td>2×</td>
+                <td>2×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+            </tr>
+            <!-- Más filas según sea necesario -->
+        </table>
         <a href="#" class="button">Volver</a>
     </div>
     
-    <div id="gen2-5" class="tab-content">
-        <img src="tabla-gen2-5.jpg" alt="Generaciones 2-5">
-        <br>
+    <!-- Generación 2-5 -->
+    <div id="gen2" class="generation">
+        <h2>Generaciones 2-5 (Oro/Plata a Negro/Blanco)</h2>
+        <table>
+            <tr>
+                <th>Ataque\Defensa</th>
+                <th>Acero</th>
+                <th>Siniestro</th>
+                <th>Hada</th>
+                <th>Volador</th>
+                <th>Psíquico</th>
+                <th>Bicho</th>
+                <th>Roca</th>
+                <th>Fantasma</th>
+                <th>Dragón</th>
+            </tr>
+            <tr>
+                <td>Acero</td>
+                <td>½×</td>
+                <td>1×</td>
+                <td>2×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>2×</td>
+                <td>1×</td>
+                <td>1×</td>
+            </tr>
+            <!-- Más filas según sea necesario -->
+        </table>
         <a href="#" class="button">Volver</a>
     </div>
     
-    <div id="gen6" class="tab-content">
-        <img src="tabla-gen6.jpg" alt="Generación 6+">
-        <br>
+    <!-- Generación 6+ -->
+    <div id="gen6" class="generation">
+        <h2>Generación 6+ (X/Y en adelante)</h2>
+        <table>
+            <tr>
+                <th>Ataque\Defensa</th>
+                <th>Hada</th>
+                <th>Acero</th>
+                <th>Siniestro</th>
+                <th>Volador</th>
+                <th>Psíquico</th>
+                <th>Bicho</th>
+                <th>Roca</th>
+                <th>Fantasma</th>
+                <th>Dragón</th>
+            </tr>
+            <tr>
+                <td>Hada</td>
+                <td>1×</td>
+                <td>½×</td>
+                <td>2×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>1×</td>
+                <td>2×</td>
+            </tr>
+            <!-- Más filas según sea necesario -->
+        </table>
         <a href="#" class="button">Volver</a>
     </div>
 </body>
