@@ -2145,6 +2145,117 @@
             
             return statMap[statName] || statName;
         }
+        <script>
+    function searchPokemon() {
+        var searchInput = document.getElementById('pokemon-search');
+        var pokemonName = searchInput.value.trim().toLowerCase();
+        
+        if (!pokemonName) {
+            showError('Por favor ingresa un nombre o número de Pokémon');
+            return;
+        }
+        
+        // Mostrar carga
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('error').style.display = 'none';
+        document.getElementById('pokemon-result').style.display = 'none';
+        
+        // Solución para 3DS: Usar proxy HTTP en lugar de HTTPS directo
+        var proxyUrl = 'http://pokeapi-proxy-3ds.herokuapp.com/api/v2/pokemon/';
+        var apiUrl = proxyUrl + pokemonName;
+        
+        // Configurar timeout para 3DS (más largo)
+        var xhr = new XMLHttpRequest();
+        xhr.timeout = 30000; // 30 segundos para 3DS
+        
+        xhr.open('GET', apiUrl, true);
+        
+        xhr.onload = function() {
+            document.getElementById('loading').style.display = 'none';
+            
+            if (xhr.status === 200) {
+                try {
+                    var pokemonData = JSON.parse(xhr.responseText);
+                    displayPokemon(pokemonData);
+                } catch (e) {
+                    showError('Error al procesar los datos del Pokémon');
+                }
+            } else {
+                showError('Pokémon no encontrado. Intenta con otro nombre o número.');
+            }
+        };
+        
+        xhr.onerror = function() {
+            document.getElementById('loading').style.display = 'none';
+            // Alternativa para 3DS: Datos locales básicos
+            if (tryLocalData(pokemonName)) {
+                return;
+            }
+            showError('Error de conexión. Intenta con Pokémon más conocidos.');
+        };
+        
+        xhr.ontimeout = function() {
+            document.getElementById('loading').style.display = 'none';
+            // Intentar con datos locales si hay timeout
+            if (tryLocalData(pokemonName)) {
+                return;
+            }
+            showError('Tiempo de espera agotado. La 3DS es lenta para conexiones.');
+        };
+        
+        xhr.send();
+    }
+    
+    // Datos locales para Pokémon más comunes (solución alternativa)
+    var localPokemonData = {
+        'pikachu': {
+            name: 'pikachu',
+            id: 25,
+            sprites: { front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png' },
+            types: [{ type: { name: 'electric' } }],
+            stats: [
+                { stat: { name: 'hp' }, base_stat: 35 },
+                { stat: { name: 'attack' }, base_stat: 55 },
+                { stat: { name: 'defense' }, base_stat: 40 },
+                { stat: { name: 'special-attack' }, base_stat: 50 },
+                { stat: { name: 'special-defense' }, base_stat: 50 },
+                { stat: { name: 'speed' }, base_stat: 90 }
+            ],
+            abilities: [
+                { ability: { name: 'static' }, is_hidden: false },
+                { ability: { name: 'lightning-rod' }, is_hidden: true }
+            ]
+        },
+        'charizard': {
+            name: 'charizard',
+            id: 6,
+            sprites: { front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png' },
+            types: [{ type: { name: 'fire' } }, { type: { name: 'flying' } }],
+            stats: [
+                { stat: { name: 'hp' }, base_stat: 78 },
+                { stat: { name: 'attack' }, base_stat: 84 },
+                { stat: { name: 'defense' }, base_stat: 78 },
+                { stat: { name: 'special-attack' }, base_stat: 109 },
+                { stat: { name: 'special-defense' }, base_stat: 85 },
+                { stat: { name: 'speed' }, base_stat: 100 }
+            ],
+            abilities: [
+                { ability: { name: 'blaze' }, is_hidden: false },
+                { ability: { name: 'solar-power' }, is_hidden: true }
+            ]
+        }
+        // Puedes agregar más Pokémon comunes aquí
+    };
+    
+    function tryLocalData(pokemonName) {
+        if (localPokemonData[pokemonName]) {
+            displayPokemon(localPokemonData[pokemonName]);
+            showError('Mostrando datos locales (conexión falló)');
+            return true;
+        }
+        return false;
+    }
+</script>
     </script>
 </body>
 </html>
