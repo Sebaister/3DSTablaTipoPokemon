@@ -1824,6 +1824,74 @@
             // Desplaza a la vista (sin animación smooth para mejor rendimiento)
             document.getElementById(typeId).scrollIntoView();
         }
+     // NUEVA FUNCIÓN PARA EL BUSCADOR (AGREGADO AL FINAL SIN CONFLICTOS)
+        async function searchPokemon() {
+            const input = document.getElementById("pokemonInput").value.toLowerCase().trim();
+            const resultDiv = document.getElementById("pokemonResult");
+            
+            if (!input) {
+                alert("Por favor escribe un nombre de Pokémon");
+                return;
+            }
+
+            try {
+                // Mostrar carga
+                resultDiv.style.display = "none";
+                
+                // Hacer la petición a PokeAPI
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${input}`);
+                const data = await response.json();
+                
+                // Mostrar sprite
+                document.getElementById("pokemonSprite").src = data.sprites.front_default;
+                document.getElementById("pokemonName").textContent = 
+                    data.name.charAt(0).toUpperCase() + data.name.slice(1);
+                
+                // Mostrar tipos con colores
+                const typesContainer = document.getElementById("pokemonTypes");
+                typesContainer.innerHTML = "";
+                data.types.forEach(type => {
+                    const typeName = type.type.name;
+                    const typeTag = document.createElement("span");
+                    typeTag.className = `type-tag ${typeName}`;
+                    typeTag.textContent = typeName.charAt(0).toUpperCase() + typeName.slice(1);
+                    typesContainer.appendChild(typeTag);
+                });
+                
+                // Mostrar altura y peso
+                document.getElementById("pokemonHeight").textContent = data.height;
+                document.getElementById("pokemonWeight").textContent = data.weight;
+                
+                // Mostrar habilidades
+                const abilities = data.abilities.map(ability => {
+                    return ability.ability.name.replace(/-/g, " ");
+                });
+                document.getElementById("pokemonAbilities").textContent = 
+                    abilities.join(", ");
+                
+                // Mostrar estadísticas
+                const stats = data.stats.map(stat => {
+                    return `${stat.stat.name}: ${stat.base_stat}`;
+                });
+                document.getElementById("pokemonStats").textContent = 
+                    stats.join(", ");
+                
+                // Mostrar resultados
+                resultDiv.style.display = "block";
+                resultDiv.scrollIntoView();
+                
+            } catch (error) {
+                alert("Pokémon no encontrado. Intenta con otro nombre.");
+                console.error("Error al buscar Pokémon:", error);
+            }
+        }
+
+        // INICIALIZACIÓN: Mostrar Gen 1 al cargar (OPCIONAL)
+        window.onload = function() {
+            if (!window.location.hash) {
+                window.location.hash = "gen1";
+            }
+        };
     </script>
 </body>
 </html>
