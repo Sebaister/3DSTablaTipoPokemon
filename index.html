@@ -220,6 +220,101 @@
             color: #FC0;
             display: none;
         }
+         /* Estilos para el buscador */
+        .search-container {
+            margin: 10px auto;
+            text-align: center;
+            max-width: 300px;
+        }
+        .search-input {
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #444;
+            width: 150px;
+            margin-right: 4px;
+            background-color: #222;
+            color: white;
+        }
+        .search-btn {
+            padding: 6px 10px;
+            background-color: #E00;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .pokemon-result {
+            border: 1px solid #444;
+            border-radius: 6px;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #222;
+            display: none;
+        }
+        .pokemon-name {
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 8px;
+            color: #FC0;
+        }
+        .pokemon-id {
+            font-size: 12px;
+            color: #AAA;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .pokemon-img {
+            display: block;
+            margin: 0 auto;
+            max-width: 100px;
+            max-height: 100px;
+        }
+        .pokemon-types {
+            text-align: center;
+            margin: 8px 0;
+        }
+        .pokemon-stats {
+            margin-top: 10px;
+        }
+        .stat-row {
+            display: flex;
+            margin-bottom: 4px;
+            align-items: center;
+        }
+        .stat-name {
+            width: 80px;
+            font-weight: bold;
+        }
+        .stat-bar-container {
+            flex-grow: 1;
+            height: 12px;
+            background-color: #333;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .stat-bar {
+            height: 100%;
+            background-color: #E00;
+            border-radius: 6px;
+        }
+        .stat-value {
+            width: 30px;
+            text-align: right;
+            margin-left: 5px;
+        }
+        .error-message {
+            color: #F44;
+            text-align: center;
+            margin: 10px 0;
+            display: none;
+        }
+        .loading {
+            text-align: center;
+            margin: 10px 0;
+            color: #FC0;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -1974,9 +2069,26 @@
             <a href="#" class="button">Volver</a>
         </div>
     </div>
-
+    <div id="search" class="content">
+        <h2>Buscar Pokémon</h2>
+        
+        <div class="search-container">
+            <input type="text" id="pokemon-search" class="search-input" placeholder="Nombre o N°" autocomplete="off">
+            <button onclick="searchPokemon()" class="search-btn">Buscar</button>
+        </div>
+        
+        <div id="loading" class="loading">Cargando...</div>
+        <div id="error" class="error-message"></div>
+        
+        <div id="pokemon-result" class="pokemon-result">
+            <!-- Contenido del resultado se llenará dinámicamente -->
+        </div>
+        
+        <div style="text-align:center;margin:10px 0;">
+            <a href="#" class="button">Volver</a>
+        </div>
+    </div>
     <script>
-<script>
         function showType(typeId) {
             // Oculta todos los detalles primero
             var details = document.getElementsByClassName('type-detail');
@@ -1987,43 +2099,44 @@
             // Muestra el seleccionado
             document.getElementById(typeId).style.display = 'block';
             
-            // Desplaza a la vista (sin animación smooth para mejor rendimiento)
+            // Desplaza a la vista
             document.getElementById(typeId).scrollIntoView();
         }
         
-        // Función para buscar Pokémon
+        // Función de búsqueda compatible con 3DS
         function searchPokemon() {
-            var searchInput = document.getElementById('pokemon-search').value.trim();
-            if (!searchInput) return;
-            
-            // Mostrar carga y ocultar resultados/errores previos
+            var searchInput = document.getElementById('pokemon-search').value.trim().toLowerCase();
+            if (!searchInput) {
+                showError('Ingresa un nombre o número');
+                return;
+            }
+
+            // Mostrar carga y ocultar resultados/errores
             document.getElementById('loading').style.display = 'block';
             document.getElementById('error').style.display = 'none';
             document.getElementById('pokemon-result').style.display = 'none';
-            
-            // Convertir a minúsculas y quitar acentos para mejor compatibilidad
-            var query = searchInput.toLowerCase()
-                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Quitar acentos
-                .replace(/[^a-z0-9]/g, ""); // Quitar caracteres especiales
-            
-            // Usar PokeAPI v2 (versión simplificada para 3DS)
-            var apiUrl = 'https://pokeapi.co/api/v2/pokemon/' + encodeURIComponent(query);
-            
-            // Usamos XMLHttpRequest en lugar de fetch para mejor compatibilidad
+
+            // Usar un proxy simple para evitar problemas de CORS
+            var proxyUrl = 'https://api.codetabs.com/v1/proxy/?quest=';
+            var apiUrl = proxyUrl + 'https://pokeapi.co/api/v2/pokemon/' + encodeURIComponent(searchInput);
+
+            // Usar XMLHttpRequest que es más compatible
             var xhr = new XMLHttpRequest();
             xhr.open('GET', apiUrl, true);
-            xhr.onload = function() {
-                document.getElementById('loading').style.display = 'none';
-                
-                if (xhr.status === 200) {
-                    try {
-                        var data = JSON.parse(xhr.responseText);
-                        displayPokemon(data);
-                    } catch (e) {
-                        showError('Error al procesar los datos');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    document.getElementById('loading').style.display = 'none';
+                    
+                    if (xhr.status === 200) {
+                        try {
+                            var data = JSON.parse(xhr.responseText);
+                            displayPokemon(data);
+                        } catch (e) {
+                            showError('Error al leer los datos');
+                        }
+                    } else {
+                        showError('Pokémon no encontrado (Error ' + xhr.status + ')');
                     }
-                } else {
-                    showError('Pokémon no encontrado');
                 }
             };
             xhr.onerror = function() {
@@ -2032,70 +2145,81 @@
             };
             xhr.send();
         }
-        
+
         // Función para mostrar los datos del Pokémon
         function displayPokemon(data) {
-            // Nombre y ID
-            document.getElementById('pokemon-name').textContent = 
-                data.name.charAt(0).toUpperCase() + data.name.slice(1);
-            document.getElementById('pokemon-id').textContent = 'N° ' + data.id;
+            var resultDiv = document.getElementById('pokemon-result');
+            resultDiv.innerHTML = '';
             
-            // Imagen (usamos la versión por defecto para ahorrar ancho de banda)
-            document.getElementById('pokemon-img').src = 
-                data.sprites.other['official-artwork'].front_default || 
-                data.sprites.front_default;
+            // Nombre
+            var nameDiv = document.createElement('div');
+            nameDiv.className = 'pokemon-name';
+            nameDiv.textContent = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+            resultDiv.appendChild(nameDiv);
+            
+            // Número
+            var idDiv = document.createElement('div');
+            idDiv.className = 'pokemon-id';
+            idDiv.textContent = 'N° ' + data.id;
+            resultDiv.appendChild(idDiv);
+            
+            // Imagen
+            if (data.sprites && data.sprites.front_default) {
+                var img = document.createElement('img');
+                img.className = 'pokemon-img';
+                img.src = data.sprites.front_default;
+                img.alt = data.name;
+                resultDiv.appendChild(img);
+            }
             
             // Tipos
-            var typesContainer = document.getElementById('pokemon-types');
-            typesContainer.innerHTML = '';
+            var typesDiv = document.createElement('div');
+            typesDiv.className = 'pokemon-types';
             data.types.forEach(function(typeObj) {
                 var typeName = typeObj.type.name;
                 var typeSpan = document.createElement('span');
                 typeSpan.className = 'type-tag ' + typeName;
                 typeSpan.textContent = typeName.charAt(0).toUpperCase() + typeName.slice(1);
-                typesContainer.appendChild(typeSpan);
-                typesContainer.appendChild(document.createTextNode(' '));
+                typesDiv.appendChild(typeSpan);
+                typesDiv.appendChild(document.createTextNode(' '));
             });
+            resultDiv.appendChild(typesDiv);
             
             // Estadísticas
-            var stats = {
-                hp: 0,
-                attack: 0,
-                defense: 0,
-                'special-attack': 0,
-                'special-defense': 0,
-                speed: 0
-            };
+            var statsDiv = document.createElement('div');
+            statsDiv.className = 'pokemon-stats';
             
             data.stats.forEach(function(statObj) {
-                var statName = statObj.stat.name;
-                if (stats.hasOwnProperty(statName)) {
-                    stats[statName] = statObj.base_stat;
-                }
+                var statRow = document.createElement('div');
+                statRow.className = 'stat-row';
+                
+                var statName = document.createElement('div');
+                statName.className = 'stat-name';
+                statName.textContent = statObj.stat.name.replace('-', ' ') + ':';
+                statRow.appendChild(statName);
+                
+                var statValue = document.createElement('div');
+                statValue.className = 'stat-value';
+                statValue.textContent = statObj.base_stat;
+                statRow.appendChild(statValue);
+                
+                statsDiv.appendChild(statRow);
             });
             
-            // Mostrar estadísticas con barras (ajustadas a máximo 255)
-            for (var stat in stats) {
-                var value = stats[stat];
-                var percentage = (value / 255) * 100;
-                
-                document.getElementById('stat-' + stat).style.width = percentage + '%';
-                document.getElementById('stat-' + stat + '-value').textContent = value;
-            }
+            resultDiv.appendChild(statsDiv);
             
             // Mostrar el resultado
-            document.getElementById('pokemon-result').style.display = 'block';
-            document.getElementById('pokemon-result').scrollIntoView();
+            resultDiv.style.display = 'block';
+            resultDiv.scrollIntoView();
         }
-        
-        // Función para mostrar errores
+
         function showError(message) {
             var errorElement = document.getElementById('error');
             errorElement.textContent = message;
             errorElement.style.display = 'block';
         }
-        
-        // Permitir buscar al presionar Enter
+
+        // Buscar con Enter
         document.getElementById('pokemon-search').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 searchPokemon();
