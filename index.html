@@ -21,6 +21,7 @@
             font-size: 18px;
             text-align: center;
             color: #e60000;
+            margin-bottom: 10px;
         }
         .search-box {
             margin-bottom: 10px;
@@ -29,6 +30,7 @@
         input[type="text"] {
             padding: 5px;
             width: 180px;
+            border: 1px solid #ccc;
         }
         button {
             padding: 5px 10px;
@@ -49,24 +51,16 @@
             margin-bottom: 10px;
         }
         .pokemon-image img {
-            max-width: 96px;
-            max-height: 96px;
+            width: 80px;
+            height: 80px;
         }
-        .stats {
-            margin-top: 10px;
-        }
-        .stat-row {
-            display: flex;
-            margin-bottom: 3px;
-        }
-        .stat-name {
-            width: 100px;
-            font-weight: bold;
+        .pokemon-info {
+            line-height: 1.5;
         }
         .type {
             display: inline-block;
             padding: 2px 5px;
-            margin-right: 5px;
+            margin: 2px;
             border-radius: 3px;
             color: white;
             font-weight: bold;
@@ -75,6 +69,12 @@
         .error {
             color: red;
             text-align: center;
+            margin-top: 10px;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
         }
     </style>
 </head>
@@ -82,46 +82,15 @@
     <div class="container">
         <h1>Buscador Pokémon 3DS</h1>
         <div class="search-box">
-            <input type="text" id="pokemon-input" placeholder="Nombre o número">
+            <input type="text" id="pokemon-input" placeholder="Nombre o número" autocomplete="off">
             <button onclick="searchPokemon()">Buscar</button>
         </div>
+        <div id="loading" class="loading" style="display:none;">Cargando...</div>
         <div id="pokemon-result" class="pokemon-display" style="display:none;">
             <div class="pokemon-image">
                 <img id="pokemon-img" src="" alt="Pokémon">
             </div>
-            <div>
-                <strong>Nombre:</strong> <span id="pokemon-name"></span><br>
-                <strong>Nº:</strong> <span id="pokemon-id"></span><br>
-                <strong>Tipo:</strong> <span id="pokemon-types"></span><br>
-                <strong>Evoluciona:</strong> <span id="pokemon-evolution"></span>
-            </div>
-            <div class="stats">
-                <strong>Estadísticas:</strong>
-                <div class="stat-row">
-                    <span class="stat-name">PS:</span>
-                    <span id="stat-hp"></span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-name">Ataque:</span>
-                    <span id="stat-attack"></span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-name">Defensa:</span>
-                    <span id="stat-defense"></span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-name">Ataque Especial:</span>
-                    <span id="stat-special-attack"></span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-name">Defensa Especial:</span>
-                    <span id="stat-special-defense"></span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-name">Velocidad:</span>
-                    <span id="stat-speed"></span>
-                </div>
-            </div>
+            <div class="pokemon-info" id="pokemon-info"></div>
         </div>
         <div id="error-message" class="error" style="display:none;"></div>
     </div>
@@ -151,137 +120,110 @@
 
         function searchPokemon() {
             var input = document.getElementById('pokemon-input').value.trim().toLowerCase();
-            if (!input) return;
+            if (!input) {
+                showError('Escribe un nombre o número');
+                return;
+            }
             
-            // Mostrar carga
+            // Mostrar estado de carga
             document.getElementById('pokemon-result').style.display = 'none';
             document.getElementById('error-message').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
             
-            // Hacer la petición a PokeAPI (versión compatible con 3DS)
+            // Intentar con diferentes métodos de conexión
+            tryConnectionMethods(input, [
+                // Método 1: Proxy CORS (mayor compatibilidad)
+                'https://cors-anywhere.herokuapp.com/http://pokeapi.co/api/v2/pokemon/',
+                
+                // Método 2: HTTP directo (sin SSL)
+                'http://pokeapi.co/api/v2/pokemon/',
+                
+                // Método 3: Espejo alternativo
+                'https://pokeapi.glitch.me/v2/pokemon/'
+            ], 0);
+        }
+        
+        function tryConnectionMethods(input, urls, index) {
+            if (index >= urls.length) {
+                showError('No se pudo conectar. Intenta más tarde.');
+                document.getElementById('loading').style.display = 'none';
+                return;
+            }
+            
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'https://pokeapi.co/api/v2/pokemon/' + encodeURIComponent(input), true);
+            var url = urls[index] + encodeURIComponent(input);
+            
+            xhr.open('GET', url, true);
+            xhr.timeout = 10000; // 10 segundos de timeout
             
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    var data = JSON.parse(xhr.responseText);
-                    displayPokemon(data);
-                    
-                    // Obtener información de especie para la evolución
-                    getSpeciesInfo(data.species.url);
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        document.getElementById('loading').style.display = 'none';
+                        displayPokemonData(data);
+                    } catch (e) {
+                        // Intentar con el siguiente método si falla el parseo
+                        tryConnectionMethods(input, urls, index + 1);
+                    }
                 } else {
-                    showError('Pokémon no encontrado. Intenta con otro nombre o número.');
+                    // Intentar con el siguiente método si falla la petición
+                    tryConnectionMethods(input, urls, index + 1);
                 }
             };
             
             xhr.onerror = function() {
-                showError('Error de conexión. Intenta nuevamente.');
+                // Intentar con el siguiente método si hay error
+                tryConnectionMethods(input, urls, index + 1);
+            };
+            
+            xhr.ontimeout = function() {
+                // Intentar con el siguiente método si hay timeout
+                tryConnectionMethods(input, urls, index + 1);
             };
             
             xhr.send();
         }
         
-        function displayPokemon(pokemon) {
+        function displayPokemonData(pokemon) {
             // Mostrar información básica
-            document.getElementById('pokemon-name').textContent = capitalizeFirstLetter(pokemon.name);
-            document.getElementById('pokemon-id').textContent = pokemon.id;
+            var infoHTML = '<strong>Nombre:</strong> ' + capitalizeFirstLetter(pokemon.name) + '<br>';
+            infoHTML += '<strong>Nº:</strong> ' + pokemon.id + '<br>';
             
-            // Mostrar imagen (usando la versión por defecto que es más pequeña)
-            document.getElementById('pokemon-img').src = pokemon.sprites.front_default;
+            // Mostrar tipos con colores
+            infoHTML += '<strong>Tipo:</strong> ';
+            if (pokemon.types && pokemon.types.length > 0) {
+                pokemon.types.forEach(function(type) {
+                    var typeName = type.type.name;
+                    infoHTML += '<span class="type" style="background-color:' + 
+                               (typeColors[typeName] || '#777') + '">' + 
+                               capitalizeFirstLetter(typeName) + '</span> ';
+                });
+            }
+            infoHTML += '<br>';
             
-            // Mostrar tipos
-            var typesContainer = document.getElementById('pokemon-types');
-            typesContainer.innerHTML = '';
-            pokemon.types.forEach(function(type) {
-                var typeSpan = document.createElement('span');
-                typeSpan.className = 'type';
-                typeSpan.textContent = capitalizeFirstLetter(type.type.name);
-                typeSpan.style.backgroundColor = typeColors[type.type.name] || '#777';
-                typesContainer.appendChild(typeSpan);
-            });
+            // Mostrar estadísticas
+            infoHTML += '<strong>Estadísticas:</strong><br>';
+            infoHTML += '• PS: ' + (pokemon.stats[0]?.base_stat || '?') + '<br>';
+            infoHTML += '• Ataque: ' + (pokemon.stats[1]?.base_stat || '?') + '<br>';
+            infoHTML += '• Defensa: ' + (pokemon.stats[2]?.base_stat || '?') + '<br>';
+            infoHTML += '• Ataque Especial: ' + (pokemon.stats[3]?.base_stat || '?') + '<br>';
+            infoHTML += '• Defensa Especial: ' + (pokemon.stats[4]?.base_stat || '?') + '<br>';
+            infoHTML += '• Velocidad: ' + (pokemon.stats[5]?.base_stat || '?') + '<br>';
             
-            // Mostrar stats
-            document.getElementById('stat-hp').textContent = pokemon.stats[0].base_stat;
-            document.getElementById('stat-attack').textContent = pokemon.stats[1].base_stat;
-            document.getElementById('stat-defense').textContent = pokemon.stats[2].base_stat;
-            document.getElementById('stat-special-attack').textContent = pokemon.stats[3].base_stat;
-            document.getElementById('stat-special-defense').textContent = pokemon.stats[4].base_stat;
-            document.getElementById('stat-speed').textContent = pokemon.stats[5].base_stat;
+            // Mostrar imagen (usando sprite por defecto)
+            var imgUrl = pokemon.sprites?.front_default || '';
+            document.getElementById('pokemon-img').src = imgUrl;
+            document.getElementById('pokemon-img').onerror = function() {
+                this.style.display = 'none';
+            };
             
-            // Mostrar contenedor
+            document.getElementById('pokemon-info').innerHTML = infoHTML;
             document.getElementById('pokemon-result').style.display = 'block';
         }
         
-        function getSpeciesInfo(speciesUrl) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', speciesUrl, true);
-            
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    var speciesData = JSON.parse(xhr.responseText);
-                    displayEvolutionInfo(speciesData);
-                }
-            };
-            
-            xhr.send();
-        }
-        
-        function displayEvolutionInfo(speciesData) {
-            var evolutionText = 'No evoluciona';
-            
-            if (speciesData.evolves_from_species) {
-                evolutionText = 'De ' + capitalizeFirstLetter(speciesData.evolves_from_species.name);
-                
-                // Intentar obtener nivel de evolución (esto es simplificado)
-                if (speciesData.evolution_chain && speciesData.evolution_chain.url) {
-                    getEvolutionChain(speciesData.evolution_chain.url, speciesData.name);
-                    return;
-                }
-            }
-            
-            document.getElementById('pokemon-evolution').textContent = evolutionText;
-        }
-        
-        function getEvolutionChain(chainUrl, pokemonName) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', chainUrl, true);
-            
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    var chainData = JSON.parse(xhr.responseText);
-                    findEvolutionLevel(chainData.chain, pokemonName.toLowerCase());
-                }
-            };
-            
-            xhr.send();
-        }
-        
-        function findEvolutionLevel(chain, targetName) {
-            // Buscar en la cadena de evolución
-            for (var i = 0; i < chain.evolves_to.length; i++) {
-                var evolution = chain.evolves_to[i];
-                if (evolution.species.name === targetName) {
-                    var level = evolution.evolution_details[0].min_level;
-                    if (level) {
-                        document.getElementById('pokemon-evolution').textContent = 
-                            'De ' + capitalizeFirstLetter(chain.species.name) + ' (nivel ' + level + ')';
-                        return;
-                    }
-                }
-                
-                // Buscar recursivamente
-                if (evolution.evolves_to.length > 0) {
-                    findEvolutionLevel(evolution, targetName);
-                }
-            }
-            
-            // Si no se encuentra nivel específico, mostrar información básica
-            if (chain.species.name === targetName && chain.evolves_to.length > 0) {
-                document.getElementById('pokemon-evolution').textContent = 
-                    'Evoluciona a ' + capitalizeFirstLetter(chain.evolves_to[0].species.name);
-            }
-        }
-        
         function showError(message) {
+            document.getElementById('loading').style.display = 'none';
             document.getElementById('error-message').textContent = message;
             document.getElementById('error-message').style.display = 'block';
         }
