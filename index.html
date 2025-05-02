@@ -1,16 +1,45 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokeAPI en 3DS</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Pokédex 3DS</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f0f0; }
+        #pokemon-info { background: white; padding: 10px; margin-top: 10px; }
+    </style>
 </head>
 <body>
-    <h1>Pokédex 3DS</h1>
-    <div id="pokemon-info">
-        <p>Cargando información...</p>
-    </div>
-    <script src="script.js"></script>
+    <h1>Buscador Pokémon</h1>
+    <input type="text" id="pokemon-input" placeholder="Ej: Pikachu">
+    <button onclick="searchPokemon()">Buscar</button>
+    <div id="pokemon-info"></div>
+
+    <script>
+        let pokedex = [];
+
+        // Cargar el JSON al iniciar
+        fetch('pokedex.json')
+            .then(response => response.json())
+            .then(data => {
+                pokedex = data.pokemon;
+            });
+
+        function searchPokemon() {
+            const input = document.getElementById('pokemon-input').value.toLowerCase();
+            const pokemon = pokedex.find(p => p.name.toLowerCase() === input);
+            const infoDiv = document.getElementById('pokemon-info');
+
+            if (pokemon) {
+                infoDiv.innerHTML = `
+                    <h2>${pokemon.name}</h2>
+                    <img src="${pokemon.img}" width="100">
+                    <p><strong>Tipo:</strong> ${pokemon.type.join(', ')}</p>
+                    <p><strong>Altura:</strong> ${pokemon.height}</p>
+                    <p><strong>Peso:</strong> ${pokemon.weight}</p>
+                `;
+            } else {
+                infoDiv.innerHTML = "<p>¡Pokémon no encontrado!</p>";
+            }
+        }
+    </script>
 </body>
 </html>
