@@ -1,75 +1,196 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokédex 3DS</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 10px;
-            color: #333;
-        }
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        h1 {
-            color: #e60000;
-            text-align: center;
-            font-size: 24px;
-        }
-        #search-form {
-            display: flex;
-            margin-bottom: 10px;
-        }
-        #pokemon-input {
-            flex: 1;
-            padding: 5px;
-            font-size: 16px;
-        }
-        button {
-            padding: 5px 10px;
-            background-color: #e60000;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        #pokemon-info {
-            background-color: white;
-            border-radius: 5px;
-            padding: 10px;
-            margin-top: 10px;
-        }
-        .pokemon-image {
-            display: block;
-            margin: 0 auto;
-            width: 96px;
-            height: 96px;
-        }
-        .stats {
-            margin-top: 10px;
-        }
-        .error {
-            color: red;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscador de Pokémon para 3DS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 10px;
+      color: #333;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #e60000;
+      text-align: center;
+      font-size: 24px;
+    }
+    #search {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    #searchBtn {
+      width: 100%;
+      padding: 10px;
+      background-color: #e60000;
+      color: white;
+      border: none;
+      font-size: 16px;
+    }
+    #pokemonInfo {
+      margin-top: 20px;
+      background-color: white;
+      padding: 10px;
+      border-radius: 5px;
+      display: none;
+    }
+    .pokemon-name {
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: capitalize;
+      color: #e60000;
+    }
+    .pokemon-id {
+      color: #777;
+    }
+    .pokemon-image {
+      display: block;
+      margin: 0 auto;
+      max-width: 150px;
+    }
+    .type {
+      display: inline-block;
+      padding: 3px 10px;
+      margin: 2px;
+      border-radius: 3px;
+      color: white;
+      font-size: 14px;
+    }
+    .stats {
+      margin-top: 10px;
+    }
+    .stat {
+      margin-bottom: 5px;
+    }
+    .stat-name {
+      display: inline-block;
+      width: 100px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Pokédex 3DS</h1>
-        <form id="search-form">
-            <input type="text" id="pokemon-input" placeholder="Nombre o Número" required>
-            <button type="submit">Buscar</button>
-        </form>
-        <div id="pokemon-info"></div>
+  <div class="container">
+    <h1>Buscador de Pokémon</h1>
+    <input type="text" id="search" placeholder="Nombre o número de Pokémon">
+    <button id="searchBtn">Buscar</button>
+    
+    <div id="pokemonInfo">
+      <div class="pokemon-name" id="pokemonName"></div>
+      <div class="pokemon-id" id="pokemonId"></div>
+      <img class="pokemon-image" id="pokemonImage" src="" alt="">
+      <div id="pokemonTypes"></div>
+      <div class="stats" id="pokemonStats"></div>
     </div>
+  </div>
 
-    <script>
-        // Aquí irá el código JavaScript
-    </script>
+  <script>
+    document.getElementById('searchBtn').addEventListener('click', searchPokemon);
+    document.getElementById('search').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        searchPokemon();
+      }
+    });
+
+    function searchPokemon() {
+      const searchValue = document.getElementById('search').value.trim().toLowerCase();
+      if (!searchValue) return;
+      
+      // Mostrar carga
+      document.getElementById('pokemonInfo').style.display = 'none';
+      
+      // Usar tu proxy de Cloudflare
+      fetch(`https://proxy3ds.sebadrgn.workers.dev/pokemon/${searchValue}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Pokémon no encontrado');
+          }
+          return response.json();
+        })
+        .then(data => displayPokemon(data))
+        .catch(error => {
+          alert(error.message);
+          console.error(error);
+        });
+    }
+
+    function displayPokemon(pokemon) {
+      // Nombre e ID
+      document.getElementById('pokemonName').textContent = 
+        pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+      document.getElementById('pokemonId').textContent = `#${pokemon.id}`;
+      
+      // Imagen
+      const img = document.getElementById('pokemonImage');
+      img.src = pokemon.sprites.front_default;
+      img.onerror = function() {
+        this.style.display = 'none';
+      };
+      
+      // Tipos
+      const typesContainer = document.getElementById('pokemonTypes');
+      typesContainer.innerHTML = '';
+      pokemon.types.forEach(type => {
+        const typeElement = document.createElement('span');
+        typeElement.className = 'type';
+        typeElement.textContent = type;
+        typeElement.style.backgroundColor = getTypeColor(type);
+        typesContainer.appendChild(typeElement);
+      });
+      
+      // Estadísticas
+      const statsContainer = document.getElementById('pokemonStats');
+      statsContainer.innerHTML = '';
+      pokemon.stats.forEach(stat => {
+        const statElement = document.createElement('div');
+        statElement.className = 'stat';
+        
+        const nameElement = document.createElement('span');
+        nameElement.className = 'stat-name';
+        nameElement.textContent = stat.name.replace('-', ' ') + ':';
+        
+        const valueElement = document.createElement('span');
+        valueElement.textContent = stat.value;
+        
+        statElement.appendChild(nameElement);
+        statElement.appendChild(valueElement);
+        statsContainer.appendChild(statElement);
+      });
+      
+      // Mostrar la información
+      document.getElementById('pokemonInfo').style.display = 'block';
+    }
+
+    function getTypeColor(type) {
+      const colors = {
+        normal: '#A8A878',
+        fire: '#F08030',
+        water: '#6890F0',
+        electric: '#F8D030',
+        grass: '#78C850',
+        ice: '#98D8D8',
+        fighting: '#C03028',
+        poison: '#A040A0',
+        ground: '#E0C068',
+        flying: '#A890F0',
+        psychic: '#F85888',
+        bug: '#A8B820',
+        rock: '#B8A038',
+        ghost: '#705898',
+        dragon: '#7038F8',
+        dark: '#705848',
+        steel: '#B8B8D0',
+        fairy: '#EE99AC'
+      };
+      return colors[type] || '#777';
+    }
+  </script>
 </body>
 </html>
