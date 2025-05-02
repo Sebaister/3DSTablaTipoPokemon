@@ -2089,24 +2089,51 @@
         </div>
     </div>
     <script>
-    // Base de datos local de Pokémon (primeros 151)
-    const pokemonDatabase = {
-        "1": { name: "bulbasaur", types: ["grass", "poison"], stats: { hp: 45, attack: 49, defense: 49, sp_atk: 65, sp_def: 65, speed: 45 } },
-        "2": { name: "ivysaur", types: ["grass", "poison"], stats: { hp: 60, attack: 62, defense: 63, sp_atk: 80, sp_def: 80, speed: 60 } },
-        "3": { name: "venusaur", types: ["grass", "poison"], stats: { hp: 80, attack: 82, defense: 83, sp_atk: 100, sp_def: 100, speed: 80 } },
-        "4": { name: "charmander", types: ["fire"], stats: { hp: 39, attack: 52, defense: 43, sp_atk: 60, sp_def: 50, speed: 65 } },
-        "5": { name: "charmeleon", types: ["fire"], stats: { hp: 58, attack: 64, defense: 58, sp_atk: 80, sp_def: 65, speed: 80 } },
-        "6": { name: "charizard", types: ["fire", "flying"], stats: { hp: 78, attack: 84, defense: 78, sp_atk: 109, sp_def: 85, speed: 100 } },
-        "7": { name: "squirtle", types: ["water"], stats: { hp: 44, attack: 48, defense: 65, sp_atk: 50, sp_def: 64, speed: 43 } },
-        "8": { name: "wartortle", types: ["water"], stats: { hp: 59, attack: 63, defense: 80, sp_atk: 65, sp_def: 80, speed: 58 } },
-        "9": { name: "blastoise", types: ["water"], stats: { hp: 79, attack: 83, defense: 100, sp_atk: 85, sp_def: 105, speed: 78 } },
-        "25": { name: "pikachu", types: ["electric"], stats: { hp: 35, attack: 55, defense: 40, sp_atk: 50, sp_def: 50, speed: 90 } },
-        // Puedes agregar más Pokémon según necesidad
-        "150": { name: "mewtwo", types: ["psychic"], stats: { hp: 106, attack: 110, defense: 90, sp_atk: 154, sp_def: 90, speed: 130 } },
-        "151": { name: "mew", types: ["psychic"], stats: { hp: 100, attack: 100, defense: 100, sp_atk: 100, sp_def: 100, speed: 100 } }
+    // Variable global para almacenar los datos
+    var pokemonDatabase = {};
+    
+    // Función para cargar los datos externos
+    function loadPokemonData() {
+        // Mostrar carga mientras se lee el archivo
+        document.getElementById('loading').style.display = 'block';
+        
+        // Usar XMLHttpRequest para cargar el archivo local
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'pokemon-data.json', true);
+        
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                document.getElementById('loading').style.display = 'none';
+                
+                if (xhr.status === 200) {
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        // Convertir el array a un objeto más fácil de buscar
+                        data.pokemons.forEach(function(pokemon) {
+                            pokemonDatabase[pokemon.id] = pokemon;
+                            pokemonDatabase[pokemon.name] = pokemon; // Para búsqueda por nombre
+                        });
+                        console.log('Datos de Pokémon cargados correctamente');
+                    } catch (e) {
+                        console.error('Error al parsear el archivo JSON', e);
+                        showError('Error en los datos de Pokémon');
+                    }
+                } else {
+                    console.error('Error al cargar el archivo JSON');
+                    showError('No se pudo cargar la base de datos');
+                }
+            }
+        };
+        
+        xhr.send();
+    }
+    
+    // Llamar a la función de carga cuando la página esté lista
+    window.onload = function() {
+        loadPokemonData();
     };
-
-    // Función de búsqueda offline
+    
+    // Resto de tus funciones (searchPokemon, displayPokemon, etc.)
     function searchPokemon() {
         var searchInput = document.getElementById('pokemon-search').value.trim().toLowerCase();
         if (!searchInput) {
@@ -2118,35 +2145,31 @@
         document.getElementById('error').style.display = 'none';
         document.getElementById('pokemon-result').style.display = 'none';
 
-        // Pequeño retraso para simular carga
+        // Pequeño retraso para dar tiempo a la interfaz
         setTimeout(function() {
             document.getElementById('loading').style.display = 'none';
             
-            // Buscar por número o nombre
-            var foundPokemon = null;
-            
-            // Primero por número
-            if (pokemonDatabase[searchInput]) {
-                foundPokemon = pokemonDatabase[searchInput];
-                foundPokemon.id = searchInput;
-            }
-            // Si no, buscar por nombre
-            else {
-                for (var id in pokemonDatabase) {
-                    if (pokemonDatabase[id].name === searchInput) {
-                        foundPokemon = pokemonDatabase[id];
-                        foundPokemon.id = id;
-                        break;
-                    }
-                }
-            }
+            // Buscar en la base de datos
+            var foundPokemon = pokemonDatabase[searchInput];
             
             if (foundPokemon) {
                 displayPokemonOffline(foundPokemon);
             } else {
-                showError('Pokémon no encontrado en base local');
+                // Intentar buscar por nombre si no se encontró por ID
+                for (var key in pokemonDatabase) {
+                    if (pokemonDatabase[key].name === searchInput) {
+                        foundPokemon = pokemonDatabase[key];
+                        break;
+                    }
+                }
+                
+                if (foundPokemon) {
+                    displayPokemonOffline(foundPokemon);
+                } else {
+                    showError('Pokémon no encontrado');
+                }
             }
-        }, 500); // Medio segundo de retraso para feedback visual
+        }, 100);
     }
 
     // Mostrar datos offline
