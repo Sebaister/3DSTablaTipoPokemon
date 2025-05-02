@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscador de Pokémon para 3DS</title>
+    <title>Pokédex 3DS</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,109 +15,61 @@
         .container {
             max-width: 400px;
             margin: 0 auto;
-            background-color: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         h1 {
+            color: #e60000;
             text-align: center;
             font-size: 24px;
-            color: #e60012;
         }
-        input, button {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0;
-            box-sizing: border-box;
+        #search-form {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        #pokemon-input {
+            flex: 1;
+            padding: 5px;
+            font-size: 16px;
         }
         button {
-            background-color: #e60012;
+            padding: 5px 10px;
+            background-color: #e60000;
             color: white;
             border: none;
             cursor: pointer;
+            font-size: 16px;
         }
-        button:disabled {
-            background-color: #cccccc;
-        }
-        #result {
-            margin-top: 15px;
-            padding: 10px;
-            border: 1px solid #ddd;
+        #pokemon-info {
+            background-color: white;
             border-radius: 5px;
-            min-height: 100px;
+            padding: 10px;
+            margin-top: 10px;
         }
-        .pokemon-img {
+        .pokemon-image {
             display: block;
             margin: 0 auto;
-            max-width: 150px;
+            width: 96px;
+            height: 96px;
+        }
+        .stats {
+            margin-top: 10px;
+        }
+        .error {
+            color: red;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Buscador de Pokémon</h1>
-        <input type="text" id="pokemonInput" placeholder="Nombre o número de Pokémon">
-        <button id="searchBtn">Buscar</button>
-        <div id="result">
-            <p>Ingresa el nombre o número de un Pokémon</p>
-        </div>
+        <h1>Pokédex 3DS</h1>
+        <form id="search-form">
+            <input type="text" id="pokemon-input" placeholder="Nombre o Número" required>
+            <button type="submit">Buscar</button>
+        </form>
+        <div id="pokemon-info"></div>
     </div>
 
     <script>
-        // Configuración del proxy de Cloudflare (reemplaza con tu URL)
-        const CLOUDFLARE_PROXY_URL = "https://tu-worker.tu-subdominio.workers.dev";
-        
-        document.getElementById('searchBtn').addEventListener('click', searchPokemon);
-        document.getElementById('pokemonInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchPokemon();
-            }
-        });
-
-        function searchPokemon() {
-            const input = document.getElementById('pokemonInput').value.trim().toLowerCase();
-            if (!input) return;
-            
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '<p>Buscando...</p>';
-            
-            // Usamos el proxy de Cloudflare para hacer la petición
-            fetch(`${CLOUDFLARE_PROXY_URL}/pokemon/${input}`)
-                .then(response => {
-                    if (!response.ok) throw new Error('Pokémon no encontrado');
-                    return response.json();
-                })
-                .then(data => {
-                    displayPokemon(data);
-                })
-                .catch(error => {
-                    resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
-                });
-        }
-
-        function displayPokemon(pokemon) {
-            const resultDiv = document.getElementById('result');
-            
-            // Obtener la imagen (usamos la versión de sprites de la 3DS si está disponible)
-            const imgUrl = pokemon.sprites.front_default || 
-                          pokemon.sprites.versions['generation-v']['black-white'].front_default;
-            
-            let html = `
-                <h2>#${pokemon.id} - ${capitalizeFirstLetter(pokemon.name)}</h2>
-                <img class="pokemon-img" src="${imgUrl}" alt="${pokemon.name}">
-                <p><strong>Tipo(s):</strong> ${pokemon.types.map(t => capitalizeFirstLetter(t.type.name)).join(', ')}</p>
-                <p><strong>Altura:</strong> ${pokemon.height / 10}m</p>
-                <p><strong>Peso:</strong> ${pokemon.weight / 10}kg</p>
-                <p><strong>Habilidades:</strong> ${pokemon.abilities.map(a => capitalizeFirstLetter(a.ability.name)).join(', ')}</p>
-            `;
-            
-            resultDiv.innerHTML = html;
-        }
-
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
+        // Aquí irá el código JavaScript
     </script>
 </body>
 </html>
