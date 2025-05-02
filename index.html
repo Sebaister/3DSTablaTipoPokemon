@@ -2089,142 +2089,158 @@
         </div>
     </div>
     <script>
-        function showType(typeId) {
-            // Oculta todos los detalles primero
-            var details = document.getElementsByClassName('type-detail');
-            for (var i = 0; i < details.length; i++) {
-                details[i].style.display = 'none';
-            }
-            
-            // Muestra el seleccionado
-            document.getElementById(typeId).style.display = 'block';
-            
-            // Desplaza a la vista
-            document.getElementById(typeId).scrollIntoView();
+    // Función para mostrar tipos (original)
+    function showType(typeId) {
+        var details = document.getElementsByClassName('type-detail');
+        for (var i = 0; i < details.length; i++) {
+            details[i].style.display = 'none';
         }
+        document.getElementById(typeId).style.display = 'block';
+        document.getElementById(typeId).scrollIntoView();
+    }
+    
+    // Versión ultra-compatible para 3DS
+    function searchPokemon() {
+        var searchInput = document.getElementById('pokemon-search').value.trim().toLowerCase();
+        if (!searchInput) {
+            showError('Ingresa un nombre o número');
+            return;
+        }
+
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('error').style.display = 'none';
+        document.getElementById('pokemon-result').style.display = 'none';
+
+        // Solución 3DS: Usar HTTP en lugar de HTTPS y endpoint específico
+        var apiUrl = 'http://pokeapi.salvadorhm.com/api/v2/pokemon/' + encodeURIComponent(searchInput) + '/';
+
+        // Método más compatible posible
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', apiUrl, true);
+        xhr.timeout = 10000; // 10 segundos de timeout
         
-        // Función de búsqueda compatible con 3DS
-        function searchPokemon() {
-            var searchInput = document.getElementById('pokemon-search').value.trim().toLowerCase();
-            if (!searchInput) {
-                showError('Ingresa un nombre o número');
-                return;
-            }
-
-            // Mostrar carga y ocultar resultados/errores
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('error').style.display = 'none';
-            document.getElementById('pokemon-result').style.display = 'none';
-
-            // Usar un proxy simple para evitar problemas de CORS
-            var proxyUrl = 'https://api.codetabs.com/v1/proxy/?quest=';
-            var apiUrl = proxyUrl + 'https://pokeapi.co/api/v2/pokemon/' + encodeURIComponent(searchInput);
-
-            // Usar XMLHttpRequest que es más compatible
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', apiUrl, true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    document.getElementById('loading').style.display = 'none';
-                    
-                    if (xhr.status === 200) {
-                        try {
-                            var data = JSON.parse(xhr.responseText);
-                            displayPokemon(data);
-                        } catch (e) {
-                            showError('Error al leer los datos');
-                        }
-                    } else {
-                        showError('Pokémon no encontrado (Error ' + xhr.status + ')');
-                    }
-                }
-            };
-            xhr.onerror = function() {
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
                 document.getElementById('loading').style.display = 'none';
-                showError('Error de conexión');
-            };
-            xhr.send();
-        }
-
-        // Función para mostrar los datos del Pokémon
-        function displayPokemon(data) {
-            var resultDiv = document.getElementById('pokemon-result');
-            resultDiv.innerHTML = '';
-            
-            // Nombre
-            var nameDiv = document.createElement('div');
-            nameDiv.className = 'pokemon-name';
-            nameDiv.textContent = data.name.charAt(0).toUpperCase() + data.name.slice(1);
-            resultDiv.appendChild(nameDiv);
-            
-            // Número
-            var idDiv = document.createElement('div');
-            idDiv.className = 'pokemon-id';
-            idDiv.textContent = 'N° ' + data.id;
-            resultDiv.appendChild(idDiv);
-            
-            // Imagen
-            if (data.sprites && data.sprites.front_default) {
-                var img = document.createElement('img');
-                img.className = 'pokemon-img';
-                img.src = data.sprites.front_default;
-                img.alt = data.name;
-                resultDiv.appendChild(img);
+                
+                if (xhr.status === 200) {
+                    try {
+                        // Parseo seguro del JSON
+                        var data = JSON.parse(xhr.responseText.replace(/[\u0000-\u001F\u007F-\u009F]/g, ""));
+                        displayPokemonBasic(data);
+                    } catch (e) {
+                        showError('Datos inválidos');
+                    }
+                } else {
+                    showError('No encontrado (Código ' + xhr.status + ')');
+                }
             }
-            
-            // Tipos
+        };
+        
+        xhr.onerror = function() {
+            document.getElementById('loading').style.display = 'none';
+            showError('Error de conexión. Intenta con HTTP en PC.');
+        };
+        
+        xhr.ontimeout = function() {
+            document.getElementById('loading').style.display = 'none';
+            showError('Tiempo de espera agotado');
+        };
+        
+        try {
+            xhr.send();
+        } catch (e) {
+            showError('Error al enviar solicitud');
+        }
+    }
+
+    // Versión simplificada para mostrar datos
+    function displayPokemonBasic(data) {
+        var resultDiv = document.getElementById('pokemon-result');
+        resultDiv.innerHTML = '';
+        
+        // Nombre y número
+        var nameDiv = document.createElement('div');
+        nameDiv.className = 'pokemon-name';
+        nameDiv.textContent = (data.name || '???').charAt(0).toUpperCase() + (data.name || '').slice(1);
+        resultDiv.appendChild(nameDiv);
+        
+        var idDiv = document.createElement('div');
+        idDiv.className = 'pokemon-id';
+        idDiv.textContent = 'N° ' + (data.id || '???');
+        resultDiv.appendChild(idDiv);
+        
+        // Tipos
+        if (data.types && data.types.length > 0) {
             var typesDiv = document.createElement('div');
             typesDiv.className = 'pokemon-types';
-            data.types.forEach(function(typeObj) {
-                var typeName = typeObj.type.name;
-                var typeSpan = document.createElement('span');
-                typeSpan.className = 'type-tag ' + typeName;
-                typeSpan.textContent = typeName.charAt(0).toUpperCase() + typeName.slice(1);
-                typesDiv.appendChild(typeSpan);
-                typesDiv.appendChild(document.createTextNode(' '));
-            });
-            resultDiv.appendChild(typesDiv);
             
-            // Estadísticas
+            data.types.forEach(function(typeObj) {
+                if (typeObj && typeObj.type) {
+                    var typeName = typeObj.type.name;
+                    var typeSpan = document.createElement('span');
+                    typeSpan.className = 'type-tag ' + typeName;
+                    typeSpan.textContent = typeName.charAt(0).toUpperCase() + typeName.slice(1);
+                    typesDiv.appendChild(typeSpan);
+                    typesDiv.appendChild(document.createTextNode(' '));
+                }
+            });
+            
+            resultDiv.appendChild(typesDiv);
+        }
+        
+        // Estadísticas básicas (sin imágenes para mayor compatibilidad)
+        if (data.stats && data.stats.length > 0) {
             var statsDiv = document.createElement('div');
             statsDiv.className = 'pokemon-stats';
             
-            data.stats.forEach(function(statObj) {
-                var statRow = document.createElement('div');
-                statRow.className = 'stat-row';
+            // Orden de estadísticas importante para 3DS
+            var statOrder = ['hp', 'attack', 'defense', 'special-attack', 'special-defense', 'speed'];
+            
+            statOrder.forEach(function(statName) {
+                var stat = data.stats.find(function(s) {
+                    return s.stat.name === statName;
+                });
                 
-                var statName = document.createElement('div');
-                statName.className = 'stat-name';
-                statName.textContent = statObj.stat.name.replace('-', ' ') + ':';
-                statRow.appendChild(statName);
-                
-                var statValue = document.createElement('div');
-                statValue.className = 'stat-value';
-                statValue.textContent = statObj.base_stat;
-                statRow.appendChild(statValue);
-                
-                statsDiv.appendChild(statRow);
+                if (stat) {
+                    var statRow = document.createElement('div');
+                    statRow.className = 'stat-row';
+                    
+                    var nameSpan = document.createElement('span');
+                    nameSpan.className = 'stat-name';
+                    nameSpan.textContent = statName.replace('-', ' ') + ':';
+                    statRow.appendChild(nameSpan);
+                    
+                    var valueSpan = document.createElement('span');
+                    valueSpan.className = 'stat-value';
+                    valueSpan.textContent = stat.base_stat;
+                    statRow.appendChild(valueSpan);
+                    
+                    statsDiv.appendChild(statRow);
+                }
             });
             
             resultDiv.appendChild(statsDiv);
-            
-            // Mostrar el resultado
-            resultDiv.style.display = 'block';
-            resultDiv.scrollIntoView();
         }
+        
+        resultDiv.style.display = 'block';
+        resultDiv.scrollIntoView();
+    }
 
-        function showError(message) {
-            var errorElement = document.getElementById('error');
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
+    function showError(message) {
+        var errorElement = document.getElementById('error');
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
+
+    // Controlador para tecla Enter (compatible con 3DS)
+    document.getElementById('pokemon-search').addEventListener('keypress', function(e) {
+        if (!e) e = window.event;
+        var keyCode = e.keyCode || e.which;
+        if (keyCode == '13') {
+            searchPokemon();
         }
-
-        // Buscar con Enter
-        document.getElementById('pokemon-search').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchPokemon();
-            }
-        });
-    </script>
+    });
+</script>
 </body>
 </html>
