@@ -1941,168 +1941,161 @@
         </div>
     </div>
 
-         <script>
-    // URL base de la PokeAPI (usaremos un proxy si es necesario)
+            <!-- [...] Todo tu HTML anterior permanece igual [...] -->
+
     <script>
-    // Versión simplificada y compatible con 3DS
-    const POKEAPI_URL = 'https://pokeapi.co/api/v2/pokemon/';
-    
-    // Detectar si es Nintendo 3DS
-    const is3DS = navigator.userAgent.includes('Nintendo 3DS');
-    
-    function showType(typeId) {
-        var details = document.getElementsByClassName('type-detail');
-        for (var i = 0; i < details.length; i++) {
-            details[i].style.display = 'none';
-        }
-        document.getElementById(typeId).style.display = 'block';
-    }
-    
-    // Función de búsqueda optimizada para 3DS
-    function searchPokemon() {
-        var searchInput = document.getElementById('pokemon-search');
-        var searchTerm = searchInput.value.trim().toLowerCase();
+        // ★★★ COMIENZO DEL NUEVO CÓDIGO ★★★
+        // Configuración para 3DS
+        const is3DS = navigator.userAgent.includes('Nintendo 3DS');
+        const API_URL = 'https://pokeapi.co/api/v2/pokemon/';
+        const PROXY_URL = 'https://corsproxy.io/?' + encodeURIComponent(API_URL);
         
-        if (!searchTerm) {
-            showError('Ingresa un nombre o número');
-            return;
-        }
-        
-        // Mostrar carga
-        document.getElementById('loading').style.display = 'block';
-        document.getElementById('error').style.display = 'none';
-        document.getElementById('pokemon-result').style.display = 'none';
-        
-        // Usar XMLHttpRequest que es más compatible con 3DS
-        var xhr = new XMLHttpRequest();
-        var apiUrl = POKEAPI_URL + encodeURIComponent(searchTerm);
-        
-        // Usar proxy solo si es 3DS
-        if (is3DS) {
-            apiUrl = 'https://cors-anywhere.herokuapp.com/' + apiUrl;
-        }
-        
-        xhr.open('GET', apiUrl, true);
-        xhr.timeout = 15000; // 15 segundos timeout
-        
-        xhr.onload = function() {
-            document.getElementById('loading').style.display = 'none';
+        // Función de búsqueda optimizada
+        function searchPokemon() {
+            var searchInput = document.getElementById('pokemon-search');
+            var searchTerm = searchInput.value.trim().toLowerCase();
             
-            if (xhr.status === 200) {
-                try {
-                    var data = JSON.parse(xhr.responseText);
-                    displayPokemon(data);
-                } catch(e) {
-                    showError('Error al leer los datos');
-                }
-            } else {
-                showError('Pokémon no encontrado');
+            if (!searchTerm) {
+                showError('Ingresa nombre o número');
+                return;
             }
-        };
-        
-        xhr.onerror = function() {
-            document.getElementById('loading').style.display = 'none';
-            showError('Error de conexión');
-        };
-        
-        xhr.ontimeout = function() {
-            document.getElementById('loading').style.display = 'none';
-            showError('Tiempo de espera agotado');
-        };
-        
-        xhr.send();
-    }
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('pokemon-result').style.display = 'none';
+            
+            var apiToUse = is3DS ? PROXY_URL : API_URL;
+            var finalUrl = apiToUse + encodeURIComponent(searchTerm);
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', finalUrl, true);
+            xhr.timeout = 20000; // 20 segundos
+            
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    document.getElementById('loading').style.display = 'none';
+                    
+                    if (xhr.status === 200) {
+                        try {
+                            var data = JSON.parse(xhr.responseText);
+                            displayPokemon({
+                                id: data.id,
+                                name: data.name,
+                                types: data.types,
+                                stats: data.stats,
+                                sprites: {
+                                    front_default: data.sprites.versions['generation-v']['black-white'].front_default || 
+                                                  data.sprites.front_default
+                                },
+                                abilities: data.abilities.slice(0, 2) // Solo 2 habilidades
+                            });
+                        } catch(e) {
+                            showError('Datos inválidos');
+                        }
+                    } else {
+                        showError('No encontrado (Error ' + xhr.status + ')');
+                    }
+                }
+            };
+            
+            xhr.onerror = function() {
+                document.getElementById('loading').style.display = 'none';
+                showError('Error de conexión');
+            };
+            
+            xhr.send();
+        }
 
-    function displayPokemon(pokemon) {
-        document.getElementById('pokemon-name').textContent = 
-            pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
-        document.getElementById('pokemon-id').textContent = '#' + pokemon.id;
-        
-        // Usamos sprites de PokeAPI
-        var imgUrl = pokemon.sprites.front_default || 
-            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png';
-        document.getElementById('pokemon-img').src = imgUrl;
-        
-        var typesContainer = document.getElementById('pokemon-types');
-        typesContainer.innerHTML = '';
-        pokemon.types.forEach(function(typeObj) {
-            var typeTag = document.createElement('div');
-            typeTag.className = 'type-tag ' + getTypeClass(typeObj.type.name);
-            typeTag.textContent = getTypeNameInSpanish(typeObj.type.name);
-            typesContainer.appendChild(typeTag);
-        });
-        
-        var statsContainer = document.getElementById('pokemon-stats');
-        statsContainer.innerHTML = '';
-        pokemon.stats.forEach(function(statObj) {
-            var statRow = document.createElement('div');
-            statRow.className = 'stat-row';
-            statRow.innerHTML = `
-                <div class="stat-name">${getStatNameInSpanish(statObj.stat.name)}:</div>
-                <div class="stat-value">${statObj.base_stat}</div>
-                <div class="stat-bar">
-                    <div class="stat-bar-fill" style="width:${Math.min(100, statObj.base_stat/2.55)}%"></div>
-                </div>
-            `;
-            statsContainer.appendChild(statRow);
-        });
-        
-        var abilitiesContainer = document.getElementById('pokemon-abilities');
-        abilitiesContainer.innerHTML = '';
-        pokemon.abilities.forEach(function(abilityObj) {
-            var abilityItem = document.createElement('div');
-            abilityItem.textContent = '- ' + 
-                abilityObj.ability.name
-                    .replace('-', ' ')
-                    .split(' ')
-                    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-                    .join(' ');
-            if (abilityObj.is_hidden) abilityItem.textContent += ' (Oculta)';
-            abilitiesContainer.appendChild(abilityItem);
-        });
-        
-        document.getElementById('pokemon-result').style.display = 'block';
-        document.getElementById('pokemon-result').scrollIntoView();
-    }
+        function displayPokemon(pokemon) {
+            document.getElementById('pokemon-name').textContent = 
+                pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+            document.getElementById('pokemon-id').textContent = '#' + pokemon.id;
+            
+            var imgUrl = pokemon.sprites.front_default || 
+                        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + pokemon.id + '.png';
+            document.getElementById('pokemon-img').src = imgUrl;
+            
+            // Mostrar tipos
+            var typesContainer = document.getElementById('pokemon-types');
+            typesContainer.innerHTML = '';
+            pokemon.types.forEach(function(type) {
+                var typeTag = document.createElement('div');
+                typeTag.className = 'type-tag ' + getTypeClass(type.type.name);
+                typeTag.textContent = getTypeNameInSpanish(type.type.name);
+                typesContainer.appendChild(typeTag);
+            });
+            
+            // Mostrar stats
+            var statsContainer = document.getElementById('pokemon-stats');
+            statsContainer.innerHTML = '';
+            pokemon.stats.forEach(function(stat) {
+                var statRow = document.createElement('div');
+                statRow.className = 'stat-row';
+                statRow.innerHTML = `
+                    <div class="stat-name">${getStatNameInSpanish(stat.stat.name)}:</div>
+                    <div class="stat-value">${stat.base_stat}</div>
+                    <div class="stat-bar"><div style="width:${Math.min(100, stat.base_stat/2.55)}%"></div></div>
+                `;
+                statsContainer.appendChild(statRow);
+            });
+            
+            // Mostrar habilidades
+            var abilitiesContainer = document.getElementById('pokemon-abilities');
+            abilitiesContainer.innerHTML = '';
+            pokemon.abilities.forEach(function(ability) {
+                var abilityItem = document.createElement('div');
+                abilityItem.textContent = '- ' + 
+                    ability.ability.name
+                        .replace(/-/g, ' ')
+                        .split(' ')
+                        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+                        .join(' ');
+                if (ability.is_hidden) abilityItem.textContent += ' (Oculta)';
+                abilitiesContainer.appendChild(abilityItem);
+            });
+            
+            document.getElementById('pokemon-result').style.display = 'block';
+        }
 
-    function showError(message) {
-        var errorElem = document.getElementById('error');
-        errorElem.textContent = message;
-        errorElem.style.display = 'block';
-    }
+        function showError(message) {
+            var errorElem = document.getElementById('error');
+            errorElem.textContent = message;
+            errorElem.style.display = 'block';
+        }
 
-    function getTypeClass(typeName) {
-        var typeMap = {
-            'normal': 'normal', 'fire': 'fuego', 'water': 'agua',
-            'grass': 'planta', 'electric': 'electrico', 'ice': 'hielo',
-            'fighting': 'lucha', 'poison': 'veneno', 'ground': 'tierra',
-            'flying': 'volador', 'psychic': 'psiquico', 'bug': 'bicho',
-            'rock': 'roca', 'ghost': 'fantasma', 'dragon': 'dragon',
-            'dark': 'siniestro', 'steel': 'acero', 'fairy': 'hada'
-        };
-        return typeMap[typeName] || 'normal';
-    }
+        function getTypeClass(typeName) {
+            var typeMap = {
+                'normal': 'normal', 'fire': 'fuego', 'water': 'agua',
+                'grass': 'planta', 'electric': 'electrico', 'ice': 'hielo',
+                'fighting': 'lucha', 'poison': 'veneno', 'ground': 'tierra',
+                'flying': 'volador', 'psychic': 'psiquico', 'bug': 'bicho',
+                'rock': 'roca', 'ghost': 'fantasma', 'dragon': 'dragon',
+                'dark': 'siniestro', 'steel': 'acero', 'fairy': 'hada'
+            };
+            return typeMap[typeName] || 'normal';
+        }
 
-    function getTypeNameInSpanish(typeName) {
-        var typeMap = {
-            'normal': 'Normal', 'fire': 'Fuego', 'water': 'Agua',
-            'grass': 'Planta', 'electric': 'Eléctrico', 'ice': 'Hielo',
-            'fighting': 'Lucha', 'poison': 'Veneno', 'ground': 'Tierra',
-            'flying': 'Volador', 'psychic': 'Psíquico', 'bug': 'Bicho',
-            'rock': 'Roca', 'ghost': 'Fantasma', 'dragon': 'Dragón',
-            'dark': 'Siniestro', 'steel': 'Acero', 'fairy': 'Hada'
-        };
-        return typeMap[typeName] || typeName;
-    }
+        function getTypeNameInSpanish(typeName) {
+            var typeMap = {
+                'normal': 'Normal', 'fire': 'Fuego', 'water': 'Agua',
+                'grass': 'Planta', 'electric': 'Eléctrico', 'ice': 'Hielo',
+                'fighting': 'Lucha', 'poison': 'Veneno', 'ground': 'Tierra',
+                'flying': 'Volador', 'psychic': 'Psíquico', 'bug': 'Bicho',
+                'rock': 'Roca', 'ghost': 'Fantasma', 'dragon': 'Dragón',
+                'dark': 'Siniestro', 'steel': 'Acero', 'fairy': 'Hada'
+            };
+            return typeMap[typeName] || typeName;
+        }
 
-    function getStatNameInSpanish(statName) {
-        var statMap = {
-            'hp': 'PS', 'attack': 'Ataque', 'defense': 'Defensa',
-            'special-attack': 'At. Especial', 'special-defense': 'Def. Especial',
-            'speed': 'Velocidad'
-        };
-        return statMap[statName] || statName;
-    }
+        function getStatNameInSpanish(statName) {
+            var statMap = {
+                'hp': 'PS', 'attack': 'Ataque', 'defense': 'Defensa',
+                'special-attack': 'At. Especial', 'special-defense': 'Def. Especial',
+                'speed': 'Velocidad'
+            };
+            return statMap[statName] || statName;
+        }
+        // ★★★ FIN DEL NUEVO CÓDIGO ★★★
     </script>
 </body>
 </html>
