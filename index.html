@@ -1943,112 +1943,74 @@
 
          <script>
     // URL base de la PokeAPI (usaremos un proxy si es necesario)
+    <script>
+    // Versión simplificada y compatible con 3DS
     const POKEAPI_URL = 'https://pokeapi.co/api/v2/pokemon/';
     
-    // Proxy alternativo para evitar problemas CORS en 3DS
-    const PROXY_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(POKEAPI_URL);
-    
-    // Usamos el proxy solo si es necesario (detectar 3DS)
+    // Detectar si es Nintendo 3DS
     const is3DS = navigator.userAgent.includes('Nintendo 3DS');
-    const API_BASE = is3DS ? PROXY_URL : POKEAPI_URL;
-
+    
     function showType(typeId) {
         var details = document.getElementsByClassName('type-detail');
         for (var i = 0; i < details.length; i++) {
             details[i].style.display = 'none';
         }
         document.getElementById(typeId).style.display = 'block';
-        document.getElementById(typeId).scrollIntoView();
     }
     
+    // Función de búsqueda optimizada para 3DS
     function searchPokemon() {
         var searchInput = document.getElementById('pokemon-search');
-        var pokemonName = searchInput.value.trim().toLowerCase();
+        var searchTerm = searchInput.value.trim().toLowerCase();
         
-        if (!pokemonName) {
-            showError('Por favor ingresa un nombre o número de Pokémon');
+        if (!searchTerm) {
+            showError('Ingresa un nombre o número');
             return;
         }
         
+        // Mostrar carga
         document.getElementById('loading').style.display = 'block';
         document.getElementById('error').style.display = 'none';
         document.getElementById('pokemon-result').style.display = 'none';
         
-        // Limpiamos el nombre para la URL
-        pokemonName = pokemonName.replace(/[^a-z0-9-]/g, '');
+        // Usar XMLHttpRequest que es más compatible con 3DS
+        var xhr = new XMLHttpRequest();
+        var apiUrl = POKEAPI_URL + encodeURIComponent(searchTerm);
         
-        // Pequeña caché local para evitar peticiones repetidas
-        if (localStorage.getItem('poke_' + pokemonName)) {
-            try {
-                displayPokemon(JSON.parse(localStorage.getItem('poke_' + pokemonName)));
-                document.getElementById('loading').style.display = 'none';
-                return;
-            } catch(e) {
-                // Si falla el parseo, continuamos con la petición
-            }
-        }
-        
-        fetchPokemon(pokemonName);
-    }
-
-    function fetchPokemon(pokemonName) {
-        // Usamos fetch con timeout para 3DS
+        // Usar proxy solo si es 3DS
         if (is3DS) {
-            fetchWithTimeout(API_BASE + pokemonName, {
-                timeout: 15000 // 15 segundos máximo
-            })
-            .then(response => {
-                if (!response.ok) throw new Error('Pokémon no encontrado');
-                return response.json();
-            })
-            .then(data => {
-                localStorage.setItem('poke_' + pokemonName, JSON.stringify(data));
-                displayPokemon(data);
-            })
-            .catch(error => {
-                showError(error.message || 'Error al buscar el Pokémon');
-            })
-            .finally(() => {
-                document.getElementById('loading').style.display = 'none';
-            });
-        } else {
-            // Para navegadores modernos
-            fetch(API_BASE + pokemonName)
-            .then(response => {
-                if (!response.ok) throw new Error('Pokémon no encontrado');
-                return response.json();
-            })
-            .then(data => {
-                localStorage.setItem('poke_' + pokemonName, JSON.stringify(data));
-                displayPokemon(data);
-            })
-            .catch(error => {
-                showError(error.message || 'Error al buscar el Pokémon');
-            })
-            .finally(() => {
-                document.getElementById('loading').style.display = 'none';
-            });
+            apiUrl = 'https://cors-anywhere.herokuapp.com/' + apiUrl;
         }
-    }
-
-    // Función fetch con timeout para 3DS
-    function fetchWithTimeout(url, options = {}) {
-        return new Promise((resolve, reject) => {
-            const timeout = options.timeout || 10000;
-            const timer = setTimeout(() => {
-                reject(new Error('Tiempo de espera agotado'));
-            }, timeout);
+        
+        xhr.open('GET', apiUrl, true);
+        xhr.timeout = 15000; // 15 segundos timeout
+        
+        xhr.onload = function() {
+            document.getElementById('loading').style.display = 'none';
             
-            fetch(url, options)
-            .then(response => {
-                clearTimeout(timer);
-                resolve(response);
-            })
-            .catch(error => {
-                clearTimeout(timer);
-                reject(error);
-            });
-        });
+            if (xhr.status === 200) {
+                try {
+                    var data = JSON.parse(xhr.responseText);
+                    displayPokemon(data);
+                } catch(e) {
+                    showError('Error al leer los datos');
+                }
+            } else {
+                showError('Pokémon no encontrado');
+            }
+        };
+        
+        xhr.onerror = function() {
+            document.getElementById('loading').style.display = 'none';
+            showError('Error de conexión');
+        };
+        
+        xhr.ontimeout = function() {
+            document.getElementById('loading').style.display = 'none';
+            showError('Tiempo de espera agotado');
+        };
+        
+        xhr.send();
     }
 
     function displayPokemon(pokemon) {
