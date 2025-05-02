@@ -52,16 +52,9 @@
         .error {
             color: red;
         }
-        .stats {
-            margin-top: 10px;
-        }
-        .stat {
-            margin-bottom: 5px;
-        }
-        .stat-name {
-            font-weight: bold;
-            display: inline-block;
-            width: 100px;
+        .loading {
+            color: #0066cc;
+            text-align: center;
         }
     </style>
 </head>
@@ -69,51 +62,76 @@
     <div class="container">
         <h1>Buscador Pokémon 3DS</h1>
         <div class="search-box">
-            <input type="text" id="pokemonInput" placeholder="Nombre o número de Pokémon">
+            <input type="text" id="pokemonInput" placeholder="Nombre o número" autocomplete="off">
             <button onclick="searchPokemon()">Buscar</button>
         </div>
+        <div id="loading" class="loading" style="display: none;">Buscando...</div>
         <div id="result" class="result" style="display: none;">
             <h2 id="pokemonName"></h2>
             <img id="pokemonImage" class="pokemon-img" src="" alt="Pokémon">
             <div id="pokemonTypes"></div>
-            <div class="stats" id="pokemonStats"></div>
+            <div id="pokemonStats"></div>
         </div>
         <div id="error" class="error" style="display: none;"></div>
     </div>
 
     <script>
-        // Función para buscar Pokémon
+        // Configuración para 3DS
+        var USE_PROXY = true; // Cambiar a false si no necesitas proxy
+        var PROXY_URL = 'https://cors-proxy.3ds.workers.dev/?url=';
+        var API_URL = 'https://pokeapi.co/api/v2/pokemon/';
+        var TIMEOUT = 15000; // 15 segundos para 3DS lenta
+
         function searchPokemon() {
             var input = document.getElementById('pokemonInput').value.trim().toLowerCase();
-            if (!input) return;
+            if (!input) {
+                showError('Ingresa un nombre o número');
+                return;
+            }
             
-            // Mostrar carga
-            document.getElementById('result').style.display = 'none';
-            document.getElementById('error').style.display = 'none';
+            showLoading();
+            hideResults();
+            hideError();
+
+            var url = USE_PROXY ? PROXY_URL + encodeURIComponent(API_URL + input) : API_URL + input;
             
-            // Hacer la petición a PokeAPI v2
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'https://pokeapi.co/api/v2/pokemon/' + encodeURIComponent(input), true);
+            xhr.timeout = TIMEOUT;
+            xhr.open('GET', url, true);
             
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    var data = JSON.parse(xhr.responseText);
-                    displayPokemon(data);
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        displayPokemon(data);
+                    } catch (e) {
+                        showError('Error al leer los datos');
+                    }
                 } else {
-                    showError('Pokémon no encontrado. Intenta con otro nombre o número.');
+                    showError('Pokémon no encontrado (Error ' + xhr.status + ')');
                 }
+                hideLoading();
             };
             
             xhr.onerror = function() {
-                showError('Error de conexión. Intenta nuevamente.');
+                showError('Error de conexión. Intenta recargar.');
+                hideLoading();
             };
             
-            xhr.send();
+            xhr.ontimeout = function() {
+                showError('Tiempo de espera agotado. La conexión es muy lenta.');
+                hideLoading();
+            };
+            
+            try {
+                xhr.send();
+            } catch (e) {
+                showError('Error al enviar la solicitud');
+                hideLoading();
+            }
         }
         
-        // Función para mostrar los datos del Pokémon
         function displayPokemon(pokemon) {
-            var resultDiv = document.getElementById('result');
             var nameElement = document.getElementById('pokemonName');
             var imageElement = document.getElementById('pokemonImage');
             var typesElement = document.getElementById('pokemonTypes');
@@ -122,44 +140,67 @@
             // Nombre y número
             nameElement.textContent = '#' + pokemon.id + ' ' + capitalizeFirstLetter(pokemon.name);
             
-            // Imagen (usamos la versión de sprites de generaciones anteriores para mejor compatibilidad)
-            imageElement.src = pokemon.sprites.versions['generation-v']['black-white'].animated.front_default || 
-                               pokemon.sprites.front_default;
+            // Imagen (versión simple para 3DS)
+            imageElement.src = pokemon.sprites.front_default || '';
+            imageElement.onerror = function() {
+                this.style.display = 'none';
+            };
             
             // Tipos
             typesElement.innerHTML = '<strong>Tipos:</strong> ';
-            pokemon.types.forEach(function(type, index) {
-                typesElement.innerHTML += capitalizeFirstLetter(type.type.name);
-                if (index < pokemon.types.length - 1) {
-                    typesElement.innerHTML += ', ';
+            var types = pokemon.types.map(function(type) {
+                return capitalizeFirstLetter(type.type.name);
+            });
+            typesElement.innerHTML += types.join(', ');
+            
+            // Estadísticas básicas
+            statsElement.innerHTML = '<strong>Estadísticas:</strong><br>';
+            var stats = ['hp', 'attack', 'defense', 'special-attack', 'special-defense', 'speed'];
+            stats.forEach(function(stat) {
+                var statObj = pokemon.stats.find(function(s) {
+                    return s.stat.name === stat;
+                });
+                if (statObj) {
+                    statsElement.innerHTML += '<div>' + 
+                        capitalizeFirstLetter(stat.replace('-', ' ')) + 
+                        ': ' + statObj.base_stat + '</div>';
                 }
             });
             
-            // Estadísticas
-            statsElement.innerHTML = '<strong>Estadísticas:</strong><br>';
-            pokemon.stats.forEach(function(stat) {
-                statsElement.innerHTML += '<div class="stat"><span class="stat-name">' + 
-                                         capitalizeFirstLetter(stat.stat.name.replace('-', ' ')) + 
-                                         ':</span> ' + stat.base_stat + '</div>';
-            });
-            
-            // Mostrar resultados
-            resultDiv.style.display = 'block';
+            showResults();
         }
         
-        // Función para mostrar errores
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+        
+        function showResults() {
+            document.getElementById('result').style.display = 'block';
+        }
+        
+        function hideResults() {
+            document.getElementById('result').style.display = 'none';
+        }
+        
         function showError(message) {
             var errorDiv = document.getElementById('error');
             errorDiv.textContent = message;
             errorDiv.style.display = 'block';
         }
         
-        // Función auxiliar para capitalizar la primera letra
+        function hideError() {
+            document.getElementById('error').style.display = 'none';
+        }
+        
         function capitalizeFirstLetter(string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
         
-        // Permitir búsqueda con Enter
+        // Manejo de teclado para 3DS
         document.getElementById('pokemonInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 searchPokemon();
