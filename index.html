@@ -1,42 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Proxy PokeAPI</title>
-    <script>
-        function fetchPokemon() {
-            var pokemonName = document.getElementById("pokemon").value;
-            var proxyUrl = "https://api.allorigins.win/get?url=" + 
-                          encodeURIComponent("https://pokeapi.co/api/v2/pokemon/" + pokemonName);
-            
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", proxyUrl, true);
-            
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    try {
-                        var data = JSON.parse(xhr.responseText);
-                        var pokemonData = JSON.parse(data.contents); // Extrae el contenido real
-                        document.getElementById("result").innerText = "Nombre: " + pokemonData.name;
-                    } catch (error) {
-                        document.getElementById("result").innerText = "Error al parsear JSON: " + error;
-                    }
-                } else {
-                    document.getElementById("result").innerText = "Error HTTP: " + xhr.status;
-                }
-            };
-            
-            xhr.onerror = function() {
-                document.getElementById("result").innerText = "Error de conexión";
-            };
-            
-            xhr.send();
-        }
-    </script>
+    <meta charset="UTF-8">
+    <title>Pokédex Online/3DS</title>
+    <style>
+        body { font-family: Arial; text-align: center; }
+        #result { margin: 20px; padding: 10px; border: 1px solid #ccc; }
+        img { max-width: 96px; } /* Tamaño apto para 3DS */
+    </style>
 </head>
 <body>
-    <h1>Proxy PokeAPI (3DS/PC)</h1>
-    <input type="text" id="pokemon" placeholder="Ej: pikachu" />
-    <button onclick="fetchPokemon()">Buscar</button>
-    <pre id="result"></pre>
+    <h1>Pokédex Universal</h1>
+    <input type="text" id="pokemonInput" placeholder="Ej: pikachu" />
+    <button onclick="searchPokemon()">Buscar</button>
+    <div id="result">
+        <p>Escribe un nombre de Pokémon y presiona "Buscar".</p>
+    </div>
+
+    <script src="js/script.js"></script>
 </body>
 </html>
