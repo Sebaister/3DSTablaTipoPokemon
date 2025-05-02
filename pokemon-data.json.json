@@ -1,0 +1,35 @@
+{
+  "pokemons": [
+    {
+      "id": 1,
+      "name": "bulbasaur",
+      "types": [
+        {"type": {"name": "planta"}},
+        {"type": {"name": "veneno"}}
+      ],
+      "stats": [
+        {"base_stat": 45, "stat": {"name": "hp"}},
+        {"base_stat": 49, "stat": {"name": "attack"}},
+        {"base_stat": 49, "stat": {"name": "defense"}},
+        {"base_stat": 65, "stat": {"name": "special-attack"}},
+        {"base_stat": 65, "stat": {"name": "special-defense"}},
+        {"base_stat": 45, "stat": {"name": "speed"}}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "charmander",
+      "types": [
+        {"type": {"name": "fuego"}}
+      ],
+      "stats": [
+        {"base_stat": 39, "stat": {"name": "hp"}},
+        {"base_stat": 52, "stat": {"name": "attack"}},
+        {"base_stat": 43, "stat": {"name": "defense"}},
+        {"base_stat": 60, "stat": {"name": "special-attack"}},
+        {"base_stat": 50, "stat": {"name": "special-defense"}},
+        {"base_stat": 65, "stat": {"name": "speed"}}
+      ]
+    }
+  ]
+}

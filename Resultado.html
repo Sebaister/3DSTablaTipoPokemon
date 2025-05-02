@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultado Pokémon</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=400">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #FFF;
+            margin: 0;
+            padding: 10px;
+            font-size: 12px;
+        }
+        .pokemon-result {
+            border: 1px solid #444;
+            border-radius: 6px;
+            margin: 8px 0;
+            padding: 6px;
+            background-color: #222;
+        }
+        .pokemon-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .pokemon-image {
+            width: 64px;
+            height: 64px;
+            image-rendering: pixelated;
+        }
+        /* [Añade aquí los demás estilos que necesites] */
+    </style>
+</head>
+<body>
+    <div id="pokemon-result" class="pokemon-result">
+        <!-- Los datos se mostrarán aquí -->
+    </div>
+    <a href="index.html" class="button">Volver a Buscar</a>
+
+    <script>
+        // Obtener parámetros de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const pokemonData = urlParams.get('data');
+        
+        if (pokemonData) {
+            try {
+                const pokemon = JSON.parse(decodeURIComponent(pokemonData));
+                displayPokemon(pokemon);
+            } catch(e) {
+                document.getElementById('pokemon-result').innerHTML = 
+                    '<div class="error-message">Error al cargar los datos</div>';
+            }
+        }
+
+        function displayPokemon(pokemon) {
+            let html = `
+                <div class="pokemon-header">
+                    <img src="${pokemon.img}" class="pokemon-image" />
+                    <span class="pokemon-name">${pokemon.name}</span>
+                    <span class="pokemon-id">#${pokemon.id}</span>
+                </div>
+                <div class="type-section">
+                    <strong>Tipo(s):</strong>
+                    <div class="type-list">${pokemon.types}</div>
+                </div>
+                <div class="pokemon-stats">
+                    <strong>Estadísticas:</strong>
+                    ${pokemon.stats}
+                </div>
+            `;
+            document.getElementById('pokemon-result').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
