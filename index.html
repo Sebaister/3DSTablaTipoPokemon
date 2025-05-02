@@ -1,181 +1,301 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Buscador Pokémon 3DS</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f0f0;
-      margin: 0;
-      padding: 10px;
-      color: #333;
-      font-size: 14px;
-    }
-    .container {
-      max-width: 320px;
-      margin: 0 auto;
-    }
-    h1 {
-      color: #e60000;
-      text-align: center;
-      font-size: 18px;
-      margin: 5px 0;
-    }
-    #search {
-      width: 70%;
-      padding: 5px;
-      font-size: 12px;
-    }
-    #searchBtn {
-      width: 25%;
-      padding: 5px;
-      background: #e60000;
-      color: white;
-      border: none;
-      font-size: 12px;
-    }
-    .pokemon-card {
-      background: white;
-      padding: 8px;
-      margin-top: 10px;
-      border-radius: 5px;
-      text-align: center;
-    }
-    .pokemon-name {
-      font-weight: bold;
-      font-size: 16px;
-      color: #e60000;
-      text-transform: capitalize;
-    }
-    .pokemon-img {
-      width: 80px;
-      height: 80px;
-      margin: 5px auto;
-    }
-    .type {
-      display: inline-block;
-      padding: 2px 8px;
-      margin: 2px;
-      border-radius: 3px;
-      color: white;
-      font-size: 12px;
-    }
-    .stat {
-      margin: 3px 0;
-      font-size: 12px;
-    }
-    .error {
-      color: #e60000;
-      text-align: center;
-      margin: 10px 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador Pokémon 3DS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 5px;
+            color: #333;
+            font-size: 14px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 18px;
+            text-align: center;
+            color: #e60000;
+        }
+        .search-box {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        input[type="text"] {
+            padding: 5px;
+            width: 180px;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #e60000;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .pokemon-display {
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .pokemon-image {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .pokemon-image img {
+            max-width: 96px;
+            max-height: 96px;
+        }
+        .stats {
+            margin-top: 10px;
+        }
+        .stat-row {
+            display: flex;
+            margin-bottom: 3px;
+        }
+        .stat-name {
+            width: 100px;
+            font-weight: bold;
+        }
+        .type {
+            display: inline-block;
+            padding: 2px 5px;
+            margin-right: 5px;
+            border-radius: 3px;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Buscador Pokémon</h1>
-    <input type="text" id="search" placeholder="Nombre o número">
-    <button id="searchBtn">Buscar</button>
-    
-    <div id="result"></div>
-  </div>
+    <div class="container">
+        <h1>Buscador Pokémon 3DS</h1>
+        <div class="search-box">
+            <input type="text" id="pokemon-input" placeholder="Nombre o número">
+            <button onclick="searchPokemon()">Buscar</button>
+        </div>
+        <div id="pokemon-result" class="pokemon-display" style="display:none;">
+            <div class="pokemon-image">
+                <img id="pokemon-img" src="" alt="Pokémon">
+            </div>
+            <div>
+                <strong>Nombre:</strong> <span id="pokemon-name"></span><br>
+                <strong>Nº:</strong> <span id="pokemon-id"></span><br>
+                <strong>Tipo:</strong> <span id="pokemon-types"></span><br>
+                <strong>Evoluciona:</strong> <span id="pokemon-evolution"></span>
+            </div>
+            <div class="stats">
+                <strong>Estadísticas:</strong>
+                <div class="stat-row">
+                    <span class="stat-name">PS:</span>
+                    <span id="stat-hp"></span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">Ataque:</span>
+                    <span id="stat-attack"></span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">Defensa:</span>
+                    <span id="stat-defense"></span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">Ataque Especial:</span>
+                    <span id="stat-special-attack"></span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">Defensa Especial:</span>
+                    <span id="stat-special-defense"></span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">Velocidad:</span>
+                    <span id="stat-speed"></span>
+                </div>
+            </div>
+        </div>
+        <div id="error-message" class="error" style="display:none;"></div>
+    </div>
 
-  <script>
-    // Colores por tipo (simplificados)
-    const typeColors = {
-      normal: '#A8A878', fire: '#F08030', water: '#6890F0',
-      electric: '#F8D030', grass: '#78C850', ice: '#98D8D8',
-      fighting: '#C03028', poison: '#A040A0', ground: '#E0C068',
-      flying: '#A890F0', psychic: '#F85888', bug: '#A8B820',
-      rock: '#B8A038', ghost: '#705898', dragon: '#7038F8',
-      dark: '#705848', steel: '#B8B8D0', fairy: '#EE99AC'
-    };
+    <script>
+        // Colores para los tipos de Pokémon
+        var typeColors = {
+            normal: '#A8A878',
+            fire: '#F08030',
+            water: '#6890F0',
+            electric: '#F8D030',
+            grass: '#78C850',
+            ice: '#98D8D8',
+            fighting: '#C03028',
+            poison: '#A040A0',
+            ground: '#E0C068',
+            flying: '#A890F0',
+            psychic: '#F85888',
+            bug: '#A8B820',
+            rock: '#B8A038',
+            ghost: '#705898',
+            dragon: '#7038F8',
+            dark: '#705848',
+            steel: '#B8B8D0',
+            fairy: '#EE99AC'
+        };
 
-    document.getElementById('searchBtn').onclick = searchPokemon;
-    document.getElementById('search').onkeypress = function(e) {
-      if (e.key === 'Enter') searchPokemon();
-    };
-
-    function searchPokemon() {
-      var query = document.getElementById('search').value.trim();
-      if (!query) return;
-      
-      document.getElementById('result').innerHTML = '<p>Cargando...</p>';
-      
-      // Usar XMLHttpRequest (más compatible con 3DS)
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', 'https://proxy3ds.sebadrgn.workers.dev/pokemon/' + query.toLowerCase(), true);
-      
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          try {
-            var data = JSON.parse(xhr.responseText);
-            showPokemon(data);
-          } catch (e) {
-            showError('Datos inválidos');
-          }
-        } else {
-          showError('Pokémon no encontrado');
+        function searchPokemon() {
+            var input = document.getElementById('pokemon-input').value.trim().toLowerCase();
+            if (!input) return;
+            
+            // Mostrar carga
+            document.getElementById('pokemon-result').style.display = 'none';
+            document.getElementById('error-message').style.display = 'none';
+            
+            // Hacer la petición a PokeAPI (versión compatible con 3DS)
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://pokeapi.co/api/v2/pokemon/' + encodeURIComponent(input), true);
+            
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    displayPokemon(data);
+                    
+                    // Obtener información de especie para la evolución
+                    getSpeciesInfo(data.species.url);
+                } else {
+                    showError('Pokémon no encontrado. Intenta con otro nombre o número.');
+                }
+            };
+            
+            xhr.onerror = function() {
+                showError('Error de conexión. Intenta nuevamente.');
+            };
+            
+            xhr.send();
         }
-      };
-      
-      xhr.onerror = function() {
-        showError('Error de conexión');
-      };
-      
-      xhr.send();
-    }
-
-    function showPokemon(p) {
-      var html = '<div class="pokemon-card">';
-      
-      // Nombre e ID
-      html += '<div class="pokemon-name">' + 
-              p.n.charAt(0).toUpperCase() + p.n.slice(1) + 
-              ' <span style="color:#888;">#' + p.id + '</span></div>';
-      
-      // Imagen (si existe)
-      if (p.img) {
-        html += '<img class="pokemon-img" src="' + p.img + '" alt="' + p.n + '">';
-      } else {
-        html += '<div style="height:80px;line-height:80px;">No hay imagen</div>';
-      }
-      
-      // Tipos
-      if (p.t && p.t.length > 0) {
-        html += '<div>';
-        for (var i = 0; i < p.t.length; i++) {
-          var type = p.t[i];
-          html += '<span class="type" style="background:' + 
-                 (typeColors[type] || '#777') + '">' + 
-                 type.charAt(0).toUpperCase() + type.slice(1) + 
-                 '</span>';
+        
+        function displayPokemon(pokemon) {
+            // Mostrar información básica
+            document.getElementById('pokemon-name').textContent = capitalizeFirstLetter(pokemon.name);
+            document.getElementById('pokemon-id').textContent = pokemon.id;
+            
+            // Mostrar imagen (usando la versión por defecto que es más pequeña)
+            document.getElementById('pokemon-img').src = pokemon.sprites.front_default;
+            
+            // Mostrar tipos
+            var typesContainer = document.getElementById('pokemon-types');
+            typesContainer.innerHTML = '';
+            pokemon.types.forEach(function(type) {
+                var typeSpan = document.createElement('span');
+                typeSpan.className = 'type';
+                typeSpan.textContent = capitalizeFirstLetter(type.type.name);
+                typeSpan.style.backgroundColor = typeColors[type.type.name] || '#777';
+                typesContainer.appendChild(typeSpan);
+            });
+            
+            // Mostrar stats
+            document.getElementById('stat-hp').textContent = pokemon.stats[0].base_stat;
+            document.getElementById('stat-attack').textContent = pokemon.stats[1].base_stat;
+            document.getElementById('stat-defense').textContent = pokemon.stats[2].base_stat;
+            document.getElementById('stat-special-attack').textContent = pokemon.stats[3].base_stat;
+            document.getElementById('stat-special-defense').textContent = pokemon.stats[4].base_stat;
+            document.getElementById('stat-speed').textContent = pokemon.stats[5].base_stat;
+            
+            // Mostrar contenedor
+            document.getElementById('pokemon-result').style.display = 'block';
         }
-        html += '</div>';
-      }
-      
-      // Estadísticas
-      if (p.s && p.s.length > 0) {
-        html += '<div style="margin-top:8px;">';
-        for (var j = 0; j < p.s.length; j++) {
-          var stat = p.s[j];
-          html += '<div class="stat">' + 
-                  stat.n + ': ' + stat.v + 
-                  '</div>';
+        
+        function getSpeciesInfo(speciesUrl) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', speciesUrl, true);
+            
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var speciesData = JSON.parse(xhr.responseText);
+                    displayEvolutionInfo(speciesData);
+                }
+            };
+            
+            xhr.send();
         }
-        html += '</div>';
-      }
-      
-      html += '</div>';
-      document.getElementById('result').innerHTML = html;
-    }
-
-    function showError(msg) {
-      document.getElementById('result').innerHTML = 
-        '<div class="error">' + msg + '</div>';
-    }
-  </script>
+        
+        function displayEvolutionInfo(speciesData) {
+            var evolutionText = 'No evoluciona';
+            
+            if (speciesData.evolves_from_species) {
+                evolutionText = 'De ' + capitalizeFirstLetter(speciesData.evolves_from_species.name);
+                
+                // Intentar obtener nivel de evolución (esto es simplificado)
+                if (speciesData.evolution_chain && speciesData.evolution_chain.url) {
+                    getEvolutionChain(speciesData.evolution_chain.url, speciesData.name);
+                    return;
+                }
+            }
+            
+            document.getElementById('pokemon-evolution').textContent = evolutionText;
+        }
+        
+        function getEvolutionChain(chainUrl, pokemonName) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', chainUrl, true);
+            
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var chainData = JSON.parse(xhr.responseText);
+                    findEvolutionLevel(chainData.chain, pokemonName.toLowerCase());
+                }
+            };
+            
+            xhr.send();
+        }
+        
+        function findEvolutionLevel(chain, targetName) {
+            // Buscar en la cadena de evolución
+            for (var i = 0; i < chain.evolves_to.length; i++) {
+                var evolution = chain.evolves_to[i];
+                if (evolution.species.name === targetName) {
+                    var level = evolution.evolution_details[0].min_level;
+                    if (level) {
+                        document.getElementById('pokemon-evolution').textContent = 
+                            'De ' + capitalizeFirstLetter(chain.species.name) + ' (nivel ' + level + ')';
+                        return;
+                    }
+                }
+                
+                // Buscar recursivamente
+                if (evolution.evolves_to.length > 0) {
+                    findEvolutionLevel(evolution, targetName);
+                }
+            }
+            
+            // Si no se encuentra nivel específico, mostrar información básica
+            if (chain.species.name === targetName && chain.evolves_to.length > 0) {
+                document.getElementById('pokemon-evolution').textContent = 
+                    'Evoluciona a ' + capitalizeFirstLetter(chain.evolves_to[0].species.name);
+            }
+        }
+        
+        function showError(message) {
+            document.getElementById('error-message').textContent = message;
+            document.getElementById('error-message').style.display = 'block';
+        }
+        
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+        
+        // Permitir buscar con Enter
+        document.getElementById('pokemon-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPokemon();
+            }
+        });
+    </script>
 </body>
 </html>
