@@ -1,23 +1,22 @@
 // Función para obtener datos de un Pokémon
 function getPokemon(pokemonName) {
     var xhr = new XMLHttpRequest();
-    var url = "https://pokeapi.co/api/v2/pokemon/" + pokemonName.toLowerCase();
-    
-    xhr.open("GET", url, true);
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            var pokemon = JSON.parse(xhr.responseText);
-            displayPokemon(pokemon);
-        } else {
-            document.getElementById("pokemon-info").innerHTML = 
-                "<p>Pokémon no encontrado. Intenta con otro nombre.</p>";
-        }
-    };
-    xhr.onerror = function() {
+var url = "http://pokeapi.co/api/v2/pokemon/pikachu"; // Usa HTTP en lugar de HTTPS
+xhr.open("GET", url, true);
+xhr.onload = function() {
+    if (xhr.status === 200) {
+        var pokemon = JSON.parse(xhr.responseText);
+        displayPokemon(pokemon);
+    } else {
         document.getElementById("pokemon-info").innerHTML = 
-            "<p>Error al cargar los datos.</p>";
-    };
-    xhr.send();
+            "<p>Error al cargar. Código: " + xhr.status + "</p>";
+    }
+};
+xhr.onerror = function() {
+    document.getElementById("pokemon-info").innerHTML = 
+        "<p>Error de conexión. ¿Tienes internet?</p>";
+};
+xhr.send();
 }
 
 // Función para mostrar los datos del Pokémon
