@@ -1,45 +1,170 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Pokédex 3DS</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador Pokémon 3DS</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f0f0f0; }
-        #pokemon-info { background: white; padding: 10px; margin-top: 10px; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 10px;
+            color: #333;
+            font-size: 14px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #e60000;
+            text-align: center;
+            font-size: 18px;
+        }
+        .search-box {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        input[type="text"] {
+            padding: 5px;
+            width: 70%;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #e60000;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .result {
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .pokemon-img {
+            display: block;
+            margin: 0 auto;
+            max-width: 100px;
+            max-height: 100px;
+        }
+        .error {
+            color: red;
+        }
+        .stats {
+            margin-top: 10px;
+        }
+        .stat {
+            margin-bottom: 5px;
+        }
+        .stat-name {
+            font-weight: bold;
+            display: inline-block;
+            width: 100px;
+        }
     </style>
 </head>
 <body>
-    <h1>Buscador Pokémon</h1>
-    <input type="text" id="pokemon-input" placeholder="Ej: Pikachu">
-    <button onclick="searchPokemon()">Buscar</button>
-    <div id="pokemon-info"></div>
+    <div class="container">
+        <h1>Buscador Pokémon 3DS</h1>
+        <div class="search-box">
+            <input type="text" id="pokemonInput" placeholder="Nombre o número de Pokémon">
+            <button onclick="searchPokemon()">Buscar</button>
+        </div>
+        <div id="result" class="result" style="display: none;">
+            <h2 id="pokemonName"></h2>
+            <img id="pokemonImage" class="pokemon-img" src="" alt="Pokémon">
+            <div id="pokemonTypes"></div>
+            <div class="stats" id="pokemonStats"></div>
+        </div>
+        <div id="error" class="error" style="display: none;"></div>
+    </div>
 
     <script>
-        let pokedex = [];
-
-        // Cargar el JSON al iniciar
-        fetch('pokedex.json')
-            .then(response => response.json())
-            .then(data => {
-                pokedex = data.pokemon;
-            });
-
+        // Función para buscar Pokémon
         function searchPokemon() {
-            const input = document.getElementById('pokemon-input').value.toLowerCase();
-            const pokemon = pokedex.find(p => p.name.toLowerCase() === input);
-            const infoDiv = document.getElementById('pokemon-info');
-
-            if (pokemon) {
-                infoDiv.innerHTML = `
-                    <h2>${pokemon.name}</h2>
-                    <img src="${pokemon.img}" width="100">
-                    <p><strong>Tipo:</strong> ${pokemon.type.join(', ')}</p>
-                    <p><strong>Altura:</strong> ${pokemon.height}</p>
-                    <p><strong>Peso:</strong> ${pokemon.weight}</p>
-                `;
-            } else {
-                infoDiv.innerHTML = "<p>¡Pokémon no encontrado!</p>";
-            }
+            var input = document.getElementById('pokemonInput').value.trim().toLowerCase();
+            if (!input) return;
+            
+            // Mostrar carga
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            
+            // Hacer la petición a PokeAPI v2
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://pokeapi.co/api/v2/pokemon/' + encodeURIComponent(input), true);
+            
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    displayPokemon(data);
+                } else {
+                    showError('Pokémon no encontrado. Intenta con otro nombre o número.');
+                }
+            };
+            
+            xhr.onerror = function() {
+                showError('Error de conexión. Intenta nuevamente.');
+            };
+            
+            xhr.send();
         }
+        
+        // Función para mostrar los datos del Pokémon
+        function displayPokemon(pokemon) {
+            var resultDiv = document.getElementById('result');
+            var nameElement = document.getElementById('pokemonName');
+            var imageElement = document.getElementById('pokemonImage');
+            var typesElement = document.getElementById('pokemonTypes');
+            var statsElement = document.getElementById('pokemonStats');
+            
+            // Nombre y número
+            nameElement.textContent = '#' + pokemon.id + ' ' + capitalizeFirstLetter(pokemon.name);
+            
+            // Imagen (usamos la versión de sprites de generaciones anteriores para mejor compatibilidad)
+            imageElement.src = pokemon.sprites.versions['generation-v']['black-white'].animated.front_default || 
+                               pokemon.sprites.front_default;
+            
+            // Tipos
+            typesElement.innerHTML = '<strong>Tipos:</strong> ';
+            pokemon.types.forEach(function(type, index) {
+                typesElement.innerHTML += capitalizeFirstLetter(type.type.name);
+                if (index < pokemon.types.length - 1) {
+                    typesElement.innerHTML += ', ';
+                }
+            });
+            
+            // Estadísticas
+            statsElement.innerHTML = '<strong>Estadísticas:</strong><br>';
+            pokemon.stats.forEach(function(stat) {
+                statsElement.innerHTML += '<div class="stat"><span class="stat-name">' + 
+                                         capitalizeFirstLetter(stat.stat.name.replace('-', ' ')) + 
+                                         ':</span> ' + stat.base_stat + '</div>';
+            });
+            
+            // Mostrar resultados
+            resultDiv.style.display = 'block';
+        }
+        
+        // Función para mostrar errores
+        function showError(message) {
+            var errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        // Función auxiliar para capitalizar la primera letra
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+        
+        // Permitir búsqueda con Enter
+        document.getElementById('pokemonInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPokemon();
+            }
+        });
     </script>
 </body>
 </html>
