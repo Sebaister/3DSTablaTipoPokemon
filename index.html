@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscador Pokémon 3DS</title>
+    <title>Buscador de Pokémon para 3DS</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,201 +11,113 @@
             margin: 0;
             padding: 10px;
             color: #333;
-            font-size: 14px;
         }
         .container {
             max-width: 400px;
             margin: 0 auto;
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         h1 {
-            color: #e60000;
             text-align: center;
-            font-size: 18px;
+            font-size: 24px;
+            color: #e60012;
         }
-        .search-box {
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        input[type="text"] {
-            padding: 5px;
-            width: 70%;
+        input, button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            box-sizing: border-box;
         }
         button {
-            padding: 5px 10px;
-            background-color: #e60000;
+            background-color: #e60012;
             color: white;
             border: none;
             cursor: pointer;
         }
-        .result {
-            background-color: white;
+        button:disabled {
+            background-color: #cccccc;
+        }
+        #result {
+            margin-top: 15px;
             padding: 10px;
+            border: 1px solid #ddd;
             border-radius: 5px;
-            margin-top: 10px;
+            min-height: 100px;
         }
         .pokemon-img {
             display: block;
             margin: 0 auto;
-            max-width: 100px;
-            max-height: 100px;
-        }
-        .error {
-            color: red;
-        }
-        .loading {
-            color: #0066cc;
-            text-align: center;
+            max-width: 150px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Buscador Pokémon 3DS</h1>
-        <div class="search-box">
-            <input type="text" id="pokemonInput" placeholder="Nombre o número" autocomplete="off">
-            <button onclick="searchPokemon()">Buscar</button>
+        <h1>Buscador de Pokémon</h1>
+        <input type="text" id="pokemonInput" placeholder="Nombre o número de Pokémon">
+        <button id="searchBtn">Buscar</button>
+        <div id="result">
+            <p>Ingresa el nombre o número de un Pokémon</p>
         </div>
-        <div id="loading" class="loading" style="display: none;">Buscando...</div>
-        <div id="result" class="result" style="display: none;">
-            <h2 id="pokemonName"></h2>
-            <img id="pokemonImage" class="pokemon-img" src="" alt="Pokémon">
-            <div id="pokemonTypes"></div>
-            <div id="pokemonStats"></div>
-        </div>
-        <div id="error" class="error" style="display: none;"></div>
     </div>
 
     <script>
-        // Configuración para 3DS
-        var USE_PROXY = true; // Cambiar a false si no necesitas proxy
-        var PROXY_URL = 'https://cors-proxy.3ds.workers.dev/?url=';
-        var API_URL = 'https://pokeapi.co/api/v2/pokemon/';
-        var TIMEOUT = 15000; // 15 segundos para 3DS lenta
-
-        function searchPokemon() {
-            var input = document.getElementById('pokemonInput').value.trim().toLowerCase();
-            if (!input) {
-                showError('Ingresa un nombre o número');
-                return;
-            }
-            
-            showLoading();
-            hideResults();
-            hideError();
-
-            var url = USE_PROXY ? PROXY_URL + encodeURIComponent(API_URL + input) : API_URL + input;
-            
-            var xhr = new XMLHttpRequest();
-            xhr.timeout = TIMEOUT;
-            xhr.open('GET', url, true);
-            
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    try {
-                        var data = JSON.parse(xhr.responseText);
-                        displayPokemon(data);
-                    } catch (e) {
-                        showError('Error al leer los datos');
-                    }
-                } else {
-                    showError('Pokémon no encontrado (Error ' + xhr.status + ')');
-                }
-                hideLoading();
-            };
-            
-            xhr.onerror = function() {
-                showError('Error de conexión. Intenta recargar.');
-                hideLoading();
-            };
-            
-            xhr.ontimeout = function() {
-                showError('Tiempo de espera agotado. La conexión es muy lenta.');
-                hideLoading();
-            };
-            
-            try {
-                xhr.send();
-            } catch (e) {
-                showError('Error al enviar la solicitud');
-                hideLoading();
-            }
-        }
+        // Configuración del proxy de Cloudflare (reemplaza con tu URL)
+        const CLOUDFLARE_PROXY_URL = "https://tu-worker.tu-subdominio.workers.dev";
         
-        function displayPokemon(pokemon) {
-            var nameElement = document.getElementById('pokemonName');
-            var imageElement = document.getElementById('pokemonImage');
-            var typesElement = document.getElementById('pokemonTypes');
-            var statsElement = document.getElementById('pokemonStats');
-            
-            // Nombre y número
-            nameElement.textContent = '#' + pokemon.id + ' ' + capitalizeFirstLetter(pokemon.name);
-            
-            // Imagen (versión simple para 3DS)
-            imageElement.src = pokemon.sprites.front_default || '';
-            imageElement.onerror = function() {
-                this.style.display = 'none';
-            };
-            
-            // Tipos
-            typesElement.innerHTML = '<strong>Tipos:</strong> ';
-            var types = pokemon.types.map(function(type) {
-                return capitalizeFirstLetter(type.type.name);
-            });
-            typesElement.innerHTML += types.join(', ');
-            
-            // Estadísticas básicas
-            statsElement.innerHTML = '<strong>Estadísticas:</strong><br>';
-            var stats = ['hp', 'attack', 'defense', 'special-attack', 'special-defense', 'speed'];
-            stats.forEach(function(stat) {
-                var statObj = pokemon.stats.find(function(s) {
-                    return s.stat.name === stat;
-                });
-                if (statObj) {
-                    statsElement.innerHTML += '<div>' + 
-                        capitalizeFirstLetter(stat.replace('-', ' ')) + 
-                        ': ' + statObj.base_stat + '</div>';
-                }
-            });
-            
-            showResults();
-        }
-        
-        function showLoading() {
-            document.getElementById('loading').style.display = 'block';
-        }
-        
-        function hideLoading() {
-            document.getElementById('loading').style.display = 'none';
-        }
-        
-        function showResults() {
-            document.getElementById('result').style.display = 'block';
-        }
-        
-        function hideResults() {
-            document.getElementById('result').style.display = 'none';
-        }
-        
-        function showError(message) {
-            var errorDiv = document.getElementById('error');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-        }
-        
-        function hideError() {
-            document.getElementById('error').style.display = 'none';
-        }
-        
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
-        
-        // Manejo de teclado para 3DS
+        document.getElementById('searchBtn').addEventListener('click', searchPokemon);
         document.getElementById('pokemonInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 searchPokemon();
             }
         });
+
+        function searchPokemon() {
+            const input = document.getElementById('pokemonInput').value.trim().toLowerCase();
+            if (!input) return;
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Buscando...</p>';
+            
+            // Usamos el proxy de Cloudflare para hacer la petición
+            fetch(`${CLOUDFLARE_PROXY_URL}/pokemon/${input}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Pokémon no encontrado');
+                    return response.json();
+                })
+                .then(data => {
+                    displayPokemon(data);
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+                });
+        }
+
+        function displayPokemon(pokemon) {
+            const resultDiv = document.getElementById('result');
+            
+            // Obtener la imagen (usamos la versión de sprites de la 3DS si está disponible)
+            const imgUrl = pokemon.sprites.front_default || 
+                          pokemon.sprites.versions['generation-v']['black-white'].front_default;
+            
+            let html = `
+                <h2>#${pokemon.id} - ${capitalizeFirstLetter(pokemon.name)}</h2>
+                <img class="pokemon-img" src="${imgUrl}" alt="${pokemon.name}">
+                <p><strong>Tipo(s):</strong> ${pokemon.types.map(t => capitalizeFirstLetter(t.type.name)).join(', ')}</p>
+                <p><strong>Altura:</strong> ${pokemon.height / 10}m</p>
+                <p><strong>Peso:</strong> ${pokemon.weight / 10}kg</p>
+                <p><strong>Habilidades:</strong> ${pokemon.abilities.map(a => capitalizeFirstLetter(a.ability.name)).join(', ')}</p>
+            `;
+            
+            resultDiv.innerHTML = html;
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
     </script>
 </body>
 </html>
