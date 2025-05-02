@@ -1,22 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Pokédex Online/3DS</title>
-    <style>
-        body { font-family: Arial; text-align: center; }
-        #result { margin: 20px; padding: 10px; border: 1px solid #ccc; }
-        img { max-width: 96px; } /* Tamaño apto para 3DS */
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokeAPI en 3DS</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Pokédex Universal</h1>
-    <input type="text" id="pokemonInput" placeholder="Ej: pikachu" />
-    <button onclick="searchPokemon()">Buscar</button>
-    <div id="result">
-        <p>Escribe un nombre de Pokémon y presiona "Buscar".</p>
+    <h1>Pokédex 3DS</h1>
+    <div id="pokemon-info">
+        <p>Cargando información...</p>
     </div>
-
-    <script src="js/script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
