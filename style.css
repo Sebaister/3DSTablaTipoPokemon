@@ -1,25 +1,55 @@
+/* styles.css */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    text-align: center;
+    background-color: #000;
+    color: #FFF;
     margin: 0;
-    padding: 10px;
+    padding: 2px;
+    font-size: 12px;
+    -webkit-text-size-adjust: none;
 }
 
 h1 {
-    color: #e63946;
+    color: #F00;
+    font-size: 16px;
+    margin: 6px 0;
+    text-align: center;
 }
 
-#pokemon-info {
-    background-color: white;
-    border: 2px solid #333;
-    border-radius: 10px;
-    padding: 10px;
-    margin: 10px auto;
-    max-width: 250px;
+h2 {
+    color: #FC0;
+    font-size: 14px;
+    margin: 6px 0;
+    text-align: center;
 }
 
-img {
-    max-width: 100px;
-    height: auto;
+.menu {
+    text-align: center;
+    margin: 8px 0;
 }
+
+.button {
+    display: inline-block;
+    padding: 6px 8px;
+    background-color: #E00;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 12px;
+    margin: 2px;
+    min-width: 80px;
+}
+
+/* ... (todos los demás estilos) ... */
+
+/* Colores de tipos */
+.normal { background-color: #A8A878; }
+.fuego { background-color: #F08030; }
+.agua { background-color: #6890F0; }
+/* ... (todos los demás colores de tipos) ... */
+
+/* Efectividad */
+.weak { background-color: #F44; color: white; }
+.resist { background-color: #4C4; color: white; }
+.strong { background-color: #26F; color: white; }
+.immune { background-color: #999; color: white; }
