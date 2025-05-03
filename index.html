@@ -1902,10 +1902,10 @@
 
     <script>
         // Variable para almacenar el filtro de generación
-        let currentGenFilter = 'all';
+        var currentGenFilter = 'all';
         
         // Lista completa de Pokémon (ejemplo con algunos Pokémon)
-        const pokemonList = {
+        var pokemonList = {
             gen1: [
                 {name: "Bulbasaur", types: ["planta", "veneno"]},
                 {name: "Ivysaur", types: ["planta", "veneno"]},
@@ -1938,7 +1938,7 @@
         };
 
         // Tablas de efectividad por generación
-        const effectivenessTables = {
+        var effectivenessTables = {
             gen1: {
                 normal: { weak: ["lucha"], resist: [], immune: ["fantasma"], strong: [] },
                 fuego: { weak: ["agua", "tierra", "roca"], resist: ["fuego", "planta", "hielo", "bicho"], strong: ["planta", "hielo", "bicho"] },
@@ -2027,20 +2027,21 @@
             currentGenFilter = gen;
             
             // Actualizar botones activos
-            const buttons = document.querySelectorAll('.gen-filter-btn');
-            buttons.forEach(btn => {
-                if (btn.textContent.toLowerCase().includes(gen) || (gen === 'all' && btn.textContent === 'Todos')) {
-                    btn.classList.add('active');
+            var buttons = document.getElementsByClassName('gen-filter-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                var btn = buttons[i];
+                if (btn.textContent.toLowerCase().indexOf(gen) !== -1 || (gen === 'all' && btn.textContent === 'Todos')) {
+                    btn.className = 'gen-filter-btn active';
                 } else {
-                    btn.classList.remove('active');
+                    btn.className = 'gen-filter-btn';
                 }
-            });
+            }
         }
 
         // Función para buscar Pokémon
         function searchPokemon() {
-            const searchTerm = document.getElementById('pokemonSearch').value.toLowerCase();
-            const resultsContainer = document.getElementById('pokemonResults');
+            var searchTerm = document.getElementById('pokemonSearch').value.toLowerCase();
+            var resultsContainer = document.getElementById('pokemonResults');
             resultsContainer.innerHTML = '';
             
             if (!searchTerm) {
@@ -2048,29 +2049,26 @@
                 return;
             }
             
-            let filteredPokemon = [];
+            var filteredPokemon = [];
             
             // Filtrar según la generación seleccionada
             if (currentGenFilter === 'gen1') {
-                filteredPokemon = pokemonList.gen1.filter(p => p.name.toLowerCase().includes(searchTerm));
+                filteredPokemon = filterPokemon(pokemonList.gen1, searchTerm);
             } else if (currentGenFilter === 'gen2') {
-                filteredPokemon = [
-                    ...pokemonList.gen1.filter(p => p.name.toLowerCase().includes(searchTerm)),
-                    ...pokemonList.gen2.filter(p => p.name.toLowerCase().includes(searchTerm))
-                ];
+                filteredPokemon = filterPokemon(pokemonList.gen1, searchTerm).concat(
+                    filterPokemon(pokemonList.gen2, searchTerm)
+                );
             } else if (currentGenFilter === 'gen6') {
-                filteredPokemon = [
-                    ...pokemonList.gen1.filter(p => p.name.toLowerCase().includes(searchTerm)),
-                    ...pokemonList.gen2.filter(p => p.name.toLowerCase().includes(searchTerm)),
-                    ...pokemonList.gen6.filter(p => p.name.toLowerCase().includes(searchTerm))
-                ];
+                filteredPokemon = filterPokemon(pokemonList.gen1, searchTerm).concat(
+                    filterPokemon(pokemonList.gen2, searchTerm),
+                    filterPokemon(pokemonList.gen6, searchTerm)
+                );
             } else {
                 // Todos los Pokémon
-                filteredPokemon = [
-                    ...pokemonList.gen1.filter(p => p.name.toLowerCase().includes(searchTerm)),
-                    ...pokemonList.gen2.filter(p => p.name.toLowerCase().includes(searchTerm)),
-                    ...pokemonList.gen6.filter(p => p.name.toLowerCase().includes(searchTerm))
-                ];
+                filteredPokemon = filterPokemon(pokemonList.gen1, searchTerm).concat(
+                    filterPokemon(pokemonList.gen2, searchTerm),
+                    filterPokemon(pokemonList.gen6, searchTerm)
+                );
             }
             
             if (filteredPokemon.length === 0) {
@@ -2079,58 +2077,73 @@
             }
             
             // Mostrar resultados
-            filteredPokemon.forEach(pokemon => {
-                const pokemonDiv = document.createElement('div');
+            for (var i = 0; i < filteredPokemon.length; i++) {
+                var pokemon = filteredPokemon[i];
+                var pokemonDiv = document.createElement('div');
                 pokemonDiv.className = 'pokemon-result';
                 
                 // Determinar la generación del Pokémon
-                let pokemonGen = 'gen1';
-                if (pokemonList.gen6.some(p => p.name === pokemon.name)) {
+                var pokemonGen = 'gen1';
+                if (isPokemonInGen(pokemon.name, 'gen6')) {
                     pokemonGen = 'gen6';
-                } else if (pokemonList.gen2.some(p => p.name === pokemon.name)) {
+                } else if (isPokemonInGen(pokemon.name, 'gen2')) {
                     pokemonGen = 'gen2';
                 }
                 
                 // Obtener la tabla de efectividad correcta
-                const effectivenessTable = effectivenessTables[pokemonGen];
+                var effectivenessTable = effectivenessTables[pokemonGen];
                 
                 // Calcular efectividad combinada para Pokémon con dos tipos
-                let combinedEffectiveness = {
+                var combinedEffectiveness = {
                     weak: [],
                     resist: [],
                     immune: [],
                     strong: []
                 };
                 
-                pokemon.types.forEach(type => {
-                    const typeEffectiveness = effectivenessTable[type];
-                    combinedEffectiveness.weak.push(...typeEffectiveness.weak);
-                    combinedEffectiveness.resist.push(...typeEffectiveness.resist);
-                    combinedEffectiveness.immune.push(...typeEffectiveness.immune);
-                    combinedEffectiveness.strong.push(...typeEffectiveness.strong);
-                });
+                for (var j = 0; j < pokemon.types.length; j++) {
+                    var type = pokemon.types[j];
+                    var typeEffectiveness = effectivenessTable[type];
+                    combinedEffectiveness.weak = combinedEffectiveness.weak.concat(typeEffectiveness.weak);
+                    combinedEffectiveness.resist = combinedEffectiveness.resist.concat(typeEffectiveness.resist);
+                    combinedEffectiveness.immune = combinedEffectiveness.immune.concat(typeEffectiveness.immune);
+                    combinedEffectiveness.strong = combinedEffectiveness.strong.concat(typeEffectiveness.strong);
+                }
                 
                 // Eliminar duplicados
-                combinedEffectiveness.weak = [...new Set(combinedEffectiveness.weak)];
-                combinedEffectiveness.resist = [...new Set(combinedEffectiveness.resist)];
-                combinedEffectiveness.immune = [...new Set(combinedEffectiveness.immune)];
-                combinedEffectiveness.strong = [...new Set(combinedEffectiveness.strong)];
+                combinedEffectiveness.weak = removeDuplicates(combinedEffectiveness.weak);
+                combinedEffectiveness.resist = removeDuplicates(combinedEffectiveness.resist);
+                combinedEffectiveness.immune = removeDuplicates(combinedEffectiveness.immune);
+                combinedEffectiveness.strong = removeDuplicates(combinedEffectiveness.strong);
                 
                 // Ajustar para casos donde un tipo es resistente y el otro débil
-                combinedEffectiveness.weak = combinedEffectiveness.weak.filter(t => 
-                    !pokemon.types.some(type => effectivenessTable[type].resist.includes(t)) &&
-                    !pokemon.types.some(type => effectivenessTable[type].immune.includes(t))
-                );
-                
-                combinedEffectiveness.resist = combinedEffectiveness.resist.filter(t => 
-                    !pokemon.types.some(type => effectivenessTable[type].weak.includes(t))
-                );
+                combinedEffectiveness.weak = filterWeaknesses(combinedEffectiveness.weak, pokemon.types, effectivenessTable);
+                combinedEffectiveness.resist = filterResistances(combinedEffectiveness.resist, pokemon.types, effectivenessTable);
                 
                 // Crear HTML para mostrar el Pokémon y su efectividad
+                var typesHTML = '';
+                for (var k = 0; k < pokemon.types.length; k++) {
+                    var type = pokemon.types[k];
+                    typesHTML += '<span class="type-tag ' + type + '">' + 
+                                type.charAt(0).toUpperCase() + type.slice(1) + '</span> ';
+                }
+                
+                var weakHTML = combinedEffectiveness.weak.length > 0 ? 
+                    createTypeTagsHTML(combinedEffectiveness.weak, 'weak') : 'Ninguno';
+                
+                var resistHTML = combinedEffectiveness.resist.length > 0 ? 
+                    createTypeTagsHTML(combinedEffectiveness.resist, 'resist') : 'Ninguno';
+                
+                var immuneHTML = combinedEffectiveness.immune.length > 0 ? 
+                    createTypeTagsHTML(combinedEffectiveness.immune, 'immune') : 'Ninguno';
+                
+                var strongHTML = combinedEffectiveness.strong.length > 0 ? 
+                    createTypeTagsHTML(combinedEffectiveness.strong, 'strong') : 'Ninguno';
+                
                 pokemonDiv.innerHTML = `
                     <div class="pokemon-name">${pokemon.name}</div>
                     <div class="pokemon-types">
-                        ${pokemon.types.map(type => `<span class="type-tag ${type}">${type.charAt(0).toUpperCase() + type.slice(1)}</span>`).join(' ')}
+                        ${typesHTML}
                     </div>
                     
                     <table class="effectiveness-table">
@@ -2140,25 +2153,113 @@
                         </tr>
                         <tr>
                             <td>Débil contra (x2)</td>
-                            <td>${combinedEffectiveness.weak.map(t => `<span class="type-tag ${t} weak">${t.charAt(0).toUpperCase() + t.slice(1)}</span>`).join(' ') || 'Ninguno'}</td>
+                            <td>${weakHTML}</td>
                         </tr>
                         <tr>
                             <td>Resistente a (x0.5)</td>
-                            <td>${combinedEffectiveness.resist.map(t => `<span class="type-tag ${t} resist">${t.charAt(0).toUpperCase() + t.slice(1)}</span>`).join(' ') || 'Ninguno'}</td>
+                            <td>${resistHTML}</td>
                         </tr>
                         <tr>
                             <td>Inmune a (x0)</td>
-                            <td>${combinedEffectiveness.immune.map(t => `<span class="type-tag ${t} immune">${t.charAt(0).toUpperCase() + t.slice(1)}</span>`).join(' ') || 'Ninguno'}</td>
+                            <td>${immuneHTML}</td>
                         </tr>
                         <tr>
                             <td>Fuerte contra (x2)</td>
-                            <td>${combinedEffectiveness.strong.map(t => `<span class="type-tag ${t} strong">${t.charAt(0).toUpperCase() + t.slice(1)}</span>`).join(' ') || 'Ninguno'}</td>
+                            <td>${strongHTML}</td>
                         </tr>
                     </table>
                 `;
                 
                 resultsContainer.appendChild(pokemonDiv);
-            });
+            }
+        }
+
+        // Función auxiliar para filtrar Pokémon por nombre
+        function filterPokemon(pokemonArray, searchTerm) {
+            var result = [];
+            for (var i = 0; i < pokemonArray.length; i++) {
+                if (pokemonArray[i].name.toLowerCase().indexOf(searchTerm) !== -1) {
+                    result.push(pokemonArray[i]);
+                }
+            }
+            return result;
+        }
+
+        // Función auxiliar para verificar si un Pokémon está en una generación
+        function isPokemonInGen(pokemonName, gen) {
+            for (var i = 0; i < pokemonList[gen].length; i++) {
+                if (pokemonList[gen][i].name === pokemonName) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Función auxiliar para eliminar duplicados de un array
+        function removeDuplicates(array) {
+            var unique = [];
+            for (var i = 0; i < array.length; i++) {
+                if (unique.indexOf(array[i]) === -1) {
+                    unique.push(array[i]);
+                }
+            }
+            return unique;
+        }
+
+        // Función auxiliar para filtrar debilidades
+        function filterWeaknesses(weaknesses, types, effectivenessTable) {
+            var filtered = [];
+            for (var i = 0; i < weaknesses.length; i++) {
+                var type = weaknesses[i];
+                var shouldInclude = true;
+                
+                for (var j = 0; j < types.length; j++) {
+                    var pokemonType = types[j];
+                    if (effectivenessTable[pokemonType].resist.indexOf(type) !== -1 ||
+                        effectivenessTable[pokemonType].immune.indexOf(type) !== -1) {
+                        shouldInclude = false;
+                        break;
+                    }
+                }
+                
+                if (shouldInclude) {
+                    filtered.push(type);
+                }
+            }
+            return filtered;
+        }
+
+        // Función auxiliar para filtrar resistencias
+        function filterResistances(resistances, types, effectivenessTable) {
+            var filtered = [];
+            for (var i = 0; i < resistances.length; i++) {
+                var type = resistances[i];
+                var shouldInclude = true;
+                
+                for (var j = 0; j < types.length; j++) {
+                    var pokemonType = types[j];
+                    if (effectivenessTable[pokemonType].weak.indexOf(type) !== -1) {
+                        shouldInclude = false;
+                        break;
+                    }
+                }
+                
+                if (shouldInclude) {
+                    filtered.push(type);
+                }
+            }
+            return filtered;
+        }
+
+        // Función auxiliar para crear etiquetas de tipo HTML
+        function createTypeTagsHTML(types, cssClass) {
+            var html = '';
+            for (var i = 0; i < types.length; i++) {
+                var type = types[i];
+                html += '<span class="type-tag ' + type + ' ' + cssClass + '">' + 
+                       type.charAt(0).toUpperCase() + type.slice(1) + '</span> ';
+            }
+            return html;
         }
 
         // Función para mostrar detalles de tipo
@@ -2177,11 +2278,14 @@
         }
 
         // Permitir búsqueda al presionar Enter
-        document.getElementById('pokemonSearch').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
+        document.getElementById('pokemonSearch').onkeypress = function(e) {
+            if (!e) e = window.event;
+            var keyCode = e.keyCode || e.which;
+            if (keyCode == '13') {
                 searchPokemon();
+                return false;
             }
-        });
+        };
     </script>
 </body>
 </html>
