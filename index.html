@@ -4,11 +4,161 @@
     <title>Tablas de Tipos Pokémon</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=400">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ESTILOS GENERALES */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 2px;
+            font-size: 12px;
+            -webkit-text-size-adjust: none;
+        }
+        
+        h1 {
+            color: #FF0000;
+            font-size: 16px;
+            margin: 6px 0;
+            text-align: center;
+        }
+        
+        h2 {
+            color: #FFCC00;
+            font-size: 14px;
+            margin: 6px 0;
+            text-align: center;
+        }
+        
+        /* MENÚ PRINCIPAL */
+        .menu {
+            text-align: center;
+            margin: 8px 0;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 6px 8px;
+            background-color: #EE0000;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 12px;
+            margin: 2px;
+            min-width: 80px;
+        }
+        
+        /* MENÚ DE TIPOS */
+        .type-menu {
+            text-align: center;
+            margin: 6px 0;
+        }
+        
+        .type-btn {
+            padding: 4px 6px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 70px;
+            text-align: center;
+            border: none;
+            color: white;
+            margin: 2px;
+        }
+        
+        /* CONTENIDO */
+        .content {
+            display: none;
+        }
+        
+        .content:target {
+            display: block;
+        }
+        
+        .type-detail {
+            border: 1px solid #444444;
+            border-radius: 6px;
+            margin: 8px 0;
+            padding: 6px;
+            background-color: #222222;
+            display: none;
+        }
+        
+        .type-header {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            text-align: center;
+            padding: 4px;
+            border-radius: 4px;
+        }
+        
+        .type-section {
+            margin: 6px 0;
+        }
+        
+        .type-list {
+            margin: 4px 0;
+        }
+        
+        .type-tag {
+            display: inline-block;
+            padding: 4px 6px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 70px;
+            text-align: center;
+            margin: 2px;
+        }
+        
+        /* COLORES DE TIPOS POKÉMON */
+        .normal { background-color: #A8A878; }
+        .fuego { background-color: #F08030; }
+        .agua { background-color: #6890F0; }
+        .planta { background-color: #78C850; }
+        .electrico { background-color: #F8D030; }
+        .hielo { background-color: #98D8D8; }
+        .lucha { background-color: #C03028; }
+        .veneno { background-color: #A040A0; }
+        .tierra { background-color: #E0C068; }
+        .volador { background-color: #A890F0; }
+        .psiquico { background-color: #F85888; }
+        .bicho { background-color: #A8B820; }
+        .roca { background-color: #B8A038; }
+        .fantasma { background-color: #705898; }
+        .dragon { background-color: #7038F8; }
+        .siniestro { background-color: #705848; }
+        .acero { background-color: #B8B8D0; }
+        .hada { background-color: #EE99AC; }
+        
+        /* EFECTIVIDAD */
+        .weak { background-color: #FF4444; color: white; }
+        .resist { background-color: #44CC44; color: white; }
+        .strong { background-color: #2266FF; color: white; }
+        .immune { background-color: #999999; color: white; }
+        
+        /* NOTAS */
+        .note {
+            font-size: 10px;
+            margin: 6px 0;
+            padding: 0 4px;
+            text-align: left;
+            color: #CCCCCC;
+        }
+        
+        /* BOTÓN VOLVER */
+        .back-button {
+            text-align: center;
+            margin: 10px 0;
+        }
+    </style>
 </head>
 <body>
+    <!-- ENCABEZADO PRINCIPAL -->
     <h1>Tablas de Tipos Pokémon</h1>
     
+    <!-- MENÚ PRINCIPAL -->
     <div class="menu">
         <a href="#gen1" class="button">Gen 1</a>
         <a href="#gen2" class="button">Gen 2-5</a>
@@ -20,24 +170,24 @@
         <h2>Generación 1 (Rojo/Azul/Amarillo)</h2>
         
         <div class="type-menu">
-            <button class="type-btn normal" onclick="showType('gen1-normal')">Normal</button>
-            <button class="type-btn fuego" onclick="showType('gen1-fuego')">Fuego</button>
-            <button class="type-btn agua" onclick="showType('gen1-agua')">Agua</button>
-            <button class="type-btn planta" onclick="showType('gen1-planta')">Planta</button>
-            <button class="type-btn electrico" onclick="showType('gen1-electrico')">Eléctrico</button>
-            <button class="type-btn hielo" onclick="showType('gen1-hielo')">Hielo</button>
-            <button class="type-btn lucha" onclick="showType('gen1-lucha')">Lucha</button>
-            <button class="type-btn veneno" onclick="showType('gen1-veneno')">Veneno</button>
-            <button class="type-btn tierra" onclick="showType('gen1-tierra')">Tierra</button>
-            <button class="type-btn volador" onclick="showType('gen1-volador')">Volador</button>
-            <button class="type-btn psiquico" onclick="showType('gen1-psiquico')">Psíquico</button>
-            <button class="type-btn bicho" onclick="showType('gen1-bicho')">Bicho</button>
-            <button class="type-btn roca" onclick="showType('gen1-roca')">Roca</button>
-            <button class="type-btn fantasma" onclick="showType('gen1-fantasma')">Fantasma</button>
-            <button class="type-btn dragon" onclick="showType('gen1-dragon')">Dragón</button>
+            <button class="type-btn normal" onclick="showTypeDetail('gen1-normal')">Normal</button>
+            <button class="type-btn fuego" onclick="showTypeDetail('gen1-fuego')">Fuego</button>
+            <button class="type-btn agua" onclick="showTypeDetail('gen1-agua')">Agua</button>
+            <button class="type-btn planta" onclick="showTypeDetail('gen1-planta')">Planta</button>
+            <button class="type-btn electrico" onclick="showTypeDetail('gen1-electrico')">Eléctrico</button>
+            <button class="type-btn hielo" onclick="showTypeDetail('gen1-hielo')">Hielo</button>
+            <button class="type-btn lucha" onclick="showTypeDetail('gen1-lucha')">Lucha</button>
+            <button class="type-btn veneno" onclick="showTypeDetail('gen1-veneno')">Veneno</button>
+            <button class="type-btn tierra" onclick="showTypeDetail('gen1-tierra')">Tierra</button>
+            <button class="type-btn volador" onclick="showTypeDetail('gen1-volador')">Volador</button>
+            <button class="type-btn psiquico" onclick="showTypeDetail('gen1-psiquico')">Psíquico</button>
+            <button class="type-btn bicho" onclick="showTypeDetail('gen1-bicho')">Bicho</button>
+            <button class="type-btn roca" onclick="showTypeDetail('gen1-roca')">Roca</button>
+            <button class="type-btn fantasma" onclick="showTypeDetail('gen1-fantasma')">Fantasma</button>
+            <button class="type-btn dragon" onclick="showTypeDetail('gen1-dragon')">Dragón</button>
         </div>
 
-        <!-- Detalle Normal -->
+        <!-- DETALLES DE TIPOS GEN 1 -->
         <div id="gen1-normal" class="type-detail">
             <div class="type-header normal">Normal</div>
             <div class="type-section">
@@ -57,10 +207,9 @@
             </div>
         </div>
 
-        <!-- Resto de tipos de Gen 1... -->
-        <!-- Se mantendrían igual que en el original, solo mostrando un ejemplo -->
+        <!-- Más detalles de tipos Gen 1... (incluir todos los tipos) -->
         
-        <div style="text-align:center;margin:10px 0;">
+        <div class="back-button">
             <a href="#" class="button">Volver</a>
         </div>
     </div>
@@ -70,27 +219,32 @@
         <h2>Generaciones 2-5 (Oro/Plata a Negro/Blanco)</h2>
         
         <div class="type-menu">
-            <button class="type-btn normal" onclick="showType('gen2-normal')">Normal</button>
-            <button class="type-btn fuego" onclick="showType('gen2-fuego')">Fuego</button>
-            <!-- Resto de botones de tipos... -->
-            <button class="type-btn siniestro" onclick="showType('gen2-siniestro')">Siniestro</button>
+            <button class="type-btn normal" onclick="showTypeDetail('gen2-normal')">Normal</button>
+            <button class="type-btn fuego" onclick="showTypeDetail('gen2-fuego')">Fuego</button>
+            <!-- Todos los botones de tipos Gen 2-5 -->
+            <button class="type-btn siniestro" onclick="showTypeDetail('gen2-siniestro')">Siniestro</button>
         </div>
 
-        <!-- Detalle Acero -->
-        <div id="gen2-acero" class="type-detail">
-            <div class="type-header acero">Acero</div>
+        <!-- DETALLES DE TIPOS GEN 2-5 -->
+        <div id="gen2-normal" class="type-detail">
+            <div class="type-header normal">Normal</div>
             <div class="type-section">
                 <strong>Débil contra:</strong>
                 <div class="type-list">
-                    <div class="type-tag weak fuego">Fuego</div>
                     <div class="type-tag weak lucha">Lucha</div>
-                    <div class="type-tag weak tierra">Tierra</div>
                 </div>
             </div>
-            <!-- Resto de detalles... -->
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune fantasma">Fantasma</div>
+                </div>
+            </div>
         </div>
+
+        <!-- Más detalles de tipos Gen 2-5... (incluir todos los tipos) -->
         
-        <div style="text-align:center;margin:10px 0;">
+        <div class="back-button">
             <a href="#" class="button">Volver</a>
         </div>
     </div>
@@ -108,29 +262,76 @@
         </div>
         
         <div class="type-menu">
-            <button class="type-btn normal" onclick="showType('gen6-normal')">Normal</button>
-            <!-- Resto de botones de tipos... -->
-            <button class="type-btn hada" onclick="showType('gen6-hada')">Hada</button>
+            <button class="type-btn normal" onclick="showTypeDetail('gen6-normal')">Normal</button>
+            <button class="type-btn fuego" onclick="showTypeDetail('gen6-fuego')">Fuego</button>
+            <!-- Todos los botones de tipos Gen 6+ -->
+            <button class="type-btn hada" onclick="showTypeDetail('gen6-hada')">Hada</button>
         </div>
 
-        <!-- Detalle Hada -->
-        <div id="gen6-hada" class="type-detail">
-            <div class="type-header hada">Hada</div>
+        <!-- DETALLES DE TIPOS GEN 6+ -->
+        <div id="gen6-normal" class="type-detail">
+            <div class="type-header normal">Normal</div>
             <div class="type-section">
                 <strong>Débil contra:</strong>
                 <div class="type-list">
-                    <div class="type-tag weak veneno">Veneno</div>
-                    <div class="type-tag weak acero">Acero</div>
+                    <div class="type-tag weak lucha">Lucha</div>
                 </div>
             </div>
-            <!-- Resto de detalles... -->
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune fantasma">Fantasma</div>
+                </div>
+            </div>
         </div>
+
+        <!-- Más detalles de tipos Gen 6+... (incluir todos los tipos) -->
         
-        <div style="text-align:center;margin:10px 0;">
+        <div class="back-button">
             <a href="#" class="button">Volver</a>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // FUNCIÓN PARA MOSTRAR DETALLES DE TIPO
+        function showTypeDetail(typeId) {
+            // Ocultar todos los detalles primero
+            var allDetails = document.getElementsByClassName('type-detail');
+            for (var i = 0; i < allDetails.length; i++) {
+                allDetails[i].style.display = 'none';
+            }
+            
+            // Mostrar el detalle seleccionado
+            var selectedDetail = document.getElementById(typeId);
+            if (selectedDetail) {
+                selectedDetail.style.display = 'block';
+                
+                // Desplazar a la vista (compatible con 3DS)
+                setTimeout(function() {
+                    selectedDetail.scrollIntoView();
+                }, 10);
+            }
+        }
+        
+        // MANEJO DE NAVEGACIÓN AL CARGAR LA PÁGINA
+        window.onload = function() {
+            // Mostrar la generación correspondiente si hay hash en la URL
+            if (window.location.hash) {
+                var hash = window.location.hash.substring(1);
+                var targetContent = document.getElementById(hash);
+                
+                if (targetContent) {
+                    // Ocultar todo el contenido primero
+                    var allContent = document.getElementsByClassName('content');
+                    for (var i = 0; i < allContent.length; i++) {
+                        allContent[i].style.display = 'none';
+                    }
+                    
+                    // Mostrar el contenido objetivo
+                    targetContent.style.display = 'block';
+                }
+            }
+        };
+    </script>
 </body>
 </html>
