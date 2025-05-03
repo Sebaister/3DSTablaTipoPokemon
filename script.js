@@ -95,7 +95,6 @@ function doSearch() {
   }
 }
 
-// Mostrar Pokémon con sprite
 function showPokemon(pokemon) {
   var result = document.getElementById('pokemon-result');
   result.style.display = 'block';
@@ -105,13 +104,13 @@ function showPokemon(pokemon) {
   
   // Cargar sprite desde la carpeta Sprite
   var spriteImg = document.getElementById('pokemon-sprite');
-  spriteImg.src = 'Sprite/' + pokemon.id + '.png';
+  spriteImg.src = 'Sprite/' + pokemon.id + '.png'; // Ruta exacta
   
-  // Manejar error si el sprite no carga
+  // Manejar error (sin depender de PokeAPI)
   spriteImg.onerror = function() {
-    console.warn('No se encontró el sprite local, usando fuente online');
-    this.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + pokemon.id + '.png';
-    this.onerror = null; // Prevenir bucles infinitos
+    this.src = 'Sprite/placeholder.png'; // Fallback local
+  };
+}
   };
   
   // Mostrar tipos
