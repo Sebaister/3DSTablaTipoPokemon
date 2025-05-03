@@ -1,13 +1,23 @@
+// Versión compatible con 3DS
 function showType(typeId) {
-            // Oculta todos los detalles primero
-            var details = document.getElementsByClassName('type-detail');
-            for (var i = 0; i < details.length; i++) {
-                details[i].style.display = 'none';
-            }
-            
-            // Muestra el seleccionado
-            document.getElementById(typeId).style.display = 'block';
-            
-            // Desplaza a la vista (sin animación smooth para mejor rendimiento)
-            document.getElementById(typeId).scrollIntoView();
-        }
+  var details = document.getElementsByClassName('type-detail');
+  for (var i = 0; i < details.length; i++) {
+    details[i].style.display = 'none';
+  }
+  
+  var el = document.getElementById(typeId);
+  if (el) {
+    el.style.display = 'block';
+    el.scrollIntoView();
+  }
+}
+
+// Inicialización segura para 3DS
+if (document.addEventListener) {
+  document.addEventListener('DOMContentLoaded', function() {
+    var details = document.getElementsByClassName('type-detail');
+    for (var i = 0; i < details.length; i++) {
+      details[i].style.display = 'none';
+    }
+  });
+}
