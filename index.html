@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tablas de Tipos Pokémon</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=400">
+    
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <h1>Tablas de Tipos Pokémon</h1>
+    
+    <div class="menu">
+        <a href="#gen1" class="button">Gen 1</a>
+        <a href="#gen2" class="button">Gen 2-5</a>
+        <a href="#gen6" class="button">Gen 6+</a>
+    </div>
+
+    <!-- GENERACIÓN 1 -->
+    <div id="gen1" class="content">
+        <h2>Generación 1 (Rojo/Azul/Amarillo)</h2>
+        
+        <div class="type-menu">
+            <button class="type-btn normal" onclick="showType('gen1-normal')">Normal</button>
+            <button class="type-btn fuego" onclick="showType('gen1-fuego')">Fuego</button>
+            <button class="type-btn agua" onclick="showType('gen1-agua')">Agua</button>
+            <button class="type-btn planta" onclick="showType('gen1-planta')">Planta</button>
+            <button class="type-btn electrico" onclick="showType('gen1-electrico')">Eléctrico</button>
+            <button class="type-btn hielo" onclick="showType('gen1-hielo')">Hielo</button>
+            <button class="type-btn lucha" onclick="showType('gen1-lucha')">Lucha</button>
+            <button class="type-btn veneno" onclick="showType('gen1-veneno')">Veneno</button>
+            <button class="type-btn tierra" onclick="showType('gen1-tierra')">Tierra</button>
+            <button class="type-btn volador" onclick="showType('gen1-volador')">Volador</button>
+            <button class="type-btn psiquico" onclick="showType('gen1-psiquico')">Psíquico</button>
+            <button class="type-btn bicho" onclick="showType('gen1-bicho')">Bicho</button>
+            <button class="type-btn roca" onclick="showType('gen1-roca')">Roca</button>
+            <button class="type-btn fantasma" onclick="showType('gen1-fantasma')">Fantasma</button>
+            <button class="type-btn dragon" onclick="showType('gen1-dragon')">Dragón</button>
+        </div>
+
+        <!-- Detalle Normal -->
+        <div id="gen1-normal" class="type-detail">
+            <div class="type-header normal">Normal</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak lucha">Lucha</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune fantasma">Fantasma</div>
+                </div>
+            </div>
+            <div class="note">
+                Movimientos Normales no afectan a Fantasmas, excepto con Fuerza Equina
+            </div>
+        </div>
+
+        <!-- Detalle Fuego -->
+        <div id="gen1-fuego" class="type-detail">
+            <div class="type-header fuego">Fuego</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak agua">Agua</div>
+                    <div class="type-tag weak tierra">Tierra</div>
+                    <div class="type-tag weak roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist fuego">Fuego</div>
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist hielo">Hielo</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong hielo">Hielo</div>
+                    <div class="type-tag strong bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="note">
+                Los movimientos de tipo hielo hacen daño normal a los Pokémon de tipo fuego.
+            </div>
+        </div>
+
+        <!-- Detalle Agua -->
+        <div id="gen1-agua" class="type-detail">
+            <div class="type-header agua">Agua</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak planta">Planta</div>
+                    <div class="type-tag weak electrico">Eléctrico</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist fuego">Fuego</div>
+                    <div class="type-tag resist agua">Agua</div>
+                    <div class="type-tag resist hielo">Hielo</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong fuego">Fuego</div>
+                    <div class="type-tag strong tierra">Tierra</div>
+                    <div class="type-tag strong roca">Roca</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Planta -->
+        <div id="gen1-planta" class="type-detail">
+            <div class="type-header planta">Planta</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak fuego">Fuego</div>
+                    <div class="type-tag weak hielo">Hielo</div>
+                    <div class="type-tag weak veneno">Veneno</div>
+                    <div class="type-tag weak volador">Volador</div>
+                    <div class="type-tag weak bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist agua">Agua</div>
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist electrico">Eléctrico</div>
+                    <div class="type-tag resist tierra">Tierra</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong agua">Agua</div>
+                    <div class="type-tag strong tierra">Tierra</div>
+                    <div class="type-tag strong roca">Roca</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Eléctrico -->
+        <div id="gen1-electrico" class="type-detail">
+            <div class="type-header electrico">Eléctrico</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak tierra">Tierra</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist electrico">Eléctrico</div>
+                    <div class="type-tag resist volador">Volador</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong agua">Agua</div>
+                    <div class="type-tag strong volador">Volador</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune tierra">Tierra</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Hielo -->
+        <div id="gen1-hielo" class="type-detail">
+            <div class="type-header hielo">Hielo</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak fuego">Fuego</div>
+                    <div class="type-tag weak lucha">Lucha</div>
+                    <div class="type-tag weak roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist hielo">Hielo</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong tierra">Tierra</div>
+                    <div class="type-tag strong volador">Volador</div>
+                    <div class="type-tag strong dragon">Dragón</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Lucha -->
+        <div id="gen1-lucha" class="type-detail">
+            <div class="type-header lucha">Lucha</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak volador">Volador</div>
+                    <div class="type-tag weak psiquico">Psíquico</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist bicho">Bicho</div>
+                    <div class="type-tag resist roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong normal">Normal</div>
+                    <div class="type-tag strong hielo">Hielo</div>
+                    <div class="type-tag strong roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune fantasma">Fantasma</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Veneno -->
+        <div id="gen1-veneno" class="type-detail">
+            <div class="type-header veneno">Veneno</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak tierra">Tierra</div>
+                    <div class="type-tag weak psiquico">Psíquico</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist veneno">Veneno</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong bicho">Bicho</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Tierra -->
+        <div id="gen1-tierra" class="type-detail">
+            <div class="type-header tierra">Tierra</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak agua">Agua</div>
+                    <div class="type-tag weak planta">Planta</div>
+                    <div class="type-tag weak hielo">Hielo</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist veneno">Veneno</div>
+                    <div class="type-tag resist roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong fuego">Fuego</div>
+                    <div class="type-tag strong electrico">Eléctrico</div>
+                    <div class="type-tag strong veneno">Veneno</div>
+                    <div class="type-tag strong roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune electrico">Eléctrico</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Volador -->
+        <div id="gen1-volador" class="type-detail">
+            <div class="type-header volador">Volador</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak electrico">Eléctrico</div>
+                    <div class="type-tag weak hielo">Hielo</div>
+                    <div class="type-tag weak roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist lucha">Lucha</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong lucha">Lucha</div>
+                    <div class="type-tag strong bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune tierra">Tierra</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Psíquico -->
+        <div id="gen1-psiquico" class="type-detail">
+            <div class="type-header psiquico">Psíquico</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist lucha">Lucha</div>
+                    <div class="type-tag resist psiquico">Psíquico</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong lucha">Lucha</div>
+                    <div class="type-tag strong veneno">Veneno</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Bicho -->
+        <div id="gen1-bicho" class="type-detail">
+            <div class="type-header bicho">Bicho</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak fuego">Fuego</div>
+                    <div class="type-tag weak volador">Volador</div>
+                    <div class="type-tag weak roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist lucha">Lucha</div>
+                    <div class="type-tag resist tierra">Tierra</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong psiquico">Psíquico</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Roca -->
+        <div id="gen1-roca" class="type-detail">
+            <div class="type-header roca">Roca</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak agua">Agua</div>
+                    <div class="type-tag weak planta">Planta</div>
+                    <div class="type-tag weak lucha">Lucha</div>
+                    <div class="type-tag weak tierra">Tierra</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist normal">Normal</div>
+                    <div class="type-tag resist fuego">Fuego</div>
+                    <div class="type-tag resist veneno">Veneno</div>
+                    <div class="type-tag resist volador">Volador</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong fuego">Fuego</div>
+                    <div class="type-tag strong hielo">Hielo</div>
+                    <div class="type-tag strong volador">Volador</div>
+                    <div class="type-tag strong bicho">Bicho</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Fantasma -->
+        <div id="gen1-fantasma" class="type-detail">
+            <div class="type-header fantasma">Fantasma</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak fantasma">Fantasma</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist veneno">Veneno</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong psiquico">Psíquico</div>
+                    <div class="type-tag strong fantasma">Fantasma</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune normal">Normal</div>
+                    <div class="type-tag immune lucha">Lucha</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Dragón -->
+        <div id="gen1-dragon" class="type-detail">
+            <div class="type-header dragon">Dragón</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak hielo">Hielo</div>
+                    <div class="type-tag weak dragon">Dragón</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist fuego">Fuego</div>
+                    <div class="type-tag resist agua">Agua</div>
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist electrico">Eléctrico</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong dragon">Dragón</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align:center;margin:10px 0;">
+            <a href="#" class="button">Volver</a>
+        </div>
+    </div>
+
+    <!-- GENERACIÓN 2-5 -->
+    <div id="gen2" class="content">
+        <h2>Generaciones 2-5 (Oro/Plata a Negro/Blanco)</h2>
+        
+        <div class="type-menu">
+            <button class="type-btn normal" onclick="showType('gen2-normal')">Normal</button>
+            <button class="type-btn fuego" onclick="showType('gen2-fuego')">Fuego</button>
+            <button class="type-btn agua" onclick="showType('gen2-agua')">Agua</button>
+            <button class="type-btn planta" onclick="showType('gen2-planta')">Planta</button>
+            <button class="type-btn electrico" onclick="showType('gen2-electrico')">Eléctrico</button>
+            <button class="type-btn hielo" onclick="showType('gen2-hielo')">Hielo</button>
+            <button class="type-btn lucha" onclick="showType('gen2-lucha')">Lucha</button>
+            <button class="type-btn veneno" onclick="showType('gen2-veneno')">Veneno</button>
+            <button class="type-btn tierra" onclick="showType('gen2-tierra')">Tierra</button>
+            <button class="type-btn volador" onclick="showType('gen2-volador')">Volador</button>
+            <button class="type-btn psiquico" onclick="showType('gen2-psiquico')">Psíquico</button>
+            <button class="type-btn bicho" onclick="showType('gen2-bicho')">Bicho</button>
+            <button class="type-btn roca" onclick="showType('gen2-roca')">Roca</button>
+            <button class="type-btn fantasma" onclick="showType('gen2-fantasma')">Fantasma</button>
+            <button class="type-btn dragon" onclick="showType('gen2-dragon')">Dragón</button>
+            <button class="type-btn acero" onclick="showType('gen2-acero')">Acero</button>
+            <button class="type-btn siniestro" onclick="showType('gen2-siniestro')">Siniestro</button>
+        </div>
+
+        <!-- Detalle Acero -->
+        <div id="gen2-acero" class="type-detail">
+            <div class="type-header acero">Acero</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak fuego">Fuego</div>
+                    <div class="type-tag weak lucha">Lucha</div>
+                    <div class="type-tag weak tierra">Tierra</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a (10 tipos):</strong>
+                <div class="type-list">
+                    <div class="type-tag resist normal">Normal</div>
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist hielo">Hielo</div>
+                    <div class="type-tag resist volador">Volador</div>
+                    <div class="type-tag resist psiquico">Psíquico</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                    <div class="type-tag resist roca">Roca</div>
+                    <div class="type-tag resist dragon">Dragón</div>
+                    <div class="type-tag resist acero">Acero</div>
+                    <div class="type-tag resist siniestro">Siniestro</div>
+                    <div class="type-tag resist fantasma">Fantasma</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune veneno">Veneno</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong hielo">Hielo</div>
+                    <div class="type-tag strong roca">Roca</div>
+                    <div class="type-tag strong hada">Hada</div>
+                </div>
+            </div>
+            <div class="note">
+                El tipo Acero fue introducido en Gen 2 para balancear el tipo Dragón
+            </div>
+        </div>
+
+        <!-- Detalle Siniestro -->
+        <div id="gen2-siniestro" class="type-detail">
+            <div class="type-header siniestro">Siniestro</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak lucha">Lucha</div>
+                    <div class="type-tag weak bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist fantasma">Fantasma</div>
+                    <div class="type-tag resist siniestro">Siniestro</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong psiquico">Psíquico</div>
+                    <div class="type-tag strong fantasma">Fantasma</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune psiquico">Psíquico</div>
+                </div>
+            </div>
+            <div class="note">
+                Introducido en Gen 2 para balancear el tipo Psíquico
+            </div>
+        </div>
+
+        <!-- Detalle Normal (Gen 2-5) -->
+        <div id="gen2-normal" class="type-detail">
+            <div class="type-header normal">Normal</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak lucha">Lucha</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune fantasma">Fantasma</div>
+                </div>
+            </div>
+            <div class="note">
+                Movimientos Normales no afectan a Fantasmas
+            </div>
+        </div>
+
+        <!-- Detalle Fuego (Gen 2-5) -->
+        <div id="gen2-fuego" class="type-detail">
+            <div class="type-header fuego">Fuego</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak agua">Agua</div>
+                    <div class="type-tag weak tierra">Tierra</div>
+                    <div class="type-tag weak roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist fuego">Fuego</div>
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist hielo">Hielo</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                    <div class="type-tag resist acero">Acero</div>
+                    <div class="type-tag resist hada">Hada</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong hielo">Hielo</div>
+                    <div class="type-tag strong bicho">Bicho</div>
+                    <div class="type-tag strong acero">Acero</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Agua (Gen 2-5) -->
+        <div id="gen2-agua" class="type-detail">
+            <div class="type-header agua">Agua</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak planta">Planta</div>
+                    <div class="type-tag weak electrico">Eléctrico</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist fuego">Fuego</div>
+                    <div class="type-tag resist agua">Agua</div>
+                    <div class="type-tag resist hielo">Hielo</div>
+                    <div class="type-tag resist acero">Acero</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong fuego">Fuego</div>
+                    <div class="type-tag strong tierra">Tierra</div>
+                    <div class="type-tag strong roca">Roca</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Planta (Gen 2-5) -->
+        <div id="gen2-planta" class="type-detail">
+            <div class="type-header planta">Planta</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak fuego">Fuego</div>
+                    <div class="type-tag weak hielo">Hielo</div>
+                    <div class="type-tag weak veneno">Veneno</div>
+                    <div class="type-tag weak volador">Volador</div>
+                    <div class="type-tag weak bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist agua">Agua</div>
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist electrico">Eléctrico</div>
+                    <div class="type-tag resist tierra">Tierra</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong agua">Agua</div>
+                    <div class="type-tag strong tierra">Tierra</div>
+                    <div class="type-tag strong roca">Roca</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Eléctrico (Gen 2-5) -->
+        <div id="gen2-electrico" class="type-detail">
+            <div class="type-header electrico">Eléctrico</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak tierra">Tierra</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist electrico">Eléctrico</div>
+                    <div class="type-tag resist volador">Volador</div>
+                    <div class="type-tag resist acero">Acero</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong agua">Agua</div>
+                    <div class="type-tag strong volador">Volador</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune tierra">Tierra</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Hielo (Gen 2-5) -->
+        <div id="gen2-hielo" class="type-detail">
+            <div class="type-header hielo">Hielo</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak fuego">Fuego</div>
+                    <div class="type-tag weak lucha">Lucha</div>
+                    <div class="type-tag weak roca">Roca</div>
+                    <div class="type-tag weak acero">Acero</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist hielo">Hielo</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong tierra">Tierra</div>
+                    <div class="type-tag strong volador">Volador</div>
+                    <div class="type-tag strong dragon">Dragón</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Lucha (Gen 2-5) -->
+        <div id="gen2-lucha" class="type-detail">
+            <div class="type-header lucha">Lucha</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak volador">Volador</div>
+                    <div class="type-tag weak psiquico">Psíquico</div>
+                    <div class="type-tag weak hada">Hada</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist bicho">Bicho</div>
+                    <div class="type-tag resist roca">Roca</div>
+                    <div class="type-tag resist siniestro">Siniestro</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong normal">Normal</div>
+                    <div class="type-tag strong hielo">Hielo</div>
+                    <div class="type-tag strong roca">Roca</div>
+                    <div class="type-tag strong siniestro">Siniestro</div>
+                    <div class="type-tag strong acero">Acero</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Veneno (Gen 2-5) -->
+        <div id="gen2-veneno" class="type-detail">
+            <div class="type-header veneno">Veneno</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak tierra">Tierra</div>
+                    <div class="type-tag weak psiquico">Psíquico</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist veneno">Veneno</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                    <div class="type-tag resist lucha">Lucha</div>
+                    <div class="type-tag resist hada">Hada</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong hada">Hada</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune acero">Acero</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Tierra (Gen 2-5) -->
+        <div id="gen2-tierra" class="type-detail">
+            <div class="type-header tierra">Tierra</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak agua">Agua</div>
+                    <div class="type-tag weak planta">Planta</div>
+                    <div class="type-tag weak hielo">Hielo</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist veneno">Veneno</div>
+                    <div class="type-tag resist roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong fuego">Fuego</div>
+                    <div class="type-tag strong electrico">Eléctrico</div>
+                    <div class="type-tag strong veneno">Veneno</div>
+                    <div class="type-tag strong roca">Roca</div>
+                    <div class="type-tag strong acero">Acero</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune electrico">Eléctrico</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Volador (Gen 2-5) -->
+        <div id="gen2-volador" class="type-detail">
+            <div class="type-header volador">Volador</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak electrico">Eléctrico</div>
+                    <div class="type-tag weak hielo">Hielo</div>
+                    <div class="type-tag weak roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist lucha">Lucha</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong lucha">Lucha</div>
+                    <div class="type-tag strong bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune tierra">Tierra</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Psíquico (Gen 2-5) -->
+        <div id="gen2-psiquico" class="type-detail">
+            <div class="type-header psiquico">Psíquico</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak bicho">Bicho</div>
+                    <div class="type-tag weak fantasma">Fantasma</div>
+                    <div class="type-tag weak siniestro">Siniestro</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist lucha">Lucha</div>
+                    <div class="type-tag resist psiquico">Psíquico</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong lucha">Lucha</div>
+                    <div class="type-tag strong veneno">Veneno</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune siniestro">Siniestro</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Bicho (Gen 2-5) -->
+        <div id="gen2-bicho" class="type-detail">
+            <div class="type-header bicho">Bicho</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak fuego">Fuego</div>
+                    <div class="type-tag weak volador">Volador</div>
+                    <div class="type-tag weak roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist lucha">Lucha</div>
+                    <div class="type-tag resist tierra">Tierra</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong psiquico">Psíquico</div>
+                    <div class="type-tag strong siniestro">Siniestro</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Roca (Gen 2-5) -->
+        <div id="gen2-roca" class="type-detail">
+            <div class="type-header roca">Roca</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak agua">Agua</div>
+                    <div class="type-tag weak planta">Planta</div>
+                    <div class="type-tag weak lucha">Lucha</div>
+                    <div class="type-tag weak tierra">Tierra</div>
+                    <div class="type-tag weak acero">Acero</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist normal">Normal</div>
+                    <div class="type-tag resist fuego">Fuego</div>
+                    <div class="type-tag resist veneno">Veneno</div>
+                    <div class="type-tag resist volador">Volador</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong fuego">Fuego</div>
+                    <div class="type-tag strong hielo">Hielo</div>
+                    <div class="type-tag strong volador">Volador</div>
+                    <div class="type-tag strong bicho">Bicho</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Fantasma (Gen 2-5) -->
+        <div id="gen2-fantasma" class="type-detail">
+            <div class="type-header fantasma">Fantasma</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak fantasma">Fantasma</div>
+                    <div class="type-tag weak siniestro">Siniestro</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist veneno">Veneno</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong psiquico">Psíquico</div>
+                    <div class="type-tag strong fantasma">Fantasma</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune normal">Normal</div>
+                    <div class="type-tag immune lucha">Lucha</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Dragón (Gen 2-5) -->
+        <div id="gen2-dragon" class="type-detail">
+            <div class="type-header dragon">Dragón</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak hielo">Hielo</div>
+                    <div class="type-tag weak dragon">Dragón</div>
+                    <div class="type-tag weak hada">Hada</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist fuego">Fuego</div>
+                    <div class="type-tag resist agua">Agua</div>
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist electrico">Eléctrico</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong dragon">Dragón</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align:center;margin:10px 0;">
+            <a href="#" class="button">Volver</a>
+        </div>
+    </div>
+
+    <!-- GENERACIÓN 6+ -->
+    <div id="gen6" class="content">
+        <h2>Generación 6+ (X/Y - Escarlata/Violeta)</h2>
+        
+        <div class="note">
+            <strong>Cambios importantes:</strong><br>
+            • Tipo Hada añadido (fuerte contra Dragón, Siniestro y Lucha)<br>
+            • Acero ya no resiste Siniestro y Fantasma<br>
+            • Planta ya no resiste Hada<br>
+            • Nuevas inmunidades y debilidades ajustadas
+        </div>
+        
+        <div class="type-menu">
+            <button class="type-btn normal" onclick="showType('gen6-normal')">Normal</button>
+            <button class="type-btn fuego" onclick="showType('gen6-fuego')">Fuego</button>
+            <button class="type-btn agua" onclick="showType('gen6-agua')">Agua</button>
+            <button class="type-btn planta" onclick="showType('gen6-planta')">Planta</button>
+            <button class="type-btn electrico" onclick="showType('gen6-electrico')">Eléctrico</button>
+            <button class="type-btn hielo" onclick="showType('gen6-hielo')">Hielo</button>
+            <button class="type-btn lucha" onclick="showType('gen6-lucha')">Lucha</button>
+            <button class="type-btn veneno" onclick="showType('gen6-veneno')">Veneno</button>
+            <button class="type-btn tierra" onclick="showType('gen6-tierra')">Tierra</button>
+            <button class="type-btn volador" onclick="showType('gen6-volador')">Volador</button>
+            <button class="type-btn psiquico" onclick="showType('gen6-psiquico')">Psíquico</button>
+            <button class="type-btn bicho" onclick="showType('gen6-bicho')">Bicho</button>
+            <button class="type-btn roca" onclick="showType('gen6-roca')">Roca</button>
+            <button class="type-btn fantasma" onclick="showType('gen6-fantasma')">Fantasma</button>
+            <button class="type-btn dragon" onclick="showType('gen6-dragon')">Dragón</button>
+            <button class="type-btn acero" onclick="showType('gen6-acero')">Acero</button>
+            <button class="type-btn siniestro" onclick="showType('gen6-siniestro')">Siniestro</button>
+            <button class="type-btn hada" onclick="showType('gen6-hada')">Hada</button>
+        </div>
+
+        <!-- Detalle Hada -->
+        <div id="gen6-hada" class="type-detail">
+            <div class="type-header hada">Hada</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak veneno">Veneno</div>
+                    <div class="type-tag weak acero">Acero</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist lucha">Lucha</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                    <div class="type-tag resist siniestro">Siniestro</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong lucha">Lucha</div>
+                    <div class="type-tag strong dragon">Dragón</div>
+                    <div class="type-tag strong siniestro">Siniestro</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune dragon">Dragón</div>
+                </div>
+            </div>
+            <div class="note">
+                Introducido en Gen 6 para balancear el tipo Dragón y Siniestro
+            </div>
+        </div>
+
+        <!-- Detalle Acero (Gen 6+) -->
+        <div id="gen6-acero" class="type-detail">
+            <div class="type-header acero">Acero</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak fuego">Fuego</div>
+                    <div class="type-tag weak lucha">Lucha</div>
+                    <div class="type-tag weak tierra">Tierra</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a (9 tipos):</strong>
+                <div class="type-list">
+                    <div class="type-tag resist normal">Normal</div>
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist hielo">Hielo</div>
+                    <div class="type-tag resist volador">Volador</div>
+                    <div class="type-tag resist psiquico">Psíquico</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                    <div class="type-tag resist roca">Roca</div>
+                    <div class="type-tag resist acero">Acero</div>
+                    <div class="type-tag resist hada">Hada</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune veneno">Veneno</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong hielo">Hielo</div>
+                    <div class="type-tag strong roca">Roca</div>
+                    <div class="type-tag strong hada">Hada</div>
+                </div>
+            </div>
+            <div class="note">
+                En Gen 6, Acero ya no resiste Siniestro y Fantasma
+            </div>
+        </div>
+
+        <!-- Detalle Siniestro (Gen 6+) -->
+        <div id="gen6-siniestro" class="type-detail">
+            <div class="type-header siniestro">Siniestro</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak lucha">Lucha</div>
+                    <div class="type-tag weak bicho">Bicho</div>
+                    <div class="type-tag weak hada">Hada</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist fantasma">Fantasma</div>
+                    <div class="type-tag resist siniestro">Siniestro</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong psiquico">Psíquico</div>
+                    <div class="type-tag strong fantasma">Fantasma</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune psiquico">Psíquico</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Normal (Gen 6+) -->
+        <div id="gen6-normal" class="type-detail">
+            <div class="type-header normal">Normal</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak lucha">Lucha</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune fantasma">Fantasma</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Fuego (Gen 6+) -->
+        <div id="gen6-fuego" class="type-detail">
+            <div class="type-header fuego">Fuego</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak agua">Agua</div>
+                    <div class="type-tag weak tierra">Tierra</div>
+                    <div class="type-tag weak roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist fuego">Fuego</div>
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist hielo">Hielo</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                    <div class="type-tag resist acero">Acero</div>
+                    <div class="type-tag resist hada">Hada</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong hielo">Hielo</div>
+                    <div class="type-tag strong bicho">Bicho</div>
+                    <div class="type-tag strong acero">Acero</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Agua (Gen 6+) -->
+        <div id="gen6-agua" class="type-detail">
+            <div class="type-header agua">Agua</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak planta">Planta</div>
+                    <div class="type-tag weak electrico">Eléctrico</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist fuego">Fuego</div>
+                    <div class="type-tag resist agua">Agua</div>
+                    <div class="type-tag resist hielo">Hielo</div>
+                    <div class="type-tag resist acero">Acero</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong fuego">Fuego</div>
+                    <div class="type-tag strong tierra">Tierra</div>
+                    <div class="type-tag strong roca">Roca</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Planta (Gen 6+) -->
+        <div id="gen6-planta" class="type-detail">
+            <div class="type-header planta">Planta</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak fuego">Fuego</div>
+                    <div class="type-tag weak hielo">Hielo</div>
+                    <div class="type-tag weak veneno">Veneno</div>
+                    <div class="type-tag weak volador">Volador</div>
+                    <div class="type-tag weak bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist agua">Agua</div>
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist electrico">Eléctrico</div>
+                    <div class="type-tag resist tierra">Tierra</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong agua">Agua</div>
+                    <div class="type-tag strong tierra">Tierra</div>
+                    <div class="type-tag strong roca">Roca</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Eléctrico (Gen 6+) -->
+        <div id="gen6-electrico" class="type-detail">
+            <div class="type-header electrico">Eléctrico</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak tierra">Tierra</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist electrico">Eléctrico</div>
+                    <div class="type-tag resist volador">Volador</div>
+                    <div class="type-tag resist acero">Acero</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong agua">Agua</div>
+                    <div class="type-tag strong volador">Volador</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune tierra">Tierra</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Hielo (Gen 6+) -->
+        <div id="gen6-hielo" class="type-detail">
+            <div class="type-header hielo">Hielo</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak fuego">Fuego</div>
+                    <div class="type-tag weak lucha">Lucha</div>
+                    <div class="type-tag weak roca">Roca</div>
+                    <div class="type-tag weak acero">Acero</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist hielo">Hielo</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong tierra">Tierra</div>
+                    <div class="type-tag strong volador">Volador</div>
+                    <div class="type-tag strong dragon">Dragón</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Lucha (Gen 6+) -->
+        <div id="gen6-lucha" class="type-detail">
+            <div class="type-header lucha">Lucha</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak volador">Volador</div>
+                    <div class="type-tag weak psiquico">Psíquico</div>
+                    <div class="type-tag weak hada">Hada</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist bicho">Bicho</div>
+                    <div class="type-tag resist roca">Roca</div>
+                    <div class="type-tag resist siniestro">Siniestro</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong normal">Normal</div>
+                    <div class="type-tag strong hielo">Hielo</div>
+                    <div class="type-tag strong roca">Roca</div>
+                    <div class="type-tag strong siniestro">Siniestro</div>
+                    <div class="type-tag strong acero">Acero</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Veneno (Gen 6+) -->
+        <div id="gen6-veneno" class="type-detail">
+            <div class="type-header veneno">Veneno</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak tierra">Tierra</div>
+                    <div class="type-tag weak psiquico">Psíquico</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist veneno">Veneno</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                    <div class="type-tag resist lucha">Lucha</div>
+                    <div class="type-tag resist hada">Hada</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong hada">Hada</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune acero">Acero</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Tierra (Gen 6+) -->
+        <div id="gen6-tierra" class="type-detail">
+            <div class="type-header tierra">Tierra</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak agua">Agua</div>
+                    <div class="type-tag weak planta">Planta</div>
+                    <div class="type-tag weak hielo">Hielo</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist veneno">Veneno</div>
+                    <div class="type-tag resist roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong fuego">Fuego</div>
+                    <div class="type-tag strong electrico">Eléctrico</div>
+                    <div class="type-tag strong veneno">Veneno</div>
+                    <div class="type-tag strong roca">Roca</div>
+                    <div class="type-tag strong acero">Acero</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune electrico">Eléctrico</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Volador (Gen 6+) -->
+        <div id="gen6-volador" class="type-detail">
+            <div class="type-header volador">Volador</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak electrico">Eléctrico</div>
+                    <div class="type-tag weak hielo">Hielo</div>
+                    <div class="type-tag weak roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist lucha">Lucha</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong lucha">Lucha</div>
+                    <div class="type-tag strong bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune tierra">Tierra</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Psíquico (Gen 6+) -->
+        <div id="gen6-psiquico" class="type-detail">
+            <div class="type-header psiquico">Psíquico</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak bicho">Bicho</div>
+                    <div class="type-tag weak fantasma">Fantasma</div>
+                    <div class="type-tag weak siniestro">Siniestro</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist lucha">Lucha</div>
+                    <div class="type-tag resist psiquico">Psíquico</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong lucha">Lucha</div>
+                    <div class="type-tag strong veneno">Veneno</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune siniestro">Siniestro</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Bicho (Gen 6+) -->
+        <div id="gen6-bicho" class="type-detail">
+            <div class="type-header bicho">Bicho</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak fuego">Fuego</div>
+                    <div class="type-tag weak volador">Volador</div>
+                    <div class="type-tag weak roca">Roca</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist lucha">Lucha</div>
+                    <div class="type-tag resist tierra">Tierra</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong planta">Planta</div>
+                    <div class="type-tag strong psiquico">Psíquico</div>
+                    <div class="type-tag strong siniestro">Siniestro</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Roca (Gen 6+) -->
+        <div id="gen6-roca" class="type-detail">
+            <div class="type-header roca">Roca</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak agua">Agua</div>
+                    <div class="type-tag weak planta">Planta</div>
+                    <div class="type-tag weak lucha">Lucha</div>
+                    <div class="type-tag weak tierra">Tierra</div>
+                    <div class="type-tag weak acero">Acero</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist normal">Normal</div>
+                    <div class="type-tag resist fuego">Fuego</div>
+                    <div class="type-tag resist veneno">Veneno</div>
+                    <div class="type-tag resist volador">Volador</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong fuego">Fuego</div>
+                    <div class="type-tag strong hielo">Hielo</div>
+                    <div class="type-tag strong volador">Volador</div>
+                    <div class="type-tag strong bicho">Bicho</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Fantasma (Gen 6+) -->
+        <div id="gen6-fantasma" class="type-detail">
+            <div class="type-header fantasma">Fantasma</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak fantasma">Fantasma</div>
+                    <div class="type-tag weak siniestro">Siniestro</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist veneno">Veneno</div>
+                    <div class="type-tag resist bicho">Bicho</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong psiquico">Psíquico</div>
+                    <div class="type-tag strong fantasma">Fantasma</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune normal">Normal</div>
+                    <div class="type-tag immune lucha">Lucha</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle Dragón (Gen 6+) -->
+        <div id="gen6-dragon" class="type-detail">
+            <div class="type-header dragon">Dragón</div>
+            <div class="type-section">
+                <strong>Débil contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag weak hielo">Hielo</div>
+                    <div class="type-tag weak dragon">Dragón</div>
+                    <div class="type-tag weak hada">Hada</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Resistente a:</strong>
+                <div class="type-list">
+                    <div class="type-tag resist fuego">Fuego</div>
+                    <div class="type-tag resist agua">Agua</div>
+                    <div class="type-tag resist planta">Planta</div>
+                    <div class="type-tag resist electrico">Eléctrico</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Fuerte contra:</strong>
+                <div class="type-list">
+                    <div class="type-tag strong dragon">Dragón</div>
+                </div>
+            </div>
+            <div class="type-section">
+                <strong>Inmune a:</strong>
+                <div class="type-list">
+                    <div class="type-tag immune hada">Hada</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align:center;margin:10px 0;">
+            <a href="#" class="button">Volver</a>
+        </div>
+    </div>
+
+    
+  <script src="script.js"></script>
+</body>
+</html>
