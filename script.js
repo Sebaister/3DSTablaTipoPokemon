@@ -28,17 +28,30 @@ function setupButtons() {
     });
 }
 
+// Función showType corregida
+function showType(typeId) {
+    // Oculta todos los detalles primero
+    hideAllTypeDetails();
+    
+    // Muestra el seleccionado
+    const element = document.getElementById(typeId);
+    if (element) {
+        element.style.display = 'block';
+        element.scrollIntoView();
+    }
+}
+
 // Filtra por generación
 function filterByGen(genId) {
     currentGen = genId;
-    
-    // Oculta todos los detalles primero
-    hideAllTypeDetails();
     
     // Si hay un tipo seleccionado, muestra solo ese tipo en esta generación
     if (currentType) {
         showType(currentGen + '-' + currentType);
     } else {
+        // Oculta todo primero
+        hideAllTypeDetails();
+        
         // Muestra todos los tipos para esta generación
         const details = document.querySelectorAll('[id^="' + genId + '-"]');
         details.forEach(detail => {
@@ -53,24 +66,8 @@ function filterByGen(genId) {
 // Filtra por tipo
 function filterByType(typeId) {
     currentType = typeId;
-    
-    // Oculta todos los detalles primero
-    hideAllTypeDetails();
-    
-    // Muestra este tipo en la generación actual
     showType(currentGen + '-' + typeId);
-    
-    // Actualiza el botón activo
     updateActiveTypeButton(typeId);
-}
-
-// Muestra una sección específica
-function showType(typeId) {
-    const element = document.getElementById(typeId);
-    if (element) {
-        element.style.display = 'block';
-        element.scrollIntoView();
-    }
 }
 
 // Oculta todas las secciones
