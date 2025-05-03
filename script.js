@@ -1,102 +1,105 @@
 // Variables globales
-let pokemonData = [];
+let currentGen = 'gen1'; // Generación por defecto
+let currentType = '';    // Tipo seleccionado
 
-// Cargar datos al iniciar
+// Inicialización cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
-  loadPokemonData();
+    // Configura los eventos de los botones
+    setupButtons();
+    
+    // Muestra la generación por defecto (Gen1)
+    filterByGen('gen1');
 });
 
-// Cargar pokedata.json
-function loadPokemonData() {
-  fetch('pokedata.json')
-    .then(response => {
-      if (!response.ok) throw new Error("Error al cargar pokedata.json");
-      return response.json();
-    })
-    .then(data => {
-      pokemonData = data;
-      console.log(`${data.length} Pokémon cargados`);
-      setupSearch();
-    })
-    .catch(error => {
-      console.error("Error:", error);
-      alert("Error al cargar los datos. Recarga la página.");
+// Configura todos los botones
+function setupButtons() {
+    // Botones de generación
+    document.getElementById('gen1').addEventListener('click', function() { filterByGen('gen1'); });
+    document.getElementById('gen2-').addEventListener('click', function() { filterByGen('gen2-'); });
+    document.getElementById('gen6+').addEventListener('click', function() { filterByGen('gen6+'); });
+    
+    // Botones de tipos
+    const typeButtons = document.querySelectorAll('.type-button');
+    typeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const typeId = this.id.replace('btn-', '');
+            filterByType(typeId);
+        });
     });
 }
 
-// Configurar búsqueda
-function setupSearch() {
-  const searchBtn = document.getElementById('search-btn');
-  const searchInput = document.getElementById('pokemon-input');
-
-  searchBtn.addEventListener('click', searchPokemon);
-  searchInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') searchPokemon();
-  });
+// Filtra por generación
+function filterByGen(genId) {
+    currentGen = genId;
+    
+    // Oculta todos los detalles primero
+    hideAllTypeDetails();
+    
+    // Si hay un tipo seleccionado, muestra solo ese tipo en esta generación
+    if (currentType) {
+        showType(currentGen + '-' + currentType);
+    } else {
+        // Muestra todos los tipos para esta generación
+        const details = document.querySelectorAll('[id^="' + genId + '-"]');
+        details.forEach(detail => {
+            detail.style.display = 'block';
+        });
+    }
+    
+    // Actualiza el botón activo
+    updateActiveGenButton(genId);
 }
 
-// Buscar Pokémon
-function searchPokemon() {
-  const input = document.getElementById('pokemon-input').value.trim().toLowerCase();
-  
-  if (!input) {
-    alert("¡Escribe un nombre o número!");
-    return;
-  }
-
-  const pokemon = pokemonData.find(p => 
-    p.nombre.toLowerCase() === input || 
-    p.id.toString() === input
-  );
-
-  if (pokemon) {
-    showPokemon(pokemon);
-  } else {
-    document.getElementById('pokemon-result').style.display = 'none';
-    alert("Pokémon no encontrado. Ejemplos: 'Bulbasaur', '1'");
-  }
+// Filtra por tipo
+function filterByType(typeId) {
+    currentType = typeId;
+    
+    // Oculta todos los detalles primero
+    hideAllTypeDetails();
+    
+    // Muestra este tipo en la generación actual
+    showType(currentGen + '-' + typeId);
+    
+    // Actualiza el botón activo
+    updateActiveTypeButton(typeId);
 }
 
-// Mostrar Pokémon
-function showPokemon(pokemon) {
-  const result = document.getElementById('pokemon-result');
-  result.style.display = 'block';
-
-  // Nombre y número
-  document.getElementById('pokemon-name').textContent = `#${pokemon.id} ${pokemon.nombre}`;
-
-  // Sprite
-  const spriteImg = document.getElementById('pokemon-sprite');
-  spriteImg.src = `Sprite/${pokemon.id}.png`; // Asume que los sprites se llaman "1.png", "2.png", etc.
-  spriteImg.onerror = function() {
-    this.src = 'Sprite/placeholder.png'; // Fallback si no existe el sprite
-  };
-
-  // Tipos
-  const typesContainer = document.getElementById('pokemon-types');
-  typesContainer.innerHTML = pokemon.tipos.map(type => 
-    `<span class="type-${type.toLowerCase()}">${type}</span>`
-  ).join('');
-
-  // Stats (opcional)
-  if (pokemon.stats) {
-    document.getElementById('pokemon-stats').innerHTML = `
-      <p><b>HP:</b> ${pokemon.stats.hp}</p>
-      <p><b>Ataque:</b> ${pokemon.stats.attack}</p>
-      <p><b>Defensa:</b> ${pokemon.stats.defense}</p>
-    `;
-  }
-
-  // Evolución (opcional)
-  if (pokemon.evolucion) {
-    document.getElementById('pokemon-evolution').innerHTML = `
-      <p><b>Evoluciona a:</b> ${pokemon.evolucion[0].b} (Nivel ${pokemon.evolucion[0].condiciones[0].split(": ")[1]})</p>
-    `;
-  }
+// Muestra una sección específica
+function showType(typeId) {
+    const element = document.getElementById(typeId);
+    if (element) {
+        element.style.display = 'block';
+        element.scrollIntoView();
+    }
 }
 
-// ----- Para debug en 3DS (opcional) -----
-// Muestra alerts en lugar de console.log
+// Oculta todas las secciones
+function hideAllTypeDetails() {
+    const details = document.getElementsByClassName('type-detail');
+    for (let i = 0; i < details.length; i++) {
+        details[i].style.display = 'none';
+    }
+}
+
+// Actualiza el botón de generación activo
+function updateActiveGenButton(genId) {
+    document.getElementById('gen1').classList.remove('active');
+    document.getElementById('gen2-').classList.remove('active');
+    document.getElementById('gen6+').classList.remove('active');
+    document.getElementById(genId).classList.add('active');
+}
+
+// Actualiza el botón de tipo activo
+function updateActiveTypeButton(typeId) {
+    const typeButtons = document.querySelectorAll('.type-button');
+    typeButtons.forEach(button => {
+        button.classList.remove('active');
+    });
+    document.getElementById('btn-' + typeId).classList.add('active');
+}
+
+// Función para manejar errores (compatible con 3DS)
 window.onerror = function(message) {
-  alert("Error: " + message);
+    alert('Error: ' + message);
+    return true;
 };
