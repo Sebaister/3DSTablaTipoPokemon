@@ -1,186 +1,102 @@
-// Función para mostrar tipos (existente)
-function showType(typeId) {
-  var details = document.getElementsByClassName('type-detail');
-  for (var i = 0; i < details.length; i++) {
-    details[i].style.display = 'none';
-  }
-  
-  var el = document.getElementById(typeId);
-  if (el) {
-    el.style.display = 'block';
-    el.scrollIntoView();
-  }
-}
+// Variables globales
+let pokemonData = [];
 
-// Inicialización
-if (document.addEventListener) {
-  document.addEventListener('DOMContentLoaded', function() {
-    // Ocultar detalles de tipo al cargar
-    var details = document.getElementsByClassName('type-detail');
-    for (var i = 0; i < details.length; i++) {
-      details[i].style.display = 'none';
-    }
-    
-    // Cargar datos de Pokémon
-    loadPokemonData();
-  });
-}
+// Cargar datos al iniciar
+document.addEventListener('DOMContentLoaded', function() {
+  loadPokemonData();
+});
 
-// Cargar datos JSON
+// Cargar pokedata.json
 function loadPokemonData() {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'pokedata.json', true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        try {
-          window.pokemonData = JSON.parse(xhr.responseText);
-          setupSearch();
-        } catch (e) {
-          console.error('Error parsing JSON:', e);
-          alert('Error al cargar los datos de Pokémon');
-        }
-      } else {
-        console.error('Error loading JSON file');
-        alert('No se pudo cargar el archivo de datos');
-      }
-    }
-  };
-  xhr.send(null);
+  fetch('pokedata.json')
+    .then(response => {
+      if (!response.ok) throw new Error("Error al cargar pokedata.json");
+      return response.json();
+    })
+    .then(data => {
+      pokemonData = data;
+      console.log(`${data.length} Pokémon cargados`);
+      setupSearch();
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      alert("Error al cargar los datos. Recarga la página.");
+    });
 }
 
 // Configurar búsqueda
 function setupSearch() {
-  var searchInput = document.getElementById('pokemon-search');
-  var searchButton = document.getElementById('search-button');
-  
-  if (!searchInput || !searchButton) {
-    console.error('Search elements not found');
-    return;
-  }
-  
-  searchButton.addEventListener('click', doSearch);
+  const searchBtn = document.getElementById('search-btn');
+  const searchInput = document.getElementById('pokemon-input');
+
+  searchBtn.addEventListener('click', searchPokemon);
   searchInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') doSearch();
+    if (e.key === 'Enter') searchPokemon();
   });
 }
 
-// Realizar búsqueda
-function doSearch() {
-  var searchTerm = document.getElementById('pokemon-search').value.trim().toLowerCase();
-  var result = document.getElementById('pokemon-result');
+// Buscar Pokémon
+function searchPokemon() {
+  const input = document.getElementById('pokemon-input').value.trim().toLowerCase();
   
-  if (!searchTerm) {
-    result.style.display = 'none';
+  if (!input) {
+    alert("¡Escribe un nombre o número!");
     return;
   }
-  
-  var foundPokemon = null;
-  
-  // Buscar por nombre o ID
-  for (var i = 0; i < window.pokemonData.length; i++) {
-    var pokemon = window.pokemonData[i];
-    if (pokemon.nombre.toLowerCase() === searchTerm || 
-        pokemon.id.toString() === searchTerm) {
-      foundPokemon = pokemon;
-      break;
-    }
-  }
-  
-  if (foundPokemon) {
-    showPokemon(foundPokemon);
+
+  const pokemon = pokemonData.find(p => 
+    p.nombre.toLowerCase() === input || 
+    p.id.toString() === input
+  );
+
+  if (pokemon) {
+    showPokemon(pokemon);
   } else {
-    alert('Pokémon no encontrado. Intenta con otro nombre o número.');
-    result.style.display = 'none';
+    document.getElementById('pokemon-result').style.display = 'none';
+    alert("Pokémon no encontrado. Ejemplos: 'Bulbasaur', '1'");
   }
 }
 
+// Mostrar Pokémon
 function showPokemon(pokemon) {
-  var result = document.getElementById('pokemon-result');
+  const result = document.getElementById('pokemon-result');
   result.style.display = 'block';
-  
+
   // Nombre y número
-  document.getElementById('pokemon-name').textContent = '#' + pokemon.id + ' ' + pokemon.nombre;
-  
-  // Cargar sprite desde la carpeta Sprite
-  var spriteImg = document.getElementById('pokemon-sprite');
-  spriteImg.src = 'Sprite/' + pokemon.id + '.png'; // Ruta exacta
-  
-  // Manejar error (sin depender de PokeAPI)
+  document.getElementById('pokemon-name').textContent = `#${pokemon.id} ${pokemon.nombre}`;
+
+  // Sprite
+  const spriteImg = document.getElementById('pokemon-sprite');
+  spriteImg.src = `Sprite/${pokemon.id}.png`; // Asume que los sprites se llaman "1.png", "2.png", etc.
   spriteImg.onerror = function() {
-    this.src = 'Sprite/placeholder.png'; // Fallback local
+    this.src = 'Sprite/placeholder.png'; // Fallback si no existe el sprite
   };
-}
-  };
-  
-  // Mostrar tipos
-  var typesContainer = document.getElementById('pokemon-types');
-  typesContainer.innerHTML = '';
-  pokemon.tipos.forEach(function(type) {
-    var typeBadge = document.createElement('span');
-    typeBadge.className = 'type-badge';
-    typeBadge.textContent = type;
-    typeBadge.style.backgroundColor = getTypeColor(type);
-    typesContainer.appendChild(typeBadge);
-  });
-  
-  // Mostrar estadísticas
-  var statsContainer = document.getElementById('pokemon-stats');
-  statsContainer.innerHTML = '<h3>Estadísticas</h3>';
-  for (var stat in pokemon.stats) {
-    if (pokemon.stats.hasOwnProperty(stat)) {
-      var statElement = document.createElement('p');
-      statElement.textContent = stat + ': ' + pokemon.stats[stat];
-      statsContainer.appendChild(statElement);
-    }
+
+  // Tipos
+  const typesContainer = document.getElementById('pokemon-types');
+  typesContainer.innerHTML = pokemon.tipos.map(type => 
+    `<span class="type-${type.toLowerCase()}">${type}</span>`
+  ).join('');
+
+  // Stats (opcional)
+  if (pokemon.stats) {
+    document.getElementById('pokemon-stats').innerHTML = `
+      <p><b>HP:</b> ${pokemon.stats.hp}</p>
+      <p><b>Ataque:</b> ${pokemon.stats.attack}</p>
+      <p><b>Defensa:</b> ${pokemon.stats.defense}</p>
+    `;
   }
-  
-  // Mostrar evoluciones
-  var evolutionContainer = document.getElementById('pokemon-evolution');
-  evolutionContainer.innerHTML = '<h3>Evoluciones</h3>';
-  
-  if (pokemon.evolucion.length === 0) {
-    evolutionContainer.innerHTML += '<p>No tiene evoluciones</p>';
-  } else {
-    pokemon.evolucion.forEach(function(evo) {
-      var evoElement = document.createElement('p');
-      evoElement.textContent = 'Evoluciona a ' + evo.b;
-      
-      // Mostrar condiciones si existen
-      if (evo.condiciones && evo.condiciones.length > 0) {
-        var conditions = document.createElement('small');
-        conditions.textContent = ' (' + evo.condiciones.join(', ') + ')';
-        conditions.style.display = 'block';
-        conditions.style.color = '#666';
-        evoElement.appendChild(conditions);
-      }
-      
-      evolutionContainer.appendChild(evoElement);
-    });
+
+  // Evolución (opcional)
+  if (pokemon.evolucion) {
+    document.getElementById('pokemon-evolution').innerHTML = `
+      <p><b>Evoluciona a:</b> ${pokemon.evolucion[0].b} (Nivel ${pokemon.evolucion[0].condiciones[0].split(": ")[1]})</p>
+    `;
   }
 }
 
-// Función auxiliar para colores de tipos
-function getTypeColor(type) {
-  var typeColors = {
-    'Planta': '#78C850',
-    'Fuego': '#F08030',
-    'Agua': '#6890F0',
-    'Eléctrico': '#F8D030',
-    'Hielo': '#98D8D8',
-    'Lucha': '#C03028',
-    'Veneno': '#A040A0',
-    'Tierra': '#E0C068',
-    'Volador': '#A890F0',
-    'Psíquico': '#F85888',
-    'Bicho': '#A8B820',
-    'Roca': '#B8A038',
-    'Fantasma': '#705898',
-    'Dragón': '#7038F8',
-    'Siniestro': '#705848',
-    'Acero': '#B8B8D0',
-    'Hada': '#EE99AC',
-    'Normal': '#A8A878'
-  };
-  return typeColors[type] || '#777777';
-}
+// ----- Para debug en 3DS (opcional) -----
+// Muestra alerts en lugar de console.log
+window.onerror = function(message) {
+  alert("Error: " + message);
+};
