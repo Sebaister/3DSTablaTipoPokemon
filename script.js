@@ -17,22 +17,13 @@ function showType(typeId) {
 var pokedata = [];
 
 // Cargar datos del archivo JSON
-var xhr = new XMLHttpRequest();
-xhr.open('GET', 'pokedata.json', true);
-xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-        pokedata = JSON.parse(xhr.responseText);
-    }
-};
-xhr.send();
-
-// Buscar Pokémon al escribir
 document.addEventListener('DOMContentLoaded', function () {
     var input = document.getElementById('search');
+    var btn = document.getElementById('search-btn');
     var infoDiv = document.getElementById('pokemon-info');
 
-    input.oninput = function () {
-        var query = this.value.toLowerCase().trim();
+    function buscarPokemon() {
+        var query = input.value.toLowerCase().trim();
         if (query === '') {
             infoDiv.innerHTML = '';
             return;
@@ -52,6 +43,13 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             infoDiv.innerHTML = '<p>No se encontró ningún Pokémon.</p>';
         }
+    }
+
+    btn.onclick = buscarPokemon;
+
+    // También permitir búsqueda con Enter
+    input.onkeypress = function (e) {
+        if (e.key === 'Enter') buscarPokemon();
     };
 
     function mostrarPokemon(pokemon) {
@@ -69,4 +67,5 @@ document.addEventListener('DOMContentLoaded', function () {
         infoDiv.innerHTML = html;
     }
 });
+
 </script>
