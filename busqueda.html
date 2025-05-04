@@ -13,10 +13,6 @@
             padding: 0;
             font-size: 12px;
             -webkit-text-size-adjust: none;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            justify-content: space-between;
         }
 
         h1 {
@@ -40,14 +36,11 @@
 
         #resultado {
             display: none;
-            flex: 1;
             padding: 6px;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
+            text-align: center;
         }
 
-        #resultado img {
+        #pokeImg {
             max-width: 100%;
             height: auto;
             image-rendering: pixelated;
@@ -57,10 +50,10 @@
         #pokeInfo {
             background: #222;
             padding: 6px;
-            margin-left: 10px;
-            flex-grow: 1;
+            margin-top: 10px;
             color: white;
             border: 1px solid #444;
+            text-align: left;
         }
 
         .type-btn {
@@ -102,6 +95,7 @@
             text-align: left;
             color: #CCC;
         }
+
     </style>
 </head>
 <body>
@@ -191,7 +185,7 @@
                 }
 
                 info.innerHTML = html;
-                resultado.style.display = "flex";
+                resultado.style.display = "block";
             } else {
                 resultado.style.display = "none";
                 alert("Pokémon no encontrado.");
