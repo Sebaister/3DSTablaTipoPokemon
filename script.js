@@ -1,4 +1,4 @@
-// Función existente para mostrar tipos (la mantendremos)
+// Función para mostrar el tipo seleccionado (original)
 function showType(typeId) {
     // Oculta todos los detalles primero
     var details = document.getElementsByClassName('type-detail');
@@ -7,106 +7,141 @@ function showType(typeId) {
     }
     
     // Muestra el seleccionado
-    var selectedType = document.getElementById(typeId);
-    if (selectedType) {
-        selectedType.style.display = 'block';
-        // Desplaza a la vista (sin animación smooth para mejor rendimiento)
-        selectedType.scrollIntoView();
+    var element = document.getElementById(typeId);
+    if (element) {
+        element.style.display = 'block';
+        element.scrollIntoView();
     }
 }
 
-// Nuevas funciones para cargar dinámicamente los datos
-function createTypeButtons(genId, types) {
-    const container = document.getElementById(`${genId}-types`);
-    if (!container) return;
-    
-    container.innerHTML = '';
-    
-    types.forEach(type => {
-        const button = document.createElement('button');
-        button.className = `type-btn ${type}`;
-        button.textContent = capitalizeFirstLetter(type);
-        button.onclick = () => showType(`${genId}-${type}`);
-        container.appendChild(button);
-    });
-}
-
-function createTypeDetails(genId, typeData) {
-    const container = document.getElementById(`${genId}-details`);
-    if (!container) return;
-    
-    container.innerHTML = '';
-    
-    for (const [type, data] of Object.entries(typeData)) {
-        const detailDiv = document.createElement('div');
-        detailDiv.id = `${genId}-${type}`;
-        detailDiv.className = 'type-detail';
-        detailDiv.style.display = 'none';
-        
-        let html = `<div class="type-header ${type}">${capitalizeFirstLetter(type)}</div>`;
-        
-        if (data.weak) {
-            html += `<div class="type-section"><strong>Débil contra:</strong><div class="type-list">`;
-            html += data.weak.map(t => `<div class="type-tag weak ${t}">${capitalizeFirstLetter(t)}</div>`).join('');
-            html += `</div></div>`;
-        }
-        
-        if (data.resist) {
-            html += `<div class="type-section"><strong>Resistente a:</strong><div class="type-list">`;
-            html += data.resist.map(t => `<div class="type-tag resist ${t}">${capitalizeFirstLetter(t)}</div>`).join('');
-            html += `</div></div>`;
-        }
-        
-        if (data.strong) {
-            html += `<div class="type-section"><strong>Fuerte contra:</strong><div class="type-list">`;
-            html += data.strong.map(t => `<div class="type-tag strong ${t}">${capitalizeFirstLetter(t)}</div>`).join('');
-            html += `</div></div>`;
-        }
-        
-        if (data.immune) {
-            html += `<div class="type-section"><strong>Inmune a:</strong><div class="type-list">`;
-            html += data.immune.map(t => `<div class="type-tag immune ${t}">${capitalizeFirstLetter(t)}</div>`).join('');
-            html += `</div></div>`;
-        }
-        
-        if (data.note) {
-            html += `<div class="note">${data.note}</div>`;
-        }
-        
-        detailDiv.innerHTML = html;
-        container.appendChild(detailDiv);
-    }
-}
-
+// Función para capitalizar (nueva)
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-// Cargar los datos y generar la interfaz
-document.addEventListener('DOMContentLoaded', () => {
-    // Primero verifica si ya hay contenido (para compatibilidad con el HTML existente)
-    const hasExistingContent = document.querySelector('.type-detail') !== null;
+// Función para crear botones (adaptada)
+function createTypeButtons(genId, types) {
+    var container = document.getElementById(genId + '-types');
+    if (!container) return;
     
-    if (!hasExistingContent) {
-        // Solo cargar dinámicamente si no hay contenido existente
-        fetch('types.json')
-            .then(response => response.json())
-            .then(data => {
+    container.innerHTML = '';
+    
+    for (var i = 0; i < types.length; i++) {
+        var type = types[i];
+        var button = document.createElement('button');
+        button.className = 'type-btn ' + type;
+        button.textContent = capitalizeFirstLetter(type);
+        button.onclick = function(t) {
+            return function() {
+                showType(genId + '-' + t);
+            };
+        }(type);
+        container.appendChild(button);
+    }
+}
+
+// Función para crear detalles (adaptada)
+function createTypeDetails(genId, typeData) {
+    var container = document.getElementById(genId + '-details');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    for (var type in typeData) {
+        if (typeData.hasOwnProperty(type)) {
+            var data = typeData[type];
+            var detailDiv = document.createElement('div');
+            detailDiv.id = genId + '-' + type;
+            detailDiv.className = 'type-detail';
+            detailDiv.style.display = 'none';
+            
+            var html = '<div class="type-header ' + type + '">' + capitalizeFirstLetter(type) + '</div>';
+            
+            if (data.weak) {
+                html += '<div class="type-section"><strong>Débil contra:</strong><div class="type-list">';
+                for (var j = 0; j < data.weak.length; j++) {
+                    html += '<div class="type-tag weak ' + data.weak[j] + '">' + capitalizeFirstLetter(data.weak[j]) + '</div>';
+                }
+                html += '</div></div>';
+            }
+            
+            if (data.resist) {
+                html += '<div class="type-section"><strong>Resistente a:</strong><div class="type-list">';
+                for (var j = 0; j < data.resist.length; j++) {
+                    html += '<div class="type-tag resist ' + data.resist[j] + '">' + capitalizeFirstLetter(data.resist[j]) + '</div>';
+                }
+                html += '</div></div>';
+            }
+            
+            if (data.strong) {
+                html += '<div class="type-section"><strong>Fuerte contra:</strong><div class="type-list">';
+                for (var j = 0; j < data.strong.length; j++) {
+                    html += '<div class="type-tag strong ' + data.strong[j] + '">' + capitalizeFirstLetter(data.strong[j]) + '</div>';
+                }
+                html += '</div></div>';
+            }
+            
+            if (data.immune) {
+                html += '<div class="type-section"><strong>Inmune a:</strong><div class="type-list">';
+                for (var j = 0; j < data.immune.length; j++) {
+                    html += '<div class="type-tag immune ' + data.immune[j] + '">' + capitalizeFirstLetter(data.immune[j]) + '</div>';
+                }
+                html += '</div></div>';
+            }
+            
+            if (data.note) {
+                html += '<div class="note">' + data.note + '</div>';
+            }
+            
+            detailDiv.innerHTML = html;
+            container.appendChild(detailDiv);
+        }
+    }
+}
+
+// Cargar datos (adaptado para 3DS)
+function loadData() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'types.json', true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                
                 // Generación 1
-                const gen1Types = Object.keys(data.gen1);
+                var gen1Types = [];
+                for (var type in data.gen1) {
+                    if (data.gen1.hasOwnProperty(type)) gen1Types.push(type);
+                }
                 createTypeButtons('gen1', gen1Types);
                 createTypeDetails('gen1', data.gen1);
                 
                 // Generación 2-5
-                const gen2Types = Object.keys(data.gen2);
+                var gen2Types = [];
+                for (var type in data.gen2) {
+                    if (data.gen2.hasOwnProperty(type)) gen2Types.push(type);
+                }
                 createTypeButtons('gen2', gen2Types);
                 createTypeDetails('gen2', data.gen2);
                 
                 // Generación 6+
-                const gen6Types = Object.keys(data.gen6);
+                var gen6Types = [];
+                for (var type in data.gen6) {
+                    if (data.gen6.hasOwnProperty(type)) gen6Types.push(type);
+                }
                 createTypeButtons('gen6', gen6Types);
                 createTypeDetails('gen6', data.gen6);
-            })
-            .catch(error => console.error('Error loading types data:', error));
-    }
-});
+            } else {
+                console.error('Error loading types data');
+            }
+        }
+    };
+    xhr.send();
+}
+
+// Iniciar cuando el DOM esté listo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadData);
+} else {
+    loadData();
+}
