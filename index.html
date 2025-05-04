@@ -19,25 +19,8 @@
     <!-- GENERACIÓN 1 -->
     <div id="gen1" class="content">
         <h2>Generación 1 (Rojo/Azul/Amarillo)</h2>
-        
-        <div class="type-menu">
-            <button class="type-btn normal" onclick="showType('gen1-normal')">Normal</button>
-            <button class="type-btn fuego" onclick="showType('gen1-fuego')">Fuego</button>
-            <button class="type-btn agua" onclick="showType('gen1-agua')">Agua</button>
-            <button class="type-btn planta" onclick="showType('gen1-planta')">Planta</button>
-            <button class="type-btn electrico" onclick="showType('gen1-electrico')">Eléctrico</button>
-            <button class="type-btn hielo" onclick="showType('gen1-hielo')">Hielo</button>
-            <button class="type-btn lucha" onclick="showType('gen1-lucha')">Lucha</button>
-            <button class="type-btn veneno" onclick="showType('gen1-veneno')">Veneno</button>
-            <button class="type-btn tierra" onclick="showType('gen1-tierra')">Tierra</button>
-            <button class="type-btn volador" onclick="showType('gen1-volador')">Volador</button>
-            <button class="type-btn psiquico" onclick="showType('gen1-psiquico')">Psíquico</button>
-            <button class="type-btn bicho" onclick="showType('gen1-bicho')">Bicho</button>
-            <button class="type-btn roca" onclick="showType('gen1-roca')">Roca</button>
-            <button class="type-btn fantasma" onclick="showType('gen1-fantasma')">Fantasma</button>
-            <button class="type-btn dragon" onclick="showType('gen1-dragon')">Dragón</button>
-        </div>
-        
+        <div class="type-menu" id="gen1-types"></div>
+        <div id="gen1-details"></div>
         <div style="text-align:center;margin:10px 0;">
             <a href="#" class="button">Volver</a>
         </div>
@@ -46,27 +29,8 @@
     <!-- GENERACIÓN 2-5 -->
     <div id="gen2" class="content">
         <h2>Generaciones 2-5 (Oro/Plata a Negro/Blanco)</h2>
-        
-        <div class="type-menu">
-            <button class="type-btn normal" onclick="showType('gen2-normal')">Normal</button>
-            <button class="type-btn fuego" onclick="showType('gen2-fuego')">Fuego</button>
-            <button class="type-btn agua" onclick="showType('gen2-agua')">Agua</button>
-            <button class="type-btn planta" onclick="showType('gen2-planta')">Planta</button>
-            <button class="type-btn electrico" onclick="showType('gen2-electrico')">Eléctrico</button>
-            <button class="type-btn hielo" onclick="showType('gen2-hielo')">Hielo</button>
-            <button class="type-btn lucha" onclick="showType('gen2-lucha')">Lucha</button>
-            <button class="type-btn veneno" onclick="showType('gen2-veneno')">Veneno</button>
-            <button class="type-btn tierra" onclick="showType('gen2-tierra')">Tierra</button>
-            <button class="type-btn volador" onclick="showType('gen2-volador')">Volador</button>
-            <button class="type-btn psiquico" onclick="showType('gen2-psiquico')">Psíquico</button>
-            <button class="type-btn bicho" onclick="showType('gen2-bicho')">Bicho</button>
-            <button class="type-btn roca" onclick="showType('gen2-roca')">Roca</button>
-            <button class="type-btn fantasma" onclick="showType('gen2-fantasma')">Fantasma</button>
-            <button class="type-btn dragon" onclick="showType('gen2-dragon')">Dragón</button>
-            <button class="type-btn acero" onclick="showType('gen2-acero')">Acero</button>
-            <button class="type-btn siniestro" onclick="showType('gen2-siniestro')">Siniestro</button>
-        </div>
-        
+        <div class="type-menu" id="gen2-types"></div>
+        <div id="gen2-details"></div>
         <div style="text-align:center;margin:10px 0;">
             <a href="#" class="button">Volver</a>
         </div>
@@ -75,7 +39,6 @@
     <!-- GENERACIÓN 6+ -->
     <div id="gen6" class="content">
         <h2>Generación 6+ (X/Y - Escarlata/Violeta)</h2>
-        
         <div class="note">
             <strong>Cambios importantes:</strong><br>
             • Tipo Hada añadido (fuerte contra Dragón, Siniestro y Lucha)<br>
@@ -83,33 +46,14 @@
             • Planta ya no resiste Hada<br>
             • Nuevas inmunidades y debilidades ajustadas
         </div>
-        
-        <div class="type-menu">
-            <button class="type-btn normal" onclick="showType('gen6-normal')">Normal</button>
-            <button class="type-btn fuego" onclick="showType('gen6-fuego')">Fuego</button>
-            <button class="type-btn agua" onclick="showType('gen6-agua')">Agua</button>
-            <button class="type-btn planta" onclick="showType('gen6-planta')">Planta</button>
-            <button class="type-btn electrico" onclick="showType('gen6-electrico')">Eléctrico</button>
-            <button class="type-btn hielo" onclick="showType('gen6-hielo')">Hielo</button>
-            <button class="type-btn lucha" onclick="showType('gen6-lucha')">Lucha</button>
-            <button class="type-btn veneno" onclick="showType('gen6-veneno')">Veneno</button>
-            <button class="type-btn tierra" onclick="showType('gen6-tierra')">Tierra</button>
-            <button class="type-btn volador" onclick="showType('gen6-volador')">Volador</button>
-            <button class="type-btn psiquico" onclick="showType('gen6-psiquico')">Psíquico</button>
-            <button class="type-btn bicho" onclick="showType('gen6-bicho')">Bicho</button>
-            <button class="type-btn roca" onclick="showType('gen6-roca')">Roca</button>
-            <button class="type-btn fantasma" onclick="showType('gen6-fantasma')">Fantasma</button>
-            <button class="type-btn dragon" onclick="showType('gen6-dragon')">Dragón</button>
-            <button class="type-btn acero" onclick="showType('gen6-acero')">Acero</button>
-            <button class="type-btn siniestro" onclick="showType('gen6-siniestro')">Siniestro</button>
-            <button class="type-btn hada" onclick="showType('gen6-hada')">Hada</button>
-        </div>
-        
+        <div class="type-menu" id="gen6-types"></div>
+        <div id="gen6-details"></div>
         <div style="text-align:center;margin:10px 0;">
             <a href="#" class="button">Volver</a>
         </div>
     </div>
 
+    <script src="types.json"></script>
     <script src="script.js"></script>
 </body>
 </html>
