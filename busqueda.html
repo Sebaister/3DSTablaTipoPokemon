@@ -1,83 +1,46 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokéSprite 1Gen</title>
+    <title>Pokémon Sprites 1Gen</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: sans-serif;
             text-align: center;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #e60000;
-            font-size: 24px;
+            background: #f0f0f0;
         }
         input {
-            width: 100px;
-            padding: 8px;
             font-size: 16px;
-            margin: 10px 0;
-            text-align: center;
+            padding: 5px;
         }
         img {
-            max-width: 96px;
-            max-height: 96px;
-            margin: 10px auto;
-            display: block;
-        }
-        .error {
-            color: red;
-            font-weight: bold;
+            margin-top: 20px;
+            image-rendering: pixelated;
+            max-width: 100%;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>PokéSprite 1Gen</h1>
-        <p>Introduce un número del 1 al 151:</p>
-        <input type="number" id="pokedexNumber" min="1" max="151" onchange="showSprite()">
-        <div id="spriteContainer"></div>
-        <p id="errorMessage" class="error"></p>
+    <h1>Buscar Sprite Pokémon</h1>
+    <p>Ingresa un número del 1 al 151:</p>
+    <input type="number" id="pokeInput" min="1" max="151" />
+    <button onclick="buscar()">Buscar</button>
+    <div id="resultado">
+        <img id="pokeImg" src="" alt="" style="display:none;">
     </div>
 
     <script>
-        function showSprite() {
-            const number = document.getElementById('pokedexNumber').value;
-            const container = document.getElementById('spriteContainer');
-            const errorMsg = document.getElementById('errorMessage');
-            
-            // Limpiar mensajes anteriores
-            errorMsg.textContent = '';
-            container.innerHTML = '';
-            
-            // Validar el número
-            if (number < 1 || number > 151 || isNaN(number)) {
-                errorMsg.textContent = 'Por favor, introduce un número del 1 al 151.';
-                return;
+        function buscar() {
+            var numero = document.getElementById("pokeInput").value;
+            var img = document.getElementById("pokeImg");
+
+            if (numero >= 1 && numero <= 151) {
+                img.src = "sprites/1gen/" + numero + ".png";
+                img.style.display = "block";
+            } else {
+                img.style.display = "none";
+                alert("Número fuera de rango. Solo del 1 al 151.");
             }
-            
-            // Crear la imagen
-            const img = document.createElement('img');
-            img.src = `sprites/1gen/${number}.png`;
-            img.alt = `Pokémon #${number}`;
-            img.onerror = function() {
-                errorMsg.textContent = 'No se encontró el sprite para este número.';
-                container.innerHTML = '';
-            };
-            
-            container.appendChild(img);
         }
     </script>
 </body>
