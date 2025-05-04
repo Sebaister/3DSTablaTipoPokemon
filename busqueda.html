@@ -106,6 +106,10 @@
             xhr2.onreadystatechange = function() {
                 if (xhr2.readyState == 4 && xhr2.status == 200) {
                     typeData = JSON.parse(xhr2.responseText);
+                    // Forzar mostrar detalles después de cargar los datos
+                    if (document.getElementById("pokeInput").value) {
+                        buscar();
+                    }
                 }
             };
             xhr2.send();
@@ -133,8 +137,15 @@
         function calcularInteracciones(tipos) {
             if (!typeData.gen1 || tipos.length === 0) return null;
             
-            var gen = tipos.length > 1 || tipos[0] === 'hada' || tipos[0] === 'acero' || tipos[0] === 'siniestro' ? 
-                     (tipos[0] === 'hada' ? 'gen6' : 'gen2') : 'gen1';
+            var gen = 'gen1'; // Por defecto usamos gen1 para máxima compatibilidad
+            
+            // Determinar la generación correcta
+            if (tipos.length > 1) {
+                gen = 'gen2'; // Tipos duales fueron introducidos en gen2
+            } else {
+                if (tipos[0] === 'hada') gen = 'gen6';
+                else if (tipos[0] === 'acero' || tipos[0] === 'siniestro') gen = 'gen2';
+            }
             
             var resultado = {
                 weak: {},
@@ -145,10 +156,10 @@
             
             for (var i = 0; i < tipos.length; i++) {
                 var tipo = tipos[i].toLowerCase();
+                if (!typeData[gen] || !typeData[gen][tipo]) continue;
                 var data = typeData[gen][tipo];
                 
-                if (!data) continue;
-                
+                // Procesar debilidades
                 if (data.weak) {
                     for (var j = 0; j < data.weak.length; j++) {
                         var weakType = data.weak[j];
@@ -156,6 +167,7 @@
                     }
                 }
                 
+                // Procesar resistencias
                 if (data.resist) {
                     for (var j = 0; j < data.resist.length; j++) {
                         var resistType = data.resist[j];
@@ -163,6 +175,7 @@
                     }
                 }
                 
+                // Procesar fortalezas
                 if (data.strong) {
                     for (var j = 0; j < data.strong.length; j++) {
                         var strongType = data.strong[j];
@@ -170,6 +183,7 @@
                     }
                 }
                 
+                // Procesar inmunidades
                 if (data.immune) {
                     for (var j = 0; j < data.immune.length; j++) {
                         var immuneType = data.immune[j];
@@ -180,6 +194,7 @@
                 }
             }
             
+            // Ajustar multiplicadores para tipos duales
             for (var type in resultado.weak) {
                 if (resultado.resist[type]) {
                     if (resultado.weak[type] === resultado.resist[type]) {
@@ -197,13 +212,20 @@
             var detailsContainer = document.getElementById('typeDetails');
             detailsContainer.innerHTML = '';
             
-            if (!tipos || tipos.length === 0 || !typeData.gen1) return;
+            if (!tipos || tipos.length === 0 || !typeData.gen1) {
+                detailsContainer.style.display = 'none';
+                return;
+            }
             
             var interacciones = calcularInteracciones(tipos);
-            if (!interacciones) return;
+            if (!interacciones) {
+                detailsContainer.style.display = 'none';
+                return;
+            }
             
-            var html = '<div class="type-section"><strong>Interacciones de Tipo:</strong></div>';
+            var html = '<div class="type-header">Interacciones de Tipo</div>';
             
+            // Debilidades
             if (Object.keys(interacciones.weak).length > 0) {
                 html += '<div class="type-section"><strong>Débil contra:</strong><div class="type-list">';
                 for (var type in interacciones.weak) {
@@ -213,6 +235,7 @@
                 html += '</div></div>';
             }
             
+            // Resistencias
             if (Object.keys(interacciones.resist).length > 0) {
                 html += '<div class="type-section"><strong>Resistente a:</strong><div class="type-list">';
                 for (var type in interacciones.resist) {
@@ -222,6 +245,7 @@
                 html += '</div></div>';
             }
             
+            // Inmunidades
             if (interacciones.immune.length > 0) {
                 html += '<div class="type-section"><strong>Inmune a:</strong><div class="type-list">';
                 for (var i = 0; i < interacciones.immune.length; i++) {
@@ -230,6 +254,7 @@
                 html += '</div></div>';
             }
             
+            // Fortalezas
             if (Object.keys(interacciones.strong).length > 0) {
                 html += '<div class="type-section"><strong>Fuerte contra:</strong><div class="type-list">';
                 for (var type in interacciones.strong) {
@@ -239,6 +264,7 @@
             }
             
             detailsContainer.innerHTML = html;
+            detailsContainer.style.display = 'block';
         }
 
         // Función de búsqueda del Pokémon
@@ -251,6 +277,7 @@
 
             var pokemon = null;
 
+            // Buscar por número o nombre
             if (!isNaN(input)) {
                 var numero = parseInt(input);
                 for (var i = 0; i < pokedata.length; i++) {
@@ -299,15 +326,21 @@
                 }
 
                 info.innerHTML = html;
+                resultado.style.display = "block";
                 
-                // Mostrar automáticamente las interacciones de tipos
+                // Mostrar interacciones de tipos
                 mostrarDetallesTipos(tipos);
             } else {
                 alert("Pokémon no encontrado.");
             }
         }
 
-        cargarDatos();
+        // Iniciar carga de datos cuando la página esté lista
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            cargarDatos();
+        } else {
+            document.addEventListener('DOMContentLoaded', cargarDatos);
+        }
     </script>
 </body>
 </html>
