@@ -6,16 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="estilos.css">
     <style>
-        /* Solo estilos adicionales específicos para la página de búsqueda */
+        /* Estilos específicos para la página de búsqueda */
         #search-container {
             padding: 2px;
             text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #000;
+            border-top: 1px solid #444;
+            z-index: 100;
         }
         
         #resultado {
-            display: none;
             padding: 6px;
-            text-align: center;
+            margin-bottom: 80px; /* Espacio para el buscador abajo */
         }
         
         #pokeImg {
@@ -57,28 +63,9 @@
             width: 80px;
             margin: 3px;
         }
-        
-        /* Asegurar que los type-tag en los detalles usen los mismos estilos */
-        .type-details .type-tag {
-            padding: 4px 6px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: bold;
-            min-width: 70px;
-            text-align: center;
-            margin: 2px;
-            color: white;
-        }
     </style>
 </head>
 <body>
-    <div id="search-container">
-        <h1>Buscar Pokémon</h1>
-        <p>Escribe Nombre o Nro de la Pokédex nacional:</p>
-        <input type="text" id="pokeInput">
-        <button onclick="buscar()">Buscar</button>
-    </div>
-
     <div id="resultado">
         <div>
             <img id="pokeImg" src="" alt="">
@@ -87,13 +74,19 @@
         <div id="pokeInfo">
             <!-- Información del Pokémon se mostrará aquí -->
         </div>
-        <!-- Contenedor para detalles de tipos (usará clases de estilos.css) -->
+        <!-- Contenedor para detalles de tipos -->
         <div id="typeDetails" class="type-detail"></div>
+    </div>
+
+    <div id="search-container">
+        <h1>Buscar Pokémon</h1>
+        <input type="text" id="pokeInput">
+        <button onclick="buscar()">Buscar</button>
     </div>
 
     <script>
         var pokedata = [];
-        var typeData = {}; // Almacenará los datos de tipos
+        var typeData = {};
 
         // Cargar los datos de los Pokémon y los tipos
         function cargarDatos() {
@@ -101,7 +94,7 @@
             var xhr1 = new XMLHttpRequest();
             xhr1.open("GET", "pokedata.json", true);
             xhr1.onreadystatechange = function() {
-                if (xhr1.readyState === 4 && xhr1.status === 200) {
+                if (xhr1.readyState == 4 && xhr1.status == 200) {
                     pokedata = JSON.parse(xhr1.responseText);
                 }
             };
@@ -111,7 +104,7 @@
             var xhr2 = new XMLHttpRequest();
             xhr2.open("GET", "types.json", true);
             xhr2.onreadystatechange = function() {
-                if (xhr2.readyState === 4 && xhr2.status === 200) {
+                if (xhr2.readyState == 4 && xhr2.status == 200) {
                     typeData = JSON.parse(xhr2.responseText);
                 }
             };
@@ -120,7 +113,7 @@
 
         // Traducción de las estadísticas
         function traducirEstadisticas(stat) {
-            const traducciones = {
+            var traducciones = {
                 "hp": "PS",
                 "attack": "Ataque",
                 "defense": "Defensa",
@@ -150,14 +143,12 @@
                 immune: []
             };
             
-            // Procesar cada tipo del Pokémon
             for (var i = 0; i < tipos.length; i++) {
                 var tipo = tipos[i].toLowerCase();
                 var data = typeData[gen][tipo];
                 
                 if (!data) continue;
                 
-                // Procesar debilidades
                 if (data.weak) {
                     for (var j = 0; j < data.weak.length; j++) {
                         var weakType = data.weak[j];
@@ -165,7 +156,6 @@
                     }
                 }
                 
-                // Procesar resistencias
                 if (data.resist) {
                     for (var j = 0; j < data.resist.length; j++) {
                         var resistType = data.resist[j];
@@ -173,7 +163,6 @@
                     }
                 }
                 
-                // Procesar fortalezas
                 if (data.strong) {
                     for (var j = 0; j < data.strong.length; j++) {
                         var strongType = data.strong[j];
@@ -181,7 +170,6 @@
                     }
                 }
                 
-                // Procesar inmunidades
                 if (data.immune) {
                     for (var j = 0; j < data.immune.length; j++) {
                         var immuneType = data.immune[j];
@@ -192,7 +180,6 @@
                 }
             }
             
-            // Ajustar multiplicadores para tipos duales
             for (var type in resultado.weak) {
                 if (resultado.resist[type]) {
                     if (resultado.weak[type] === resultado.resist[type]) {
@@ -209,7 +196,6 @@
         function mostrarDetallesTipos(tipos) {
             var detailsContainer = document.getElementById('typeDetails');
             detailsContainer.innerHTML = '';
-            detailsContainer.style.display = 'none';
             
             if (!tipos || tipos.length === 0 || !typeData.gen1) return;
             
@@ -218,7 +204,6 @@
             
             var html = '<div class="type-section"><strong>Interacciones de Tipo:</strong></div>';
             
-            // Mostrar debilidades
             if (Object.keys(interacciones.weak).length > 0) {
                 html += '<div class="type-section"><strong>Débil contra:</strong><div class="type-list">';
                 for (var type in interacciones.weak) {
@@ -228,7 +213,6 @@
                 html += '</div></div>';
             }
             
-            // Mostrar resistencias
             if (Object.keys(interacciones.resist).length > 0) {
                 html += '<div class="type-section"><strong>Resistente a:</strong><div class="type-list">';
                 for (var type in interacciones.resist) {
@@ -238,7 +222,6 @@
                 html += '</div></div>';
             }
             
-            // Mostrar inmunidades
             if (interacciones.immune.length > 0) {
                 html += '<div class="type-section"><strong>Inmune a:</strong><div class="type-list">';
                 for (var i = 0; i < interacciones.immune.length; i++) {
@@ -247,7 +230,6 @@
                 html += '</div></div>';
             }
             
-            // Mostrar fortalezas
             if (Object.keys(interacciones.strong).length > 0) {
                 html += '<div class="type-section"><strong>Fuerte contra:</strong><div class="type-list">';
                 for (var type in interacciones.strong) {
@@ -257,7 +239,6 @@
             }
             
             detailsContainer.innerHTML = html;
-            detailsContainer.style.display = 'block';
         }
 
         // Función de búsqueda del Pokémon
@@ -270,7 +251,6 @@
 
             var pokemon = null;
 
-            // Buscar Pokémon
             if (!isNaN(input)) {
                 var numero = parseInt(input);
                 for (var i = 0; i < pokedata.length; i++) {
@@ -297,12 +277,7 @@
                 for (var i = 0; i < pokemon.tipos.length; i++) {
                     var tipo = pokemon.tipos[i].toLowerCase();
                     tipos.push(tipo);
-                    html += '<span class="type-btn ' + tipo + '" onclick="mostrarDetallesTipos([' + "'" + tipo + "'" + '])">' + pokemon.tipos[i] + '</span> ';
-                }
-                
-                // Mostrar interacciones para todos los tipos juntos
-                if (tipos.length > 1) {
-                    html += '<br><span class="type-btn" style="background:#666;margin-top:5px;" onclick="mostrarDetallesTipos([' + tipos.map(function(t) { return "'" + t + "'"; }).join(',') + '])">Ver combinación de tipos</span>';
+                    html += '<span class="type-btn ' + tipo + '">' + pokemon.tipos[i] + '</span> ';
                 }
 
                 html += "<br><a id='tablaTiposBtn' href='index.html'>Revisar tabla de tipos</a><br><br>";
@@ -324,14 +299,10 @@
                 }
 
                 info.innerHTML = html;
-                resultado.style.display = "block";
                 
-                // Mostrar automáticamente las interacciones si tiene dos tipos
-                if (tipos.length > 1) {
-                    mostrarDetallesTipos(tipos);
-                }
+                // Mostrar automáticamente las interacciones de tipos
+                mostrarDetallesTipos(tipos);
             } else {
-                resultado.style.display = "none";
                 alert("Pokémon no encontrado.");
             }
         }
