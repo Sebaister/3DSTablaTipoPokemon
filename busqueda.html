@@ -2,10 +2,6 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>P<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
     <title>Pokémon Sprites</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -55,49 +51,6 @@
             } else {
                 img.style.display = "none";
                 alert("Solo números del 1 al 151.");
-            }
-        }
-    </script>
-</body>
-</html>
-okémon Sprites 1Gen</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            text-align: center;
-            background: #f0f0f0;
-        }
-        input {
-            font-size: 16px;
-            padding: 5px;
-        }
-        img {
-            margin-top: 20px;
-            image-rendering: pixelated;
-            max-width: 100%;
-        }
-    </style>
-</head>
-<body>
-    <h1>Buscar Sprite Pokémon</h1>
-    <p>Ingresa un número del 1 al 151:</p>
-    <input type="number" id="pokeInput" min="1" max="151" />
-    <button onclick="buscar()">Buscar</button>
-    <div id="resultado">
-        <img id="pokeImg" src="" alt="" style="display:none;">
-    </div>
-
-    <script>
-        function buscar() {
-            var numero = document.getElementById("pokeInput").value;
-            var img = document.getElementById("pokeImg");
-
-            if (numero >= 1 && numero <= 151) {
-                img.src = "sprites/1gen/" + numero + ".png";
-                img.style.display = "block";
-            } else {
-                img.style.display = "none";
-                alert("Número fuera de rango. Solo del 1 al 151.");
             }
         }
     </script>
