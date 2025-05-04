@@ -1,223 +1,342 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #000;
-    color: #FFF;
-    margin: 0;
-    padding: 2px;
-    font-size: 12px;
-    -webkit-text-size-adjust: none;
-}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Pokémon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilos.css">
+    <style>
+        /* Solo estilos adicionales específicos para la página de búsqueda */
+        #search-container {
+            padding: 2px;
+            text-align: center;
+        }
+        
+        #resultado {
+            display: none;
+            padding: 6px;
+            text-align: center;
+        }
+        
+        #pokeImg {
+            max-width: 100%;
+            height: auto;
+            image-rendering: pixelated;
+            width: 120px;
+        }
+        
+        #pokeInfo {
+            background: #222;
+            padding: 6px;
+            margin-top: 10px;
+            color: white;
+            border: 1px solid #444;
+            text-align: left;
+        }
+        
+        #pokeName {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        #tablaTiposBtn {
+            background-color: #444;
+            padding: 5px;
+            border-radius: 5px;
+            color: #FFF;
+            font-size: 10px;
+            text-decoration: none;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        
+        input, button {
+            font-size: 12px;
+            padding: 3px;
+            width: 80px;
+            margin: 3px;
+        }
+        
+        /* Asegurar que los type-tag en los detalles usen los mismos estilos */
+        .type-details .type-tag {
+            padding: 4px 6px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 70px;
+            text-align: center;
+            margin: 2px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="search-container">
+        <h1>Buscar Pokémon</h1>
+        <p>Escribe Nombre o Nro de la Pokédex nacional:</p>
+        <input type="text" id="pokeInput">
+        <button onclick="buscar()">Buscar</button>
+    </div>
 
-h1 {
-    color: #F00;
-    font-size: 16px;
-    margin: 6px 0;
-    text-align: center;
-}
+    <div id="resultado">
+        <div>
+            <img id="pokeImg" src="" alt="">
+        </div>
+        <div id="pokeName"></div>
+        <div id="pokeInfo">
+            <!-- Información del Pokémon se mostrará aquí -->
+        </div>
+        <!-- Contenedor para detalles de tipos (usará clases de estilos.css) -->
+        <div id="typeDetails" class="type-detail"></div>
+    </div>
 
-h2 {
-    color: #FC0;
-    font-size: 14px;
-    margin: 6px 0;
-    text-align: center;
-}
+    <script>
+        var pokedata = [];
+        var typeData = {}; // Almacenará los datos de tipos
 
-.menu {
-    text-align: center;
-    margin: 8px 0;
-}
+        // Cargar los datos de los Pokémon y los tipos
+        function cargarDatos() {
+            // Cargar datos de Pokémon
+            var xhr1 = new XMLHttpRequest();
+            xhr1.open("GET", "pokedata.json", true);
+            xhr1.onreadystatechange = function() {
+                if (xhr1.readyState === 4 && xhr1.status === 200) {
+                    pokedata = JSON.parse(xhr1.responseText);
+                }
+            };
+            xhr1.send();
+            
+            // Cargar datos de tipos
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open("GET", "types.json", true);
+            xhr2.onreadystatechange = function() {
+                if (xhr2.readyState === 4 && xhr2.status === 200) {
+                    typeData = JSON.parse(xhr2.responseText);
+                }
+            };
+            xhr2.send();
+        }
 
-.button {
-    display: inline-block;
-    padding: 6px 8px;
-    background-color: #E00;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 12px;
-    margin: 2px;
-    min-width: 80px;
-}
+        // Traducción de las estadísticas
+        function traducirEstadisticas(stat) {
+            const traducciones = {
+                "hp": "PS",
+                "attack": "Ataque",
+                "defense": "Defensa",
+                "special-attack": "Ataque Especial",
+                "special-defense": "Defensa Especial",
+                "speed": "Velocidad"
+            };
+            return traducciones[stat] || stat;
+        }
 
-.type-menu {
-    text-align: center;
-    margin: 6px 0;
-}
+        // Función para capitalizar la primera letra
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
 
-.type-btn {
-    padding: 4px 6px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: bold;
-    min-width: 70px;
-    text-align: center;
-    border: none;
-    color: white;
-    margin: 2px;
-}
+        // Calcular interacciones de tipos combinados
+        function calcularInteracciones(tipos) {
+            if (!typeData.gen1 || tipos.length === 0) return null;
+            
+            var gen = tipos.length > 1 || tipos[0] === 'hada' || tipos[0] === 'acero' || tipos[0] === 'siniestro' ? 
+                     (tipos[0] === 'hada' ? 'gen6' : 'gen2') : 'gen1';
+            
+            var resultado = {
+                weak: {},
+                resist: {},
+                strong: {},
+                immune: []
+            };
+            
+            // Procesar cada tipo del Pokémon
+            for (var i = 0; i < tipos.length; i++) {
+                var tipo = tipos[i].toLowerCase();
+                var data = typeData[gen][tipo];
+                
+                if (!data) continue;
+                
+                // Procesar debilidades
+                if (data.weak) {
+                    for (var j = 0; j < data.weak.length; j++) {
+                        var weakType = data.weak[j];
+                        resultado.weak[weakType] = (resultado.weak[weakType] || 0) + 1;
+                    }
+                }
+                
+                // Procesar resistencias
+                if (data.resist) {
+                    for (var j = 0; j < data.resist.length; j++) {
+                        var resistType = data.resist[j];
+                        resultado.resist[resistType] = (resultado.resist[resistType] || 0) + 1;
+                    }
+                }
+                
+                // Procesar fortalezas
+                if (data.strong) {
+                    for (var j = 0; j < data.strong.length; j++) {
+                        var strongType = data.strong[j];
+                        resultado.strong[strongType] = (resultado.strong[strongType] || 0) + 1;
+                    }
+                }
+                
+                // Procesar inmunidades
+                if (data.immune) {
+                    for (var j = 0; j < data.immune.length; j++) {
+                        var immuneType = data.immune[j];
+                        if (resultado.immune.indexOf(immuneType) === -1) {
+                            resultado.immune.push(immuneType);
+                        }
+                    }
+                }
+            }
+            
+            // Ajustar multiplicadores para tipos duales
+            for (var type in resultado.weak) {
+                if (resultado.resist[type]) {
+                    if (resultado.weak[type] === resultado.resist[type]) {
+                        delete resultado.weak[type];
+                        delete resultado.resist[type];
+                    }
+                }
+            }
+            
+            return resultado;
+        }
 
-.content {
-    display: none;
-}
+        // Mostrar detalles de tipos
+        function mostrarDetallesTipos(tipos) {
+            var detailsContainer = document.getElementById('typeDetails');
+            detailsContainer.innerHTML = '';
+            detailsContainer.style.display = 'none';
+            
+            if (!tipos || tipos.length === 0 || !typeData.gen1) return;
+            
+            var interacciones = calcularInteracciones(tipos);
+            if (!interacciones) return;
+            
+            var html = '<div class="type-section"><strong>Interacciones de Tipo:</strong></div>';
+            
+            // Mostrar debilidades
+            if (Object.keys(interacciones.weak).length > 0) {
+                html += '<div class="type-section"><strong>Débil contra:</strong><div class="type-list">';
+                for (var type in interacciones.weak) {
+                    var multiplier = interacciones.weak[type] > 1 ? ' (x4)' : ' (x2)';
+                    html += '<div class="type-tag weak ' + type + '">' + capitalizeFirstLetter(type) + multiplier + '</div>';
+                }
+                html += '</div></div>';
+            }
+            
+            // Mostrar resistencias
+            if (Object.keys(interacciones.resist).length > 0) {
+                html += '<div class="type-section"><strong>Resistente a:</strong><div class="type-list">';
+                for (var type in interacciones.resist) {
+                    var multiplier = interacciones.resist[type] > 1 ? ' (x1/4)' : ' (x1/2)';
+                    html += '<div class="type-tag resist ' + type + '">' + capitalizeFirstLetter(type) + multiplier + '</div>';
+                }
+                html += '</div></div>';
+            }
+            
+            // Mostrar inmunidades
+            if (interacciones.immune.length > 0) {
+                html += '<div class="type-section"><strong>Inmune a:</strong><div class="type-list">';
+                for (var i = 0; i < interacciones.immune.length; i++) {
+                    html += '<div class="type-tag immune ' + interacciones.immune[i] + '">' + capitalizeFirstLetter(interacciones.immune[i]) + '</div>';
+                }
+                html += '</div></div>';
+            }
+            
+            // Mostrar fortalezas
+            if (Object.keys(interacciones.strong).length > 0) {
+                html += '<div class="type-section"><strong>Fuerte contra:</strong><div class="type-list">';
+                for (var type in interacciones.strong) {
+                    html += '<div class="type-tag strong ' + type + '">' + capitalizeFirstLetter(type) + '</div>';
+                }
+                html += '</div></div>';
+            }
+            
+            detailsContainer.innerHTML = html;
+            detailsContainer.style.display = 'block';
+        }
 
-.content:target {
-    display: block;
-}
+        // Función de búsqueda del Pokémon
+        function buscar() {
+            var input = document.getElementById("pokeInput").value.trim().toLowerCase();
+            var img = document.getElementById("pokeImg");
+            var info = document.getElementById("pokeInfo");
+            var resultado = document.getElementById("resultado");
+            var pokeName = document.getElementById("pokeName");
 
-.type-detail {
-    border: 1px solid #444;
-    border-radius: 6px;
-    margin: 8px 0;
-    padding: 6px;
-    background-color: #222;
-    display: none;
-}
+            var pokemon = null;
 
-.type-header {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 6px;
-    text-align: center;
-    padding: 4px;
-    border-radius: 4px;
-}
+            // Buscar Pokémon
+            if (!isNaN(input)) {
+                var numero = parseInt(input);
+                for (var i = 0; i < pokedata.length; i++) {
+                    if (pokedata[i].id === numero) {
+                        pokemon = pokedata[i];
+                        break;
+                    }
+                }
+            } else {
+                for (var i = 0; i < pokedata.length; i++) {
+                    if (pokedata[i].nombre.toLowerCase() === input) {
+                        pokemon = pokedata[i];
+                        break;
+                    }
+                }
+            }
 
-.type-section {
-    margin: 6px 0;
-}
+            if (pokemon) {
+                img.src = "sprites/1gen/" + pokemon.id + ".png";
+                pokeName.innerHTML = pokemon.nombre;
 
-.type-list {
-    margin: 4px 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-}
+                var html = "<b>Tipos:</b> ";
+                var tipos = [];
+                for (var i = 0; i < pokemon.tipos.length; i++) {
+                    var tipo = pokemon.tipos[i].toLowerCase();
+                    tipos.push(tipo);
+                    html += '<span class="type-btn ' + tipo + '" onclick="mostrarDetallesTipos([' + "'" + tipo + "'" + '])">' + pokemon.tipos[i] + '</span> ';
+                }
+                
+                // Mostrar interacciones para todos los tipos juntos
+                if (tipos.length > 1) {
+                    html += '<br><span class="type-btn" style="background:#666;margin-top:5px;" onclick="mostrarDetallesTipos([' + tipos.map(function(t) { return "'" + t + "'"; }).join(',') + '])">Ver combinación de tipos</span>';
+                }
 
-.type-tag {
-    display: inline-block;
-    padding: 4px 6px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: bold;
-    min-width: 70px;
-    text-align: center;
-    margin: 2px;
-}
+                html += "<br><a id='tablaTiposBtn' href='index.html'>Revisar tabla de tipos</a><br><br>";
+                html += "<b>Estadísticas:</b><br>";
+                var stats = pokemon.stats;
+                for (var stat in stats) {
+                    html += traducirEstadisticas(stat) + ": " + stats[stat] + "<br>";
+                }
 
-/* Colores de tipos */
-.normal { background-color: #A8A878; }
-.fuego { background-color: #F08030; }
-.agua { background-color: #6890F0; }
-.planta { background-color: #78C850; }
-.electrico { background-color: #F8D030; }
-.hielo { background-color: #98D8D8; }
-.lucha { background-color: #C03028; }
-.veneno { background-color: #A040A0; }
-.tierra { background-color: #E0C068; }
-.volador { background-color: #A890F0; }
-.psiquico { background-color: #F85888; }
-.bicho { background-color: #A8B820; }
-.roca { background-color: #B8A038; }
-.fantasma { background-color: #705898; }
-.dragon { background-color: #7038F8; }
-.siniestro { background-color: #705848; }
-.acero { background-color: #B8B8D0; }
-.hada { background-color: #EE99AC; }
+                if (pokemon.evolucion.length > 0) {
+                    var evo = pokemon.evolucion[0];
+                    html += "<br><b>Evoluciona a:</b> " + evo.b + "<br>";
+                    html += "<b>Condiciones:</b><br>";
+                    for (var j = 0; j < evo.condiciones.length; j++) {
+                        html += "- " + evo.condiciones[j] + "<br>";
+                    }
+                } else {
+                    html += "<br><b>Sin evoluciones.</b>";
+                }
 
-/* Efectividad */
-.weak { background-color: #F44; color: white; }
-.resist { background-color: #4C4; color: white; }
-.strong { background-color: #26F; color: white; }
-.immune { background-color: #999; color: white; }
+                info.innerHTML = html;
+                resultado.style.display = "block";
+                
+                // Mostrar automáticamente las interacciones si tiene dos tipos
+                if (tipos.length > 1) {
+                    mostrarDetallesTipos(tipos);
+                }
+            } else {
+                resultado.style.display = "none";
+                alert("Pokémon no encontrado.");
+            }
+        }
 
-.note {
-    font-size: 10px;
-    margin: 6px 0;
-    padding: 0 4px;
-    text-align: left;
-    color: #CCC;
-}
-
-/* Estilos específicos para la página de búsqueda */
-#search-container {
-    padding: 2px;
-    text-align: center;
-}
-
-input, button {
-    font-size: 12px;
-    padding: 3px;
-    width: 80px;
-    margin: 3px;
-}
-
-#resultado {
-    display: none;
-    padding: 6px;
-    text-align: center;
-}
-
-#pokeImg {
-    max-width: 100%;
-    height: auto;
-    image-rendering: pixelated;
-    width: 120px;
-}
-
-#pokeInfo {
-    background: #222;
-    padding: 6px;
-    margin-top: 10px;
-    color: white;
-    border: 1px solid #444;
-    text-align: left;
-}
-
-#pokeName {
-    margin-top: 10px;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-#tablaTiposBtn {
-    background-color: #444;
-    padding: 5px;
-    border-radius: 5px;
-    color: #FFF;
-    font-size: 10px;
-    text-decoration: none;
-    margin-top: 10px;
-    display: inline-block;
-}
-
-/* Contenedor de detalles de tipos en la búsqueda */
-.type-details {
-    border: 1px solid #444;
-    border-radius: 6px;
-    margin: 8px 0;
-    padding: 6px;
-    background-color: #222;
-    display: none;
-}
-
-.type-details .type-section {
-    margin: 6px 0;
-}
-
-.type-details .type-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin: 4px 0;
-}
-
-.type-details .type-tag {
-    display: inline-block;
-    padding: 4px 6px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: bold;
-    min-width: 70px;
-    text-align: center;
-    margin: 2px;
-}
+        cargarDatos();
+    </script>
+</body>
+</html>
