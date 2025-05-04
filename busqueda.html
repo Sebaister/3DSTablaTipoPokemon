@@ -6,62 +6,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            font-family: sans-serif;
-            font-size: 12px;
-            background: #fff;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #FFF;
             margin: 0;
-            padding: 5px;
+            padding: 0;
+            font-size: 12px;
+            -webkit-text-size-adjust: none;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: space-between;
+        }
+
+        h1 {
+            color: #F00;
+            font-size: 16px;
+            margin: 6px 0;
             text-align: center;
         }
-        h1 {
-            font-size: 14px;
-            margin: 5px 0;
+
+        #search-container {
+            padding: 2px;
+            text-align: center;
         }
+
         input, button {
             font-size: 12px;
             padding: 3px;
             width: 80px;
             margin: 3px;
         }
-        table {
-            margin: 10px auto;
-            width: 95%;
+
+        #resultado {
+            display: none;
+            flex: 1;
+            padding: 6px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
         }
-        td {
-            vertical-align: top;
-            padding: 5px;
-        }
-        img {
+
+        #resultado img {
             max-width: 100%;
             height: auto;
             image-rendering: pixelated;
+            width: 120px;
         }
-        .info {
+
+        #pokeInfo {
+            background: #222;
+            padding: 6px;
+            margin-left: 10px;
+            flex-grow: 1;
+            color: white;
+            border: 1px solid #444;
+        }
+
+        .type-btn {
+            padding: 4px 6px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 70px;
+            text-align: center;
+            border: none;
+            color: white;
+            margin: 2px;
+        }
+
+        /* Colores de tipos */
+        .normal { background-color: #A8A878; }
+        .fuego { background-color: #F08030; }
+        .agua { background-color: #6890F0; }
+        .planta { background-color: #78C850; }
+        .electrico { background-color: #F8D030; }
+        .hielo { background-color: #98D8D8; }
+        .lucha { background-color: #C03028; }
+        .veneno { background-color: #A040A0; }
+        .tierra { background-color: #E0C068; }
+        .volador { background-color: #A890F0; }
+        .psiquico { background-color: #F85888; }
+        .bicho { background-color: #A8B820; }
+        .roca { background-color: #B8A038; }
+        .fantasma { background-color: #705898; }
+        .dragon { background-color: #7038F8; }
+        .siniestro { background-color: #705848; }
+        .acero { background-color: #B8B8D0; }
+        .hada { background-color: #EE99AC; }
+
+        .note {
+            font-size: 10px;
+            margin: 6px 0;
+            padding: 0 4px;
             text-align: left;
-            background: #f9f9f9;
-            border: 1px solid #ccc;
-            padding: 5px;
+            color: #CCC;
         }
     </style>
 </head>
 <body>
-    <h1>Pokémon 1ra Gen</h1>
-    <p>Escribe un número (1–151):</p>
-    <input type="number" id="pokeInput" min="1" max="151">
-    <button onclick="buscar()">Buscar</button>
+    <div id="resultado">
+        <div>
+            <img id="pokeImg" src="" alt="">
+        </div>
+        <div id="pokeInfo">
+            <!-- Información del Pokémon se mostrará aquí -->
+        </div>
+    </div>
 
-    <table id="resultado" style="display:none;">
-        <tr>
-            <td style="width: 40%;">
-                <img id="pokeImg" src="" alt="">
-            </td>
-            <td class="info" id="pokeInfo" style="width: 60%;"></td>
-        </tr>
-    </table>
+    <div id="search-container">
+        <h1>Pokémon 1ra Gen</h1>
+        <p>Escribe un número (1–151):</p>
+        <input type="number" id="pokeInput" min="1" max="151">
+        <button onclick="buscar()">Buscar</button>
+    </div>
 
     <script>
         var pokedata = [];
 
+        // Cargar los datos de los Pokémon desde el archivo JSON
         function cargarDatos() {
             var xhr = new XMLHttpRequest();
             xhr.open("GET", "pokedata.json", true);
@@ -73,6 +136,20 @@
             xhr.send();
         }
 
+        // Traducción de las estadísticas
+        function traducirEstadisticas(stat) {
+            const traducciones = {
+                "hp": "PS",
+                "attack": "Ataque",
+                "defense": "Defensa",
+                "special-attack": "Ataque Especial",
+                "special-defense": "Defensa Especial",
+                "speed": "Velocidad"
+            };
+            return traducciones[stat] || stat;
+        }
+
+        // Función de búsqueda del Pokémon
         function buscar() {
             var numero = parseInt(document.getElementById("pokeInput").value);
             var img = document.getElementById("pokeImg");
@@ -91,11 +168,15 @@
                 img.src = "sprites/1gen/" + numero + ".png";
 
                 var html = "<b>Nombre:</b> " + pokemon.nombre + "<br>";
-                html += "<b>Tipos:</b> " + pokemon.tipos.join(", ") + "<br><br>";
+                html += "<b>Tipos:</b> ";
+                for (var i = 0; i < pokemon.tipos.length; i++) {
+                    html += "<span class='type-btn " + pokemon.tipos[i].toLowerCase() + "'>" + pokemon.tipos[i] + "</span> ";
+                }
+                html += "<br><br>";
                 html += "<b>Estadísticas:</b><br>";
                 var stats = pokemon.stats;
                 for (var stat in stats) {
-                    html += stat + ": " + stats[stat] + "<br>";
+                    html += traducirEstadisticas(stat) + ": " + stats[stat] + "<br>";
                 }
 
                 if (pokemon.evolucion.length > 0) {
@@ -110,7 +191,7 @@
                 }
 
                 info.innerHTML = html;
-                resultado.style.display = "table";
+                resultado.style.display = "flex";
             } else {
                 resultado.style.display = "none";
                 alert("Pokémon no encontrado.");
