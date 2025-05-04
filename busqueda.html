@@ -133,6 +133,20 @@
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
+        // Función para determinar la generación por el ID del Pokémon
+        function determinarGeneracion(id) {
+            if (id >= 1 && id <= 151) return "1gen";
+            else if (id >= 152 && id <= 251) return "2gen";
+            else if (id >= 252 && id <= 386) return "3gen";
+            else if (id >= 387 && id <= 493) return "4gen";
+            else if (id >= 494 && id <= 649) return "5gen";
+            else if (id >= 650 && id <= 721) return "6gen";
+            else if (id >= 722 && id <= 809) return "7gen";
+            else if (id >= 810 && id <= 898) return "8gen";
+            else if (id >= 899 && id <= 1025) return "9gen";
+            else return "unknown";
+        }
+
         // Calcular interacciones de tipos combinados
         function calcularInteracciones(tipos) {
             if (!typeData.gen1 || tipos.length === 0) return null;
@@ -296,7 +310,15 @@
             }
 
             if (pokemon) {
-                img.src = "sprites/1gen/" + pokemon.id + ".png";
+                // Determinar la generación y la carpeta de sprites
+                var genFolder = determinarGeneracion(pokemon.id);
+                img.src = "sprites/" + genFolder + "/" + pokemon.id + ".png";
+                
+                // Manejo de error si la imagen no existe - usa MissingNo
+                img.onerror = function() {
+                    this.src = "sprites/MissingNo.png";
+                };
+
                 pokeName.innerHTML = pokemon.nombre;
 
                 var html = "<b>Tipos:</b> ";
