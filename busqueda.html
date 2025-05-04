@@ -96,6 +96,24 @@
             color: #CCC;
         }
 
+        /* Estilos para el nombre del Pokémon debajo de la imagen */
+        #pokeName {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        #tablaTiposBtn {
+            background-color: #444;
+            padding: 5px;
+            border-radius: 5px;
+            color: #FFF;
+            font-size: 10px;
+            text-decoration: none;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
     </style>
 </head>
 <body>
@@ -103,6 +121,8 @@
         <div>
             <img id="pokeImg" src="" alt="">
         </div>
+        <!-- Nombre debajo del sprite -->
+        <div id="pokeName"></div>
         <div id="pokeInfo">
             <!-- Información del Pokémon se mostrará aquí -->
         </div>
@@ -149,6 +169,7 @@
             var img = document.getElementById("pokeImg");
             var info = document.getElementById("pokeInfo");
             var resultado = document.getElementById("resultado");
+            var pokeName = document.getElementById("pokeName");
 
             var pokemon = null;
             for (var i = 0; i < pokedata.length; i++) {
@@ -161,12 +182,15 @@
             if (pokemon) {
                 img.src = "sprites/1gen/" + numero + ".png";
 
-                var html = "<b>Nombre:</b> " + pokemon.nombre + "<br>";
-                html += "<b>Tipos:</b> ";
+                // Nombre debajo del sprite
+                pokeName.innerHTML = pokemon.nombre;
+
+                var html = "<b>Tipos:</b> ";
                 for (var i = 0; i < pokemon.tipos.length; i++) {
                     html += "<span class='type-btn " + pokemon.tipos[i].toLowerCase() + "'>" + pokemon.tipos[i] + "</span> ";
                 }
-                html += "<br><br>";
+
+                html += "<br><a id='tablaTiposBtn' href='index.html'>Revisar tabla de tipos</a><br><br>";
                 html += "<b>Estadísticas:</b><br>";
                 var stats = pokemon.stats;
                 for (var stat in stats) {
