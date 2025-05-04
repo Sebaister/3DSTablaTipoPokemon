@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Pokémon 1ra Gen</title>
+    <title>Buscar Pokémon</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -129,9 +129,9 @@
     </div>
 
     <div id="search-container">
-        <h1>Pokémon 1ra Gen</h1>
-        <p>Escribe un número (1–151):</p>
-        <input type="number" id="pokeInput" min="1" max="151">
+        <h1>Buscar Pokémon</h1>
+        <p>Escribe Nombre o Nro de la Pokédex nacional:</p>
+        <input type="text" id="pokeInput">
         <button onclick="buscar()">Buscar</button>
     </div>
 
@@ -165,22 +165,36 @@
 
         // Función de búsqueda del Pokémon
         function buscar() {
-            var numero = parseInt(document.getElementById("pokeInput").value);
+            var input = document.getElementById("pokeInput").value.trim().toLowerCase();
             var img = document.getElementById("pokeImg");
             var info = document.getElementById("pokeInfo");
             var resultado = document.getElementById("resultado");
             var pokeName = document.getElementById("pokeName");
 
             var pokemon = null;
-            for (var i = 0; i < pokedata.length; i++) {
-                if (pokedata[i].id === numero) {
-                    pokemon = pokedata[i];
-                    break;
+
+            // Verificar si el input es un número o un nombre
+            if (!isNaN(input)) {
+                // Buscar por número
+                var numero = parseInt(input);
+                for (var i = 0; i < pokedata.length; i++) {
+                    if (pokedata[i].id === numero) {
+                        pokemon = pokedata[i];
+                        break;
+                    }
+                }
+            } else {
+                // Buscar por nombre
+                for (var i = 0; i < pokedata.length; i++) {
+                    if (pokedata[i].nombre.toLowerCase() === input) {
+                        pokemon = pokedata[i];
+                        break;
+                    }
                 }
             }
 
             if (pokemon) {
-                img.src = "sprites/1gen/" + numero + ".png";
+                img.src = "sprites/1gen/" + pokemon.id + ".png";
 
                 // Nombre debajo del sprite
                 pokeName.innerHTML = pokemon.nombre;
