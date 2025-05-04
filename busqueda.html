@@ -2,14 +2,14 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Pokémon Sprites</title>
+    <title>Pokémon 1ra Gen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            background: #fff;
             font-family: sans-serif;
             font-size: 12px;
             text-align: center;
+            background: #fff;
             margin: 0;
             padding: 5px;
         }
@@ -29,30 +29,93 @@
             height: auto;
             image-rendering: pixelated;
         }
+        .info {
+            text-align: left;
+            margin-top: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+        }
     </style>
 </head>
 <body>
-    <h1>Sprite Pokémon 1ra Gen</h1>
-    <p>Escribe un número (1-151):</p>
-    <input type="number" id="pokeInput" min="1" max="151" />
-    <button onclick="buscar()">Ver</button>
+    <h1>Pokémon 1ra Gen</h1>
+    <p>Escribe un número (1–151):</p>
+    <input type="number" id="pokeInput" min="1" max="151">
+    <button onclick="buscar()">Buscar</button>
+
     <div>
         <img id="pokeImg" src="" alt="" style="display:none;">
     </div>
+    <div id="pokeInfo" class="info" style="display:none;"></div>
 
     <script>
-        function buscar() {
-            var numero = document.getElementById("pokeInput").value;
-            var img = document.getElementById("pokeImg");
+        var pokedata = [];
 
-            if (numero >= 1 && numero <= 151) {
+        // Cargar el JSON local
+        function cargarDatos() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "pokedata.json", true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    pokedata = JSON.parse(xhr.responseText);
+                }
+            };
+            xhr.send();
+        }
+
+        // Mostrar info del Pokémon
+        function buscar() {
+            var numero = parseInt(document.getElementById("pokeInput").value);
+            var img = document.getElementById("pokeImg");
+            var info = document.getElementById("pokeInfo");
+
+            var pokemon = null;
+
+            // Buscar por ID
+            for (var i = 0; i < pokedata.length; i++) {
+                if (pokedata[i].id === numero) {
+                    pokemon = pokedata[i];
+                    break;
+                }
+            }
+
+            if (pokemon) {
+                // Mostrar sprite
                 img.src = "sprites/1gen/" + numero + ".png";
                 img.style.display = "block";
+
+                // Mostrar info
+                var html = "<b>Nombre:</b> " + pokemon.nombre + "<br>";
+                html += "<b>Tipos:</b> " + pokemon.tipos.join(", ") + "<br>";
+                html += "<b>Estadísticas:</b><br>";
+                var stats = pokemon.stats;
+                for (var stat in stats) {
+                    html += stat + ": " + stats[stat] + "<br>";
+                }
+
+                if (pokemon.evolucion.length > 0) {
+                    var evo = pokemon.evolucion[0];
+                    html += "<b>Evoluciona a:</b> " + evo.b + "<br>";
+                    html += "<b>Condiciones:</b><br>";
+                    for (var j = 0; j < evo.condiciones.length; j++) {
+                        html += "- " + evo.condiciones[j] + "<br>";
+                    }
+                } else {
+                    html += "<b>Sin evoluciones.</b>";
+                }
+
+                info.innerHTML = html;
+                info.style.display = "block";
             } else {
                 img.style.display = "none";
-                alert("Solo números del 1 al 151.");
+                info.style.display = "none";
+                alert("Pokémon no encontrado.");
             }
         }
+
+        // Iniciar carga del JSON al abrir
+        cargarDatos();
     </script>
 </body>
 </html>
