@@ -589,7 +589,7 @@
     "id": 25,
     "nombre": "Pikachu",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -617,7 +617,7 @@
     "id": 26,
     "nombre": "Raichu",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -1531,7 +1531,7 @@
     "id": 63,
     "nombre": "Abra",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -1559,7 +1559,7 @@
     "id": 64,
     "nombre": "Kadabra",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -1586,7 +1586,7 @@
     "id": 65,
     "nombre": "Alakazam",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -1919,7 +1919,7 @@
     "nombre": "Slowpoke",
     "tipos": [
       "Agua",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -1958,7 +1958,7 @@
     "nombre": "Slowbro",
     "tipos": [
       "Agua",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -1975,7 +1975,7 @@
     "id": 81,
     "nombre": "Magnemite",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Acero"
     ],
     "sprite": null,
@@ -2004,7 +2004,7 @@
     "id": 82,
     "nombre": "Magneton",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Acero"
     ],
     "sprite": null,
@@ -2349,7 +2349,7 @@
     "id": 96,
     "nombre": "Drowzee",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -2377,7 +2377,7 @@
     "id": 97,
     "nombre": "Hypno",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -2439,7 +2439,7 @@
     "id": 100,
     "nombre": "Voltorb",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -2467,7 +2467,7 @@
     "id": 101,
     "nombre": "Electrode",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -2485,7 +2485,7 @@
     "nombre": "Exeggcute",
     "tipos": [
       "Planta",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -2514,7 +2514,7 @@
     "nombre": "Exeggutor",
     "tipos": [
       "Planta",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -2944,7 +2944,7 @@
     "nombre": "Starmie",
     "tipos": [
       "Agua",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -2961,7 +2961,7 @@
     "id": 122,
     "nombre": "Mr. Mime",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Hada"
     ],
     "sprite": null,
@@ -3030,7 +3030,7 @@
     "nombre": "Jynx",
     "tipos": [
       "Hielo",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -3047,7 +3047,7 @@
     "id": 125,
     "nombre": "Electabuzz",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -3336,7 +3336,7 @@
     "id": 135,
     "nombre": "Jolteon",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -3545,7 +3545,7 @@
     "id": 145,
     "nombre": "Zapdos",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Volador"
     ],
     "sprite": null,
@@ -3655,7 +3655,7 @@
     "id": 150,
     "nombre": "Mewtwo",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -3672,7 +3672,7 @@
     "id": 151,
     "nombre": "Mew",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -4113,7 +4113,7 @@
     "nombre": "Chinchou",
     "tipos": [
       "Agua",
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -4142,7 +4142,7 @@
     "nombre": "Lanturn",
     "tipos": [
       "Agua",
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -4159,7 +4159,7 @@
     "id": 172,
     "nombre": "Pichu",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -4301,7 +4301,7 @@
     "id": 177,
     "nombre": "Natu",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Volador"
     ],
     "sprite": null,
@@ -4330,7 +4330,7 @@
     "id": 178,
     "nombre": "Xatu",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Volador"
     ],
     "sprite": null,
@@ -4348,7 +4348,7 @@
     "id": 179,
     "nombre": "Mareep",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -4376,7 +4376,7 @@
     "id": 180,
     "nombre": "Flaaffy",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -4404,7 +4404,7 @@
     "id": 181,
     "nombre": "Ampharos",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -4754,7 +4754,7 @@
     "id": 196,
     "nombre": "Espeon",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -4818,7 +4818,7 @@
     "nombre": "Slowking",
     "tipos": [
       "Agua",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -4863,7 +4863,7 @@
     "id": 201,
     "nombre": "Unown",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -4880,7 +4880,7 @@
     "id": 202,
     "nombre": "Wobbuffet",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -4898,7 +4898,7 @@
     "nombre": "Girafarig",
     "tipos": [
       "Normal",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -5758,7 +5758,7 @@
     "nombre": "Smoochum",
     "tipos": [
       "Hielo",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -5786,7 +5786,7 @@
     "id": 239,
     "nombre": "Elekid",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -5876,7 +5876,7 @@
     "id": 243,
     "nombre": "Raikou",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -6003,7 +6003,7 @@
     "id": 249,
     "nombre": "Lugia",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Volador"
     ],
     "sprite": null,
@@ -6039,7 +6039,7 @@
     "id": 251,
     "nombre": "Celebi",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Planta"
     ],
     "sprite": null,
@@ -6757,7 +6757,7 @@
     "id": 280,
     "nombre": "Ralts",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Hada"
     ],
     "sprite": null,
@@ -6786,7 +6786,7 @@
     "id": 281,
     "nombre": "Kirlia",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Hada"
     ],
     "sprite": null,
@@ -6826,7 +6826,7 @@
     "id": 282,
     "nombre": "Gardevoir",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Hada"
     ],
     "sprite": null,
@@ -7417,7 +7417,7 @@
     "nombre": "Meditite",
     "tipos": [
       "Lucha",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -7446,7 +7446,7 @@
     "nombre": "Medicham",
     "tipos": [
       "Lucha",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -7463,7 +7463,7 @@
     "id": 309,
     "nombre": "Electrike",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -7491,7 +7491,7 @@
     "id": 310,
     "nombre": "Manectric",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -7508,7 +7508,7 @@
     "id": 311,
     "nombre": "Plusle",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -7525,7 +7525,7 @@
     "id": 312,
     "nombre": "Minun",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -7806,7 +7806,7 @@
     "id": 325,
     "nombre": "Spoink",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -7834,7 +7834,7 @@
     "id": 326,
     "nombre": "Grumpig",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -8071,7 +8071,7 @@
     "nombre": "Lunatone",
     "tipos": [
       "Roca",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -8089,7 +8089,7 @@
     "nombre": "Solrock",
     "tipos": [
       "Roca",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -8200,7 +8200,7 @@
     "nombre": "Baltoy",
     "tipos": [
       "Tierra",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -8229,7 +8229,7 @@
     "nombre": "Claydol",
     "tipos": [
       "Tierra",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -8538,7 +8538,7 @@
     "id": 358,
     "nombre": "Chimecho",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -8572,7 +8572,7 @@
     "id": 360,
     "nombre": "Wynaut",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -8914,7 +8914,7 @@
     "nombre": "Beldum",
     "tipos": [
       "Acero",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -8943,7 +8943,7 @@
     "nombre": "Metang",
     "tipos": [
       "Acero",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -8972,7 +8972,7 @@
     "nombre": "Metagross",
     "tipos": [
       "Acero",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -9041,7 +9041,7 @@
     "nombre": "Latias",
     "tipos": [
       "Dragón",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -9059,7 +9059,7 @@
     "nombre": "Latios",
     "tipos": [
       "Dragón",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -9129,7 +9129,7 @@
     "nombre": "Jirachi",
     "tipos": [
       "Acero",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -9146,7 +9146,7 @@
     "id": 386,
     "nombre": "Deoxys",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -9553,7 +9553,7 @@
     "id": 403,
     "nombre": "Shinx",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -9581,7 +9581,7 @@
     "id": 404,
     "nombre": "Luxio",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -9609,7 +9609,7 @@
     "id": 405,
     "nombre": "Luxray",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -9890,7 +9890,7 @@
     "id": 417,
     "nombre": "Pachirisu",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -10232,7 +10232,7 @@
     "id": 433,
     "nombre": "Chingling",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -10309,7 +10309,7 @@
     "nombre": "Bronzor",
     "tipos": [
       "Acero",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -10338,7 +10338,7 @@
     "nombre": "Bronzong",
     "tipos": [
       "Acero",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -10383,7 +10383,7 @@
     "id": 439,
     "nombre": "Mime Jr.",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Hada"
     ],
     "sprite": null,
@@ -10923,7 +10923,7 @@
     "id": 462,
     "nombre": "Magnezone",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Acero"
     ],
     "sprite": null,
@@ -10993,7 +10993,7 @@
     "id": 466,
     "nombre": "Electivire",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -11150,7 +11150,7 @@
     "id": 475,
     "nombre": "Gallade",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Lucha"
     ],
     "sprite": null,
@@ -11221,7 +11221,7 @@
     "id": 479,
     "nombre": "Rotom",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Fantasma"
     ],
     "sprite": null,
@@ -11239,7 +11239,7 @@
     "id": 480,
     "nombre": "Uxie",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -11256,7 +11256,7 @@
     "id": 481,
     "nombre": "Mesprit",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -11273,7 +11273,7 @@
     "id": 482,
     "nombre": "Azelf",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -11379,7 +11379,7 @@
     "id": 488,
     "nombre": "Cresselia",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -11489,7 +11489,7 @@
     "id": 494,
     "nombre": "Victini",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Fuego"
     ],
     "sprite": null,
@@ -12026,7 +12026,7 @@
     "id": 517,
     "nombre": "Munna",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -12054,7 +12054,7 @@
     "id": 518,
     "nombre": "Musharna",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -12147,7 +12147,7 @@
     "id": 522,
     "nombre": "Blitzle",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -12175,7 +12175,7 @@
     "id": 523,
     "nombre": "Zebstrika",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -12264,7 +12264,7 @@
     "id": 527,
     "nombre": "Woobat",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Volador"
     ],
     "sprite": null,
@@ -12293,7 +12293,7 @@
     "id": 528,
     "nombre": "Swoobat",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Volador"
     ],
     "sprite": null,
@@ -13048,7 +13048,7 @@
     "id": 561,
     "nombre": "Sigilyph",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Volador"
     ],
     "sprite": null,
@@ -13349,7 +13349,7 @@
     "id": 574,
     "nombre": "Gothita",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -13377,7 +13377,7 @@
     "id": 575,
     "nombre": "Gothorita",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -13405,7 +13405,7 @@
     "id": 576,
     "nombre": "Gothitelle",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -13422,7 +13422,7 @@
     "id": 577,
     "nombre": "Solosis",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -13450,7 +13450,7 @@
     "id": 578,
     "nombre": "Duosion",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -13478,7 +13478,7 @@
     "id": 579,
     "nombre": "Reuniclus",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -13662,7 +13662,7 @@
     "id": 587,
     "nombre": "Emolga",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Volador"
     ],
     "sprite": null,
@@ -13838,7 +13838,7 @@
     "nombre": "Joltik",
     "tipos": [
       "Bicho",
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -13867,7 +13867,7 @@
     "nombre": "Galvantula",
     "tipos": [
       "Bicho",
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -14004,7 +14004,7 @@
     "id": 602,
     "nombre": "Tynamo",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -14032,7 +14032,7 @@
     "id": 603,
     "nombre": "Eelektrik",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -14060,7 +14060,7 @@
     "id": 604,
     "nombre": "Eelektross",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -14077,7 +14077,7 @@
     "id": 605,
     "nombre": "Elgyem",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -14105,7 +14105,7 @@
     "id": 606,
     "nombre": "Beheeyem",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -14379,7 +14379,7 @@
     "nombre": "Stunfisk",
     "tipos": [
       "Tierra",
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -14902,7 +14902,7 @@
     "id": 642,
     "nombre": "Thundurus",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Volador"
     ],
     "sprite": null,
@@ -14939,7 +14939,7 @@
     "nombre": "Zekrom",
     "tipos": [
       "Dragón",
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -15011,7 +15011,7 @@
     "nombre": "Meloetta",
     "tipos": [
       "Normal",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -15177,7 +15177,7 @@
     "nombre": "Delphox",
     "tipos": [
       "Fuego",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -15693,7 +15693,7 @@
     "id": 677,
     "nombre": "Espurr",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -15721,7 +15721,7 @@
     "id": 678,
     "nombre": "Meowstic",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -15905,7 +15905,7 @@
     "nombre": "Inkay",
     "tipos": [
       "Siniestro",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -15935,7 +15935,7 @@
     "nombre": "Malamar",
     "tipos": [
       "Siniestro",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -16091,7 +16091,7 @@
     "id": 694,
     "nombre": "Helioptile",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Normal"
     ],
     "sprite": null,
@@ -16120,7 +16120,7 @@
     "id": 695,
     "nombre": "Heliolisk",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Normal"
     ],
     "sprite": null,
@@ -16269,7 +16269,7 @@
     "id": 702,
     "nombre": "Dedenne",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Hada"
     ],
     "sprite": null,
@@ -16642,7 +16642,7 @@
     "id": 720,
     "nombre": "Hoopa",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Fantasma"
     ],
     "sprite": null,
@@ -17053,7 +17053,7 @@
     "nombre": "Charjabug",
     "tipos": [
       "Bicho",
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -17081,7 +17081,7 @@
     "nombre": "Vikavolt",
     "tipos": [
       "Bicho",
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -17690,7 +17690,7 @@
     "nombre": "Oranguru",
     "tipos": [
       "Normal",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -17933,7 +17933,7 @@
     "id": 777,
     "nombre": "Togedemaru",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Acero"
     ],
     "sprite": null,
@@ -17970,7 +17970,7 @@
     "nombre": "Bruxish",
     "tipos": [
       "Agua",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -18098,7 +18098,7 @@
     "id": 785,
     "nombre": "Tapu Koko",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Hada"
     ],
     "sprite": null,
@@ -18116,7 +18116,7 @@
     "id": 786,
     "nombre": "Tapu Lele",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Hada"
     ],
     "sprite": null,
@@ -18170,7 +18170,7 @@
     "id": 789,
     "nombre": "Cosmog",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -18198,7 +18198,7 @@
     "id": 790,
     "nombre": "Cosmoem",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -18236,7 +18236,7 @@
     "id": 791,
     "nombre": "Solgaleo",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Acero"
     ],
     "sprite": null,
@@ -18254,7 +18254,7 @@
     "id": 792,
     "nombre": "Lunala",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Fantasma"
     ],
     "sprite": null,
@@ -18326,7 +18326,7 @@
     "id": 796,
     "nombre": "Xurkitree",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -18397,7 +18397,7 @@
     "id": 800,
     "nombre": "Necrozma",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -18532,7 +18532,7 @@
     "id": 807,
     "nombre": "Zeraora",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -18950,7 +18950,7 @@
     "nombre": "Dottler",
     "tipos": [
       "Bicho",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -18979,7 +18979,7 @@
     "nombre": "Orbeetle",
     "tipos": [
       "Bicho",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -19177,7 +19177,7 @@
     "id": 835,
     "nombre": "Yamper",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -19205,7 +19205,7 @@
     "id": 836,
     "nombre": "Boltund",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -19487,7 +19487,7 @@
     "id": 848,
     "nombre": "Toxel",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Veneno"
     ],
     "sprite": null,
@@ -19516,7 +19516,7 @@
     "id": 849,
     "nombre": "Toxtricity",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Veneno"
     ],
     "sprite": null,
@@ -19671,7 +19671,7 @@
     "id": 856,
     "nombre": "Hatenna",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -19699,7 +19699,7 @@
     "id": 857,
     "nombre": "Hattrem",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -19727,7 +19727,7 @@
     "id": 858,
     "nombre": "Hatterene",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Hada"
     ],
     "sprite": null,
@@ -19891,7 +19891,7 @@
     "nombre": "Mr. Rime",
     "tipos": [
       "Hielo",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -19987,7 +19987,7 @@
     "id": 871,
     "nombre": "Pincurchin",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -20086,7 +20086,7 @@
     "id": 876,
     "nombre": "Indeedee",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Normal"
     ],
     "sprite": null,
@@ -20104,7 +20104,7 @@
     "id": 877,
     "nombre": "Morpeko",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Siniestro"
     ],
     "sprite": null,
@@ -20167,7 +20167,7 @@
     "id": 880,
     "nombre": "Dracozolt",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Dragón"
     ],
     "sprite": null,
@@ -20185,7 +20185,7 @@
     "id": 881,
     "nombre": "Arctozolt",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Hielo"
     ],
     "sprite": null,
@@ -20456,7 +20456,7 @@
     "id": 894,
     "nombre": "Regieleki",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -20524,7 +20524,7 @@
     "id": 898,
     "nombre": "Calyrex",
     "tipos": [
-      "Psíquico",
+      "Psiquico",
       "Planta"
     ],
     "sprite": null,
@@ -20543,7 +20543,7 @@
     "nombre": "Wyrdeer",
     "tipos": [
       "Normal",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -21026,7 +21026,7 @@
     "id": 921,
     "nombre": "Pawmi",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -21054,7 +21054,7 @@
     "id": 922,
     "nombre": "Pawmo",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Lucha"
     ],
     "sprite": null,
@@ -21082,7 +21082,7 @@
     "id": 923,
     "nombre": "Pawmot",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Lucha"
     ],
     "sprite": null,
@@ -21396,7 +21396,7 @@
     "nombre": "Armarouge",
     "tipos": [
       "Fuego",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -21431,7 +21431,7 @@
     "id": 938,
     "nombre": "Tadbulb",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -21459,7 +21459,7 @@
     "id": 939,
     "nombre": "Bellibolt",
     "tipos": [
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -21476,7 +21476,7 @@
     "id": 940,
     "nombre": "Wattrel",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Volador"
     ],
     "sprite": null,
@@ -21505,7 +21505,7 @@
     "id": 941,
     "nombre": "Kilowattrel",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Volador"
     ],
     "sprite": null,
@@ -21799,7 +21799,7 @@
     "nombre": "Rabsca",
     "tipos": [
       "Bicho",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -21816,7 +21816,7 @@
     "id": 955,
     "nombre": "Flittle",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -21844,7 +21844,7 @@
     "id": 956,
     "nombre": "Espathra",
     "tipos": [
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -22284,7 +22284,7 @@
     "nombre": "Veluza",
     "tipos": [
       "Agua",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -22373,7 +22373,7 @@
     "nombre": "Farigiraf",
     "tipos": [
       "Normal",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -22444,7 +22444,7 @@
     "nombre": "Colagrito",
     "tipos": [
       "Hada",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -22515,7 +22515,7 @@
     "id": 989,
     "nombre": "Pelarena",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Tierra"
     ],
     "sprite": null,
@@ -22570,7 +22570,7 @@
     "nombre": "Ferropalmas",
     "tipos": [
       "Lucha",
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -22624,7 +22624,7 @@
     "nombre": "Ferropúas",
     "tipos": [
       "Roca",
-      "Eléctrico"
+      "Electrico"
     ],
     "sprite": null,
     "stats": {
@@ -22888,7 +22888,7 @@
     "id": 1008,
     "nombre": "Miraidon",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Dragón"
     ],
     "sprite": null,
@@ -22925,7 +22925,7 @@
     "nombre": "Ferroverdor",
     "tipos": [
       "Planta",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -23031,7 +23031,7 @@
     "nombre": "Munkidori",
     "tipos": [
       "Veneno",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -23137,7 +23137,7 @@
     "id": 1021,
     "nombre": "Electrofuria",
     "tipos": [
-      "Eléctrico",
+      "Electrico",
       "Dragón"
     ],
     "sprite": null,
@@ -23156,7 +23156,7 @@
     "nombre": "Ferromole",
     "tipos": [
       "Roca",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
@@ -23174,7 +23174,7 @@
     "nombre": "Ferrotesta",
     "tipos": [
       "Acero",
-      "Psíquico"
+      "Psiquico"
     ],
     "sprite": null,
     "stats": {
