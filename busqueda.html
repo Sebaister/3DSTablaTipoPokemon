@@ -13,6 +13,10 @@
             padding: 0;
             font-size: 12px;
             -webkit-text-size-adjust: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
         }
 
         h1 {
@@ -25,6 +29,9 @@
         #search-container {
             padding: 2px;
             text-align: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
         }
 
         input, button {
@@ -38,22 +45,30 @@
             display: none;
             padding: 6px;
             text-align: center;
+            margin: 10px;
         }
 
         #pokeImg {
-            max-width: 100%;
+            max-width: 120px;
             height: auto;
             image-rendering: pixelated;
-            width: 120px;
         }
 
         #pokeInfo {
             background: #222;
             padding: 6px;
+            margin-left: 20px;
             margin-top: 10px;
             color: white;
             border: 1px solid #444;
             text-align: left;
+            width: 80%;
+        }
+
+        .poke-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .type-btn {
@@ -100,11 +115,11 @@
 </head>
 <body>
     <div id="resultado">
-        <div>
+        <div class="poke-container">
             <img id="pokeImg" src="" alt="">
-        </div>
-        <div id="pokeInfo">
-            <!-- Información del Pokémon se mostrará aquí -->
+            <div id="pokeInfo">
+                <!-- Información del Pokémon se mostrará aquí -->
+            </div>
         </div>
     </div>
 
