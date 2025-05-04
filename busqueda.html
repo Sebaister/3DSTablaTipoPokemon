@@ -8,10 +8,10 @@
         body {
             font-family: sans-serif;
             font-size: 12px;
-            text-align: center;
             background: #fff;
             margin: 0;
             padding: 5px;
+            text-align: center;
         }
         h1 {
             font-size: 14px;
@@ -23,18 +23,24 @@
             width: 80px;
             margin: 3px;
         }
+        table {
+            margin: 10px auto;
+            width: 95%;
+        }
+        td {
+            vertical-align: top;
+            padding: 5px;
+        }
         img {
-            margin-top: 10px;
             max-width: 100%;
             height: auto;
             image-rendering: pixelated;
         }
         .info {
             text-align: left;
-            margin-top: 10px;
-            padding: 5px;
-            border: 1px solid #ccc;
             background: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 5px;
         }
     </style>
 </head>
@@ -44,15 +50,18 @@
     <input type="number" id="pokeInput" min="1" max="151">
     <button onclick="buscar()">Buscar</button>
 
-    <div>
-        <img id="pokeImg" src="" alt="" style="display:none;">
-    </div>
-    <div id="pokeInfo" class="info" style="display:none;"></div>
+    <table id="resultado" style="display:none;">
+        <tr>
+            <td style="width: 40%;">
+                <img id="pokeImg" src="" alt="">
+            </td>
+            <td class="info" id="pokeInfo" style="width: 60%;"></td>
+        </tr>
+    </table>
 
     <script>
         var pokedata = [];
 
-        // Cargar el JSON local
         function cargarDatos() {
             var xhr = new XMLHttpRequest();
             xhr.open("GET", "pokedata.json", true);
@@ -64,15 +73,13 @@
             xhr.send();
         }
 
-        // Mostrar info del Pokémon
         function buscar() {
             var numero = parseInt(document.getElementById("pokeInput").value);
             var img = document.getElementById("pokeImg");
             var info = document.getElementById("pokeInfo");
+            var resultado = document.getElementById("resultado");
 
             var pokemon = null;
-
-            // Buscar por ID
             for (var i = 0; i < pokedata.length; i++) {
                 if (pokedata[i].id === numero) {
                     pokemon = pokedata[i];
@@ -81,13 +88,10 @@
             }
 
             if (pokemon) {
-                // Mostrar sprite
                 img.src = "sprites/1gen/" + numero + ".png";
-                img.style.display = "block";
 
-                // Mostrar info
                 var html = "<b>Nombre:</b> " + pokemon.nombre + "<br>";
-                html += "<b>Tipos:</b> " + pokemon.tipos.join(", ") + "<br>";
+                html += "<b>Tipos:</b> " + pokemon.tipos.join(", ") + "<br><br>";
                 html += "<b>Estadísticas:</b><br>";
                 var stats = pokemon.stats;
                 for (var stat in stats) {
@@ -96,25 +100,23 @@
 
                 if (pokemon.evolucion.length > 0) {
                     var evo = pokemon.evolucion[0];
-                    html += "<b>Evoluciona a:</b> " + evo.b + "<br>";
+                    html += "<br><b>Evoluciona a:</b> " + evo.b + "<br>";
                     html += "<b>Condiciones:</b><br>";
                     for (var j = 0; j < evo.condiciones.length; j++) {
                         html += "- " + evo.condiciones[j] + "<br>";
                     }
                 } else {
-                    html += "<b>Sin evoluciones.</b>";
+                    html += "<br><b>Sin evoluciones.</b>";
                 }
 
                 info.innerHTML = html;
-                info.style.display = "block";
+                resultado.style.display = "table";
             } else {
-                img.style.display = "none";
-                info.style.display = "none";
+                resultado.style.display = "none";
                 alert("Pokémon no encontrado.");
             }
         }
 
-        // Iniciar carga del JSON al abrir
         cargarDatos();
     </script>
 </body>
