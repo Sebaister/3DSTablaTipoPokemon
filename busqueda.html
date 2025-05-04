@@ -22,13 +22,29 @@
         #resultado {
             padding: 6px;
             margin-bottom: 80px; /* Espacio para el buscador abajo */
+            text-align: center; /* Centrar todo el contenido */
+        }
+        
+        #pokeContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
         }
         
         #pokeImg {
-            max-width: 100%;
             height: auto;
             image-rendering: pixelated;
-            width: 120px;
+            width: 160px; /* Tamaño aumentado */
+            margin: 0 auto; /* Centrar horizontalmente */
+        }
+        
+        #pokeName {
+            margin-top: 8px;
+            font-weight: bold;
+            font-size: 16px; /* Tamaño de fuente aumentado */
+            color: #FFF;
+            text-align: center;
         }
         
         #pokeInfo {
@@ -38,12 +54,9 @@
             color: white;
             border: 1px solid #444;
             text-align: left;
-        }
-        
-        #pokeName {
-            margin-top: 10px;
-            font-weight: bold;
-            font-size: 14px;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         #tablaTiposBtn {
@@ -67,10 +80,10 @@
 </head>
 <body>
     <div id="resultado">
-        <div>
+        <div id="pokeContainer">
             <img id="pokeImg" src="" alt="">
+            <div id="pokeName"></div>
         </div>
-        <div id="pokeName"></div>
         <div id="pokeInfo">
             <!-- Información del Pokémon se mostrará aquí -->
         </div>
