@@ -1,22 +1,4 @@
-// Variable global para almacenar los datos de tipos
-let typeData = {};
-
-// Cargar los datos del JSON al iniciar
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('tabladetipo.json')
-        .then(response => response.json())
-        .then(data => {
-            typeData = data;
-            // Mostrar la primera generación por defecto
-            document.getElementById('gen1').style.display = 'block';
-        })
-        .catch(error => {
-            console.error('Error cargando los datos:', error);
-            document.getElementById('gen1').style.display = 'block';
-        });
-});
-
-// Función para mostrar el tipo seleccionado
+// Función existente para mostrar tipos (la mantendremos)
 function showType(typeId) {
     // Oculta todos los detalles primero
     var details = document.getElementsByClassName('type-detail');
@@ -24,109 +6,107 @@ function showType(typeId) {
         details[i].style.display = 'none';
     }
     
-    // Verifica si el elemento ya existe
-    var typeElement = document.getElementById(typeId);
-    
-    // Si no existe, créalo
-    if (!typeElement && typeData) {
-        var parts = typeId.split('-');
-        if (parts.length === 2) {
-            var gen = parts[0];
-            var type = parts[1];
-            
-            if (typeData[gen] && typeData[gen][type]) {
-                createTypeDetail(gen, type, typeData[gen][type]);
-                typeElement = document.getElementById(typeId);
-            }
-        }
-    }
-    
-    // Muestra el elemento si existe
-    if (typeElement) {
-        typeElement.style.display = 'block';
-        typeElement.scrollIntoView();
-    } else {
-        console.error('No se pudo cargar el tipo:', typeId);
+    // Muestra el seleccionado
+    var selectedType = document.getElementById(typeId);
+    if (selectedType) {
+        selectedType.style.display = 'block';
+        // Desplaza a la vista (sin animación smooth para mejor rendimiento)
+        selectedType.scrollIntoView();
     }
 }
 
-// Función para crear el detalle de un tipo
-function createTypeDetail(gen, typeKey, data) {
-    var container = document.createElement('div');
-    container.id = gen + '-' + typeKey;
-    container.className = 'type-detail';
-    container.style.display = 'none';
+// Nuevas funciones para cargar dinámicamente los datos
+function createTypeButtons(genId, types) {
+    const container = document.getElementById(`${genId}-types`);
+    if (!container) return;
     
-    // Crear encabezado
-    var header = document.createElement('div');
-    header.className = 'type-header ' + typeKey;
-    header.textContent = data.name || typeKey.charAt(0).toUpperCase() + typeKey.slice(1);
-    container.appendChild(header);
+    container.innerHTML = '';
     
-    // Función para añadir secciones (débil, resistente, etc.)
-    function addSection(title, items, className) {
-        if (items && items.length > 0) {
-            var section = document.createElement('div');
-            section.className = 'type-section';
-            
-            var strong = document.createElement('strong');
-            strong.textContent = title;
-            section.appendChild(strong);
-            
-            var list = document.createElement('div');
-            list.className = 'type-list';
-            
-            items.forEach(function(item) {
-                var tag = document.createElement('div');
-                tag.className = 'type-tag ' + className + ' ' + item;
-                tag.textContent = getTypeName(item);
-                list.appendChild(tag);
-            });
-            
-            section.appendChild(list);
-            container.appendChild(section);
-        }
-    }
-    
-    // Añadir secciones
-    addSection('Débil contra:', data.weak, 'weak');
-    addSection('Resistente a:', data.resist, 'resist');
-    addSection('Fuerte contra:', data.strong, 'strong');
-    addSection('Inmune a:', data.immune, 'immune');
-    
-    // Añadir nota si existe
-    if (data.note) {
-        var note = document.createElement('div');
-        note.className = 'note';
-        note.textContent = data.note;
-        container.appendChild(note);
-    }
-    
-    // Añadir al contenedor de la generación correspondiente
-    document.getElementById(gen).appendChild(container);
+    types.forEach(type => {
+        const button = document.createElement('button');
+        button.className = `type-btn ${type}`;
+        button.textContent = capitalizeFirstLetter(type);
+        button.onclick = () => showType(`${genId}-${type}`);
+        container.appendChild(button);
+    });
 }
 
-// Función para obtener el nombre legible del tipo
-function getTypeName(typeKey) {
-    var typeNames = {
-        "normal": "Normal",
-        "fuego": "Fuego",
-        "agua": "Agua",
-        "planta": "Planta",
-        "electrico": "Eléctrico",
-        "hielo": "Hielo",
-        "lucha": "Lucha",
-        "veneno": "Veneno",
-        "tierra": "Tierra",
-        "volador": "Volador",
-        "psiquico": "Psíquico",
-        "bicho": "Bicho",
-        "roca": "Roca",
-        "fantasma": "Fantasma",
-        "dragon": "Dragón",
-        "acero": "Acero",
-        "siniestro": "Siniestro",
-        "hada": "Hada"
-    };
-    return typeNames[typeKey] || typeKey;
+function createTypeDetails(genId, typeData) {
+    const container = document.getElementById(`${genId}-details`);
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    for (const [type, data] of Object.entries(typeData)) {
+        const detailDiv = document.createElement('div');
+        detailDiv.id = `${genId}-${type}`;
+        detailDiv.className = 'type-detail';
+        detailDiv.style.display = 'none';
+        
+        let html = `<div class="type-header ${type}">${capitalizeFirstLetter(type)}</div>`;
+        
+        if (data.weak) {
+            html += `<div class="type-section"><strong>Débil contra:</strong><div class="type-list">`;
+            html += data.weak.map(t => `<div class="type-tag weak ${t}">${capitalizeFirstLetter(t)}</div>`).join('');
+            html += `</div></div>`;
+        }
+        
+        if (data.resist) {
+            html += `<div class="type-section"><strong>Resistente a:</strong><div class="type-list">`;
+            html += data.resist.map(t => `<div class="type-tag resist ${t}">${capitalizeFirstLetter(t)}</div>`).join('');
+            html += `</div></div>`;
+        }
+        
+        if (data.strong) {
+            html += `<div class="type-section"><strong>Fuerte contra:</strong><div class="type-list">`;
+            html += data.strong.map(t => `<div class="type-tag strong ${t}">${capitalizeFirstLetter(t)}</div>`).join('');
+            html += `</div></div>`;
+        }
+        
+        if (data.immune) {
+            html += `<div class="type-section"><strong>Inmune a:</strong><div class="type-list">`;
+            html += data.immune.map(t => `<div class="type-tag immune ${t}">${capitalizeFirstLetter(t)}</div>`).join('');
+            html += `</div></div>`;
+        }
+        
+        if (data.note) {
+            html += `<div class="note">${data.note}</div>`;
+        }
+        
+        detailDiv.innerHTML = html;
+        container.appendChild(detailDiv);
+    }
 }
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// Cargar los datos y generar la interfaz
+document.addEventListener('DOMContentLoaded', () => {
+    // Primero verifica si ya hay contenido (para compatibilidad con el HTML existente)
+    const hasExistingContent = document.querySelector('.type-detail') !== null;
+    
+    if (!hasExistingContent) {
+        // Solo cargar dinámicamente si no hay contenido existente
+        fetch('types.json')
+            .then(response => response.json())
+            .then(data => {
+                // Generación 1
+                const gen1Types = Object.keys(data.gen1);
+                createTypeButtons('gen1', gen1Types);
+                createTypeDetails('gen1', data.gen1);
+                
+                // Generación 2-5
+                const gen2Types = Object.keys(data.gen2);
+                createTypeButtons('gen2', gen2Types);
+                createTypeDetails('gen2', data.gen2);
+                
+                // Generación 6+
+                const gen6Types = Object.keys(data.gen6);
+                createTypeButtons('gen6', gen6Types);
+                createTypeDetails('gen6', data.gen6);
+            })
+            .catch(error => console.error('Error loading types data:', error));
+    }
+});
