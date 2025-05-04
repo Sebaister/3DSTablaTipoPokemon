@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Pokémon 1ra Gen</title>
@@ -23,12 +23,8 @@
         }
 
         #search-container {
-            text-align: center;
-            width: 100%;
-            position: fixed;
-            bottom: 0;
-            background-color: #222;
             padding: 2px;
+            text-align: center;
         }
 
         input, button {
@@ -40,34 +36,24 @@
 
         #resultado {
             display: none;
-            padding: 10px;
-            text-align: left;
-            margin: 10px;
-        }
-
-        .poke-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: flex-start;
-            padding: 5px;
-            gap: 10px;
+            padding: 6px;
+            text-align: center;
         }
 
         #pokeImg {
-            width: 80px;  /* Ajuste para un sprite más pequeño */
-            height: 80px;
+            max-width: 100%;
+            height: auto;
             image-rendering: pixelated;
+            width: 120px;
         }
 
         #pokeInfo {
             background: #222;
             padding: 6px;
+            margin-top: 10px;
             color: white;
             border: 1px solid #444;
             text-align: left;
-            width: 200px; /* Ancho fijo para la información */
-            font-size: 10px;
         }
 
         .type-btn {
@@ -113,17 +99,15 @@
     </style>
 </head>
 <body>
-    <!-- Pantalla superior donde se mostrarán los resultados -->
     <div id="resultado">
-        <div class="poke-container">
+        <div>
             <img id="pokeImg" src="" alt="">
-            <div id="pokeInfo">
-                <!-- Información del Pokémon se mostrará aquí -->
-            </div>
+        </div>
+        <div id="pokeInfo">
+            <!-- Información del Pokémon se mostrará aquí -->
         </div>
     </div>
 
-    <!-- Barra de búsqueda en la pantalla inferior -->
     <div id="search-container">
         <h1>Pokémon 1ra Gen</h1>
         <p>Escribe un número (1–151):</p>
