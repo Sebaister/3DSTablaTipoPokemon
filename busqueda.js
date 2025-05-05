@@ -1,34 +1,56 @@
+// Variables globales
 var pokedata = [];
 var typeData = {};
 
-// Cargar los datos de los Pokémon y los tipos
+// Función para cargar datos
 function cargarDatos() {
-    // Cargar datos de Pokémon
+    console.log("Iniciando carga de datos...");
+    
+    // Cargar pokedata.json
     var xhr1 = new XMLHttpRequest();
-    xhr1.open("GET", "pokedata.json", true);
+    xhr1.open("GET", "./pokedata.json", true);
     xhr1.onreadystatechange = function() {
-        if (xhr1.readyState == 4 && xhr1.status == 200) {
-            pokedata = JSON.parse(xhr1.responseText);
+        if (xhr1.readyState === 4) {
+            if (xhr1.status === 200) {
+                try {
+                    pokedata = JSON.parse(xhr1.responseText);
+                    console.log("Pokédex cargada (" + pokedata.length + " Pokémon)");
+                } catch (e) {
+                    console.error("Error al parsear pokedata.json:", e);
+                }
+            } else {
+                console.error("Error al cargar pokedata.json:", xhr1.status);
+            }
         }
     };
     xhr1.send();
-    
-    // Cargar datos de tipos
+
+    // Cargar types.json
     var xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", "types.json", true);
+    xhr2.open("GET", "./types.json", true);
     xhr2.onreadystatechange = function() {
-        if (xhr2.readyState == 4 && xhr2.status == 200) {
-            typeData = JSON.parse(xhr2.responseText);
-            // Forzar mostrar detalles después de cargar los datos
-            if (document.getElementById("pokeInput").value) {
-                buscar();
+        if (xhr2.readyState === 4) {
+            if (xhr2.status === 200) {
+                try {
+                    typeData = JSON.parse(xhr2.responseText);
+                    console.log("Tipos cargados");
+                    // Auto-búsqueda si hay texto en el input
+                    var inputVal = document.getElementById("pokeInput").value;
+                    if (inputVal && inputVal.trim() !== "") {
+                        setTimeout(buscar, 100);
+                    }
+                } catch (e) {
+                    console.error("Error al parsear types.json:", e);
+                }
+            } else {
+                console.error("Error al cargar types.json:", xhr2.status);
             }
         }
     };
     xhr2.send();
 }
 
-// Traducción de las estadísticas
+// Traducción de estadísticas
 function traducirEstadisticas(stat) {
     var traducciones = {
         "hp": "PS",
@@ -41,12 +63,12 @@ function traducirEstadisticas(stat) {
     return traducciones[stat] || stat;
 }
 
-// Función para capitalizar la primera letra
+// Capitalizar primera letra
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-// Función para determinar la generación por el ID del Pokémon
+// Determinar generación por ID
 function determinarGeneracion(id) {
     if (id >= 1 && id <= 151) return "1gen";
     else if (id >= 152 && id <= 251) return "2gen";
@@ -60,15 +82,13 @@ function determinarGeneracion(id) {
     else return "unknown";
 }
 
-// Calcular interacciones de tipos combinados
+// Calcular interacciones de tipos
 function calcularInteracciones(tipos) {
     if (!typeData.gen1 || tipos.length === 0) return null;
     
-    var gen = 'gen1'; // Por defecto usamos gen1 para máxima compatibilidad
-    
-    // Determinar la generación correcta
+    var gen = 'gen1';
     if (tipos.length > 1) {
-        gen = 'gen2'; // Tipos duales fueron introducidos en gen2
+        gen = 'gen2';
     } else {
         if (tipos[0] === 'hada') gen = 'gen6';
         else if (tipos[0] === 'acero' || tipos[0] === 'siniestro') gen = 'gen2';
@@ -86,7 +106,6 @@ function calcularInteracciones(tipos) {
         if (!typeData[gen] || !typeData[gen][tipo]) continue;
         var data = typeData[gen][tipo];
         
-        // Procesar debilidades
         if (data.weak) {
             for (var j = 0; j < data.weak.length; j++) {
                 var weakType = data.weak[j];
@@ -94,7 +113,6 @@ function calcularInteracciones(tipos) {
             }
         }
         
-        // Procesar resistencias
         if (data.resist) {
             for (var j = 0; j < data.resist.length; j++) {
                 var resistType = data.resist[j];
@@ -102,7 +120,6 @@ function calcularInteracciones(tipos) {
             }
         }
         
-        // Procesar fortalezas
         if (data.strong) {
             for (var j = 0; j < data.strong.length; j++) {
                 var strongType = data.strong[j];
@@ -110,7 +127,6 @@ function calcularInteracciones(tipos) {
             }
         }
         
-        // Procesar inmunidades
         if (data.immune) {
             for (var j = 0; j < data.immune.length; j++) {
                 var immuneType = data.immune[j];
@@ -121,7 +137,6 @@ function calcularInteracciones(tipos) {
         }
     }
     
-    // Ajustar multiplicadores para tipos duales
     for (var type in resultado.weak) {
         if (resultado.resist[type]) {
             if (resultado.weak[type] === resultado.resist[type]) {
@@ -157,7 +172,7 @@ function mostrarDetallesTipos(tipos) {
         html += '<div class="type-section"><strong>Débil contra:</strong><div class="type-list">';
         for (var type in interacciones.weak) {
             var multiplier = interacciones.weak[type] > 1 ? ' (x4)' : ' (x2)';
-            html += '<div class="type-tag weak ' + type + '">' + resolveElectricAndPsychicTypes(capitalizeFirstLetter(type))  + multiplier + '</div>';
+            html += '<div class="type-tag weak ' + type + '">' + resolveElectricAndPsychicTypes(capitalizeFirstLetter(type)) + multiplier + '</div>';
         }
         html += '</div></div>';
     }
@@ -194,25 +209,25 @@ function mostrarDetallesTipos(tipos) {
     detailsContainer.style.display = 'block';
 }
 
-// agrega la tilde ( ´ ) a los tipos que lo utilizan en español
+// Corregir nombres de tipos
 function resolveElectricAndPsychicTypes(type) {
-    if(type === "Electrico") {
-        return "Eléctrico";
-    } 
-    if(type === "Psiquico") {
-        return "Psíquico";
-    } else {
-        return type;
-    }
+    if (type === "Electrico") return "Eléctrico";
+    if (type === "Psiquico") return "Psíquico";
+    return type;
 }
 
-// Función de búsqueda del Pokémon
+// Función de búsqueda principal
 function buscar() {
+    console.log("Ejecutando búsqueda...");
     var input = document.getElementById("pokeInput").value.trim().toLowerCase();
     var img = document.getElementById("pokeImg");
     var info = document.getElementById("pokeInfo");
-    var resultado = document.getElementById("resultado");
     var pokeName = document.getElementById("pokeName");
+
+    if (!input) {
+        console.log("Búsqueda vacía");
+        return;
+    }
 
     var pokemon = null;
 
@@ -235,12 +250,12 @@ function buscar() {
     }
 
     if (pokemon) {
-        // Determinar la generación y la carpeta de sprites
+        console.log("Pokémon encontrado:", pokemon.nombre);
         var genFolder = determinarGeneracion(pokemon.id);
         img.src = "sprites/" + genFolder + "/" + pokemon.id + ".png";
         
-        // Manejo de error si la imagen no existe - usa MissingNo
         img.onerror = function() {
+            console.log("Imagen no encontrada, usando MissingNo");
             this.src = "sprites/MissingNo.png";
         };
 
@@ -273,18 +288,18 @@ function buscar() {
         }
 
         info.innerHTML = html;
-        resultado.style.display = "block";
-        
-        // Mostrar interacciones de tipos
         mostrarDetallesTipos(tipos);
     } else {
+        console.log("Pokémon no encontrado");
         alert("Pokémon no encontrado.");
     }
 }
 
-// Iniciar carga de datos cuando la página esté lista
+// Inicialización
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    cargarDatos();
+    setTimeout(cargarDatos, 100);
 } else {
-    document.addEventListener('DOMContentLoaded', cargarDatos);
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(cargarDatos, 100);
+    });
 }
