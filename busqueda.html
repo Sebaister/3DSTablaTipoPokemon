@@ -2,98 +2,35 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Buscar Pokémon</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="estilos.css">
+    <title>Búsqueda de Pokémon</title>
     <style>
-        /* Estilos específicos para la página de búsqueda */
-        #search-container {
-            padding: 2px;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #000;
-            border-top: 1px solid #444;
-            z-index: 100;
+        body {
+            font-family: sans-serif;
+            background-color: #f8f8f8;
+            padding: 10px;
         }
-
-        #resultado {
-            padding: 6px;
-            margin-bottom: 80px;
-            text-align: center;
-        }
-
-        #pokeContainer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        #pokeImg {
-            height: auto;
-            image-rendering: pixelated;
-            width: 160px;
-            margin: 0 auto;
-        }
-
-        #pokeName {
-            margin-top: 8px;
-            font-weight: bold;
-            font-size: 16px;
-            color: #FFF;
-            text-align: center;
-        }
-
-        #pokeInfo {
-            background: #222;
-            padding: 6px;
-            margin-top: 10px;
-            color: white;
-            border: 1px solid #444;
-            text-align: left;
-            max-width: 300px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        #tablaTiposBtn {
-            background-color: #444;
+        input {
             padding: 5px;
-            border-radius: 5px;
-            color: #FFF;
-            font-size: 10px;
-            text-decoration: none;
-            margin-top: 10px;
-            display: inline-block;
+            font-size: 14px;
+            width: 90%;
         }
-
-        input, button {
-            font-size: 12px;
-            padding: 3px;
-            width: 80px;
-            margin: 3px;
+        .pokemon-card {
+            border: 1px solid #ccc;
+            background: #fff;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        img {
+            max-width: 96px;
+            height: auto;
         }
     </style>
 </head>
 <body>
-    <div id="resultado">
-        <div id="pokeContainer">
-            <img id="pokeImg" src="" alt="">
-            <div id="pokeName"></div>
-        </div>
-        <div id="pokeInfo"></div>
-        <div id="typeDetails" class="type-detail"></div>
-    </div>
+    <h1>Buscar Pokémon</h1>
+    <input type="text" id="searchInput" placeholder="Escribe el nombre del Pokémon">
+    <div id="results"></div>
 
-    <div id="search-container">
-        <h1>Buscar Pokémon</h1>
-        <input type="text" id="pokeInput">
-        <button onclick="buscar()">Buscar</button>
-    </div>
-
-    <script src="archivo.js"></script>
+    <script src="busqueda.js"></script>
 </body>
 </html>
