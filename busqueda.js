@@ -207,7 +207,7 @@ function buscar() {
 
         if (pokemon.evolucion.length > 0) {
             var evo = pokemon.evolucion[0];
-            html += `<br><b>Evoluciona a:</b> ${evo.b}<br><b>Condiciones:</b><br>`;
+            html += `<br><b>Evoluciona a:</b> <span class="evo-link" data-poke="${evo.b.toLowerCase()}">${evo.b}</span><br><b>Condiciones:</b><br>`;
             evo.condiciones.forEach(cond => {
                 html += `- ${cond}<br>`;
             });
@@ -218,6 +218,12 @@ function buscar() {
         info.innerHTML = html;
         resultado.style.display = "block";
         mostrarDetallesTipos(tipos);
+        info.addEventListener('click', function(e) {
+    if (e.target && e.target.classList.contains('evo-link')) {
+        document.getElementById('pokeInput').value = e.target.getAttribute('data-poke');
+        buscar();
+    }
+});
     } else {
         alert("Pokémon no encontrado.");
     }
