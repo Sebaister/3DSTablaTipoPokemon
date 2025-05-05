@@ -1,32 +1,24 @@
-        var pokedata = [];
-        var typeData = {};
+        // busqueda.js
+var pokedata=[],typeData={};
 
-        // Cargar los datos de los Pokémon y los tipos
-        function cargarDatos() {
-            // Cargar datos de Pokémon
-            var xhr1 = new XMLHttpRequest();
-            xhr1.open("GET", "pokedata.json", true);
-            xhr1.onreadystatechange = function() {
-                if (xhr1.readyState == 4 && xhr1.status == 200) {
-                    pokedata = JSON.parse(xhr1.responseText);
-                }
-            };
-            xhr1.send();
-            
-            // Cargar datos de tipos
-            var xhr2 = new XMLHttpRequest();
-            xhr2.open("GET", "types.json", true);
-            xhr2.onreadystatechange = function() {
-                if (xhr2.readyState == 4 && xhr2.status == 200) {
-                    typeData = JSON.parse(xhr2.responseText);
-                    // Forzar mostrar detalles después de cargar los datos
-                    if (document.getElementById("pokeInput").value) {
-                        buscar();
-                    }
-                }
-            };
-            xhr2.send();
-        }
+function cargarDatos(){
+  var xhr1=new XMLHttpRequest();
+  xhr1.open("GET","pokedata.json",true);
+  xhr1.onload=function(){
+    if(xhr1.status===200)pokedata=JSON.parse(xhr1.responseText);
+  };
+  xhr1.send();
+  
+  var xhr2=new XMLHttpRequest();
+  xhr2.open("GET","types.json",true);
+  xhr2.onload=function(){
+    if(xhr2.status===200){
+      typeData=JSON.parse(xhr2.responseText);
+      if(document.getElementById("pokeInput").value)buscar();
+    }
+  };
+  xhr2.send();
+}
 
         // Traducción de las estadísticas
         function traducirEstadisticas(stat) {
@@ -62,8 +54,10 @@
 
         // Calcular interacciones de tipos combinados
         function calcularInteracciones(tipos) {
-            if (!typeData.gen1 || tipos.length === 0) return null;
-            
+  if (!typeData || !typeData.gen1 || !tipos || tipos.length === 0) {
+    console.error("Datos de tipos no cargados");
+    return null;
+  }      
             var gen = 'gen1'; // Por defecto usamos gen1 para máxima compatibilidad
             
             // Determinar la generación correcta
@@ -176,7 +170,8 @@
             if (interacciones.immune.length > 0) {
                 html += '<div class="type-section"><strong>Inmune a:</strong><div class="type-list">';
                 for (var i = 0; i < interacciones.immune.length; i++) {
-                    html += '<div class="type-tag immune ' + interacciones.immune[i] + '">' + resolveElectricAndPsychicTypes(capitalizeFirstLetter(type)) + '</div>';
+                    html += '<div class="type-tag immune ' + interacciones.immune[i] + '">' + 
+        resolveElectricAndPsychicTypes(capitalizeFirstLetter(interacciones.immune[i])) + '</div>';
                 }
                 html += '</div></div>';
             }
@@ -284,8 +279,5 @@
         }
 
         // Iniciar carga de datos cuando la página esté lista
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
-            cargarDatos();
-        } else {
-            document.addEventListener('DOMContentLoaded', cargarDatos);
-        }
+        if(document.readyState==='complete')cargarDatos();
+else document.addEventListener('DOMContentLoaded',cargarDatos);
