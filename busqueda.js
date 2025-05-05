@@ -264,7 +264,7 @@ var pokedata = [];
 
                 if (pokemon.evolucion.length > 0) {
                     var evo = pokemon.evolucion[0];
-                    html += "<br><b>Evoluciona a:</b> <a href='#' onclick='buscarPorNombre(\"" + evo.b + "\")'>" + evo.b + "</a><br>";
+                    html += `<br><b>Evoluciona a:</b> <span class="evo-link" data-poke="${evo.b.toLowerCase()}">${evo.b}</span><br><b>Condiciones:</b><br>`;
                     html += "<b>Condiciones:</b><br>";
                     for (var j = 0; j < evo.condiciones.length; j++) {
                         html += "- " + evo.condiciones[j] + "<br>";
@@ -281,6 +281,13 @@ var pokedata = [];
                 
                 // Mostrar interacciones de tipos
                 mostrarDetallesTipos(tipos);
+                // Delegación de eventos para 3DS
+                info.addEventListener('click', function(e) {
+                    if (e.target && e.target.classList.contains('evo-link')) {
+                    document.getElementById('pokeInput').value = e.target.getAttribute('data-poke');
+                    buscar();
+                }
+        });
             } else {
                 alert("Pokémon no encontrado.");
             }
