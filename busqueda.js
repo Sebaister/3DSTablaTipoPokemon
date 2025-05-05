@@ -264,7 +264,7 @@ var pokedata = [];
 
                 if (pokemon.evolucion.length > 0) {
                     var evo = pokemon.evolucion[0];
-                    html += "<br><b>Evoluciona a:</b> " + evo.b + "<br>";
+                    html += "<br><b>Evoluciona a:</b> <a href='#' onclick='buscarPorNombre(\"" + evo.b + "\")'>" + evo.b + "</a><br>";
                     html += "<b>Condiciones:</b><br>";
                     for (var j = 0; j < evo.condiciones.length; j++) {
                         html += "- " + evo.condiciones[j] + "<br>";
@@ -272,7 +272,10 @@ var pokedata = [];
                 } else {
                     html += "<br><b>Sin evoluciones.</b>";
                 }
-
+                function buscarPorNombre(nombre) {
+                    document.getElementById("pokeInput").value = nombre;
+                    buscar();
+                }
                 info.innerHTML = html;
                 resultado.style.display = "block";
                 
