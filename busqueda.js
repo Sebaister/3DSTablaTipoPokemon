@@ -1,15 +1,19 @@
-        // busqueda.js
-var pokedata=[],typeData={};
+var pokedata = [];
+        var typeData = {};
 
-function cargarDatos(){
-  var xhr1=new XMLHttpRequest();
-  xhr1.open("GET","pokedata.json",true);
-  xhr1.onload=function(){
-    if(xhr1.status===200)pokedata=JSON.parse(xhr1.responseText);
-  };
-  xhr1.send();
-  
-  // Cargar datos de tipos
+        // Cargar los datos de los Pokémon y los tipos
+        function cargarDatos() {
+            // Cargar datos de Pokémon
+            var xhr1 = new XMLHttpRequest();
+            xhr1.open("GET", "pokedata.json", true);
+            xhr1.onreadystatechange = function() {
+                if (xhr1.readyState == 4 && xhr1.status == 200) {
+                    pokedata = JSON.parse(xhr1.responseText);
+                }
+            };
+            xhr1.send();
+            
+            // Cargar datos de tipos
             var xhr2 = new XMLHttpRequest();
             xhr2.open("GET", "types.json", true);
             xhr2.onreadystatechange = function() {
