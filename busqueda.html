@@ -96,6 +96,26 @@
         <input type="text" id="pokeInput">
         <button onclick="buscar()">Buscar</button>
     </div>
-<script src="busqueda.js"></script>
+<!-- En busqueda.html -->
+<script>
+  // Carga con fallback para 3DS
+  function cargarScript() {
+    var script = document.createElement('script');
+    script.src = 'busqueda.js?v=' + Date.now(); // Evita caché
+    script.onerror = function() {
+      // Fallback: Carga alternativa para 3DS
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', 'busqueda.js', true);
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          eval(xhr.responseText); // Ejecuta el código manualmente
+        }
+      };
+      xhr.send();
+    };
+    document.body.appendChild(script);
+  }
+  window.addEventListener('DOMContentLoaded', cargarScript);
+</script>
 </body>
 </html>
