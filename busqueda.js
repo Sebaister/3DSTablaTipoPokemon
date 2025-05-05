@@ -1,16 +1,10 @@
 var pokedata = [];
 var typeData = {};
 
-// Función global para cargar evoluciones (compatible con 3DS)
-function cargarEvolucion(pokemon) {
-    document.getElementById('pokeInput').value = pokemon;
-    buscar();
-    return false; // Previene el comportamiento por defecto del enlace
-}
 // Cargar los datos de los Pokémon y los tipos
 function cargarDatos() {
     var xhr1 = new XMLHttpRequest();
-    xhr1.open("GET", "pokedata.json", false);
+    xhr1.open("GET", "pokedata.json", true);
     xhr1.onreadystatechange = function () {
         if (xhr1.readyState == 4 && xhr1.status == 200) {
             pokedata = JSON.parse(xhr1.responseText);
@@ -19,7 +13,7 @@ function cargarDatos() {
     xhr1.send();
 
     var xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", "types.json", false);
+    xhr2.open("GET", "types.json", true);
     xhr2.onreadystatechange = function () {
         if (xhr2.readyState == 4 && xhr2.status == 200) {
             typeData = JSON.parse(xhr2.responseText);
@@ -213,7 +207,7 @@ function buscar() {
 
         if (pokemon.evolucion.length > 0) {
             var evo = pokemon.evolucion[0];
-            html += `<br><b>Evoluciona a:</b> <a href="javascript:void(0)" onclick="cargarEvolucion('${evo.b.toLowerCase()}')">${evo.b}</a><br><b>Condiciones:</b><br>`;
+            html += `<br><b>Evoluciona a:</b> ${evo.b}<br><b>Condiciones:</b><br>`;
             evo.condiciones.forEach(cond => {
                 html += `- ${cond}<br>`;
             });
@@ -224,20 +218,14 @@ function buscar() {
         info.innerHTML = html;
         resultado.style.display = "block";
         mostrarDetallesTipos(tipos);
-        info.addEventListener('click', function(e) {
-    if (e.target && e.target.classList.contains('evo-link')) {
-        document.getElementById('pokeInput').value = e.target.getAttribute('data-poke');
-        buscar();
-    }
-});
     } else {
         alert("Pokémon no encontrado.");
     }
 }
 
 // Iniciar al cargar
-    if (document.readyState === 'complete') {
-        cargarDatos();
-        } else {
-        document.addEventListener('DOMContentLoaded', cargarDatos);
-        }
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    cargarDatos();
+} else {
+    document.addEventListener('DOMContentLoaded', cargarDatos);
+}
