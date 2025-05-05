@@ -1,6 +1,12 @@
 var pokedata = [];
 var typeData = {};
 
+// Función global para cargar evoluciones (compatible con 3DS)
+function cargarEvolucion(pokemon) {
+    document.getElementById('pokeInput').value = pokemon;
+    buscar();
+    return false; // Previene el comportamiento por defecto del enlace
+}
 // Cargar los datos de los Pokémon y los tipos
 function cargarDatos() {
     var xhr1 = new XMLHttpRequest();
@@ -207,7 +213,7 @@ function buscar() {
 
         if (pokemon.evolucion.length > 0) {
             var evo = pokemon.evolucion[0];
-            html += `<br><b>Evoluciona a:</b> <span class="evo-link" data-poke="${evo.b.toLowerCase()}">${evo.b}</span><br><b>Condiciones:</b><br>`;
+            html += `<br><b>Evoluciona a:</b> <a href="javascript:void(0)" onclick="cargarEvolucion('${evo.b.toLowerCase()}')">${evo.b}</a><br><b>Condiciones:</b><br>`;
             evo.condiciones.forEach(cond => {
                 html += `- ${cond}<br>`;
             });
