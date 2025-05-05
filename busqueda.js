@@ -4,7 +4,7 @@ var typeData = {};
 // Cargar los datos de los Pokémon y los tipos
 function cargarDatos() {
     var xhr1 = new XMLHttpRequest();
-    xhr1.open("GET", "pokedata.json", true);
+    xhr1.open("GET", "pokedata.json", false);
     xhr1.onreadystatechange = function () {
         if (xhr1.readyState == 4 && xhr1.status == 200) {
             pokedata = JSON.parse(xhr1.responseText);
@@ -13,7 +13,7 @@ function cargarDatos() {
     xhr1.send();
 
     var xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", "types.json", true);
+    xhr2.open("GET", "types.json", false);
     xhr2.onreadystatechange = function () {
         if (xhr2.readyState == 4 && xhr2.status == 200) {
             typeData = JSON.parse(xhr2.responseText);
