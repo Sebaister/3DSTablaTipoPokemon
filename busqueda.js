@@ -230,8 +230,8 @@ function buscar() {
 }
 
 // Iniciar al cargar
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    cargarDatos();
-} else {
-    document.addEventListener('DOMContentLoaded', cargarDatos);
-}
+    if (document.readyState === 'complete') {
+        cargarDatos();
+        } else {
+        document.addEventListener('DOMContentLoaded', cargarDatos);
+        }
