@@ -1,6 +1,11 @@
-var pokedata = [];
+        var pokedata = [];
         var typeData = {};
-
+        // Función global para cargar evoluciones (compatible con 3DS)
+        function cargarEvolucion(pokemon) {
+        document.getElementById('pokeInput').value = pokemon;
+        buscar();
+        return false; // Previene el comportamiento por defecto del enlace
+        }
         // Cargar los datos de los Pokémon y los tipos
         function cargarDatos() {
             // Cargar datos de Pokémon
@@ -264,8 +269,7 @@ var pokedata = [];
 
                 if (pokemon.evolucion.length > 0) {
                     var evo = pokemon.evolucion[0];
-                    html += `<br><b>Evoluciona a:</b> <span class="evo-link" data-poke="${evo.b.toLowerCase()}">${evo.b}</span><br><b>Condiciones:</b><br>`;
-                    html += "<b>Condiciones:</b><br>";
+                    html += `<br><b>Evoluciona a:</b> <a href="javascript:void(0)" onclick="cargarEvolucion('${evo.b.toLowerCase()}')">${evo.b}</a><br><b>Condiciones:</b><br>`;
                     for (var j = 0; j < evo.condiciones.length; j++) {
                         html += "- " + evo.condiciones[j] + "<br>";
                     }
@@ -282,13 +286,7 @@ var pokedata = [];
                 // Mostrar interacciones de tipos
                 mostrarDetallesTipos(tipos);
                 // Delegación de eventos para 3DS
-                info.addEventListener('click', function(e) {
-                    if (e.target && e.target.classList.contains('evo-link')) {
-                    document.getElementById('pokeInput').value = e.target.getAttribute('data-poke');
-                    buscar();
-                }
-        });
-            } else {
+                } else {
                 alert("Pokémon no encontrado.");
             }
         }
