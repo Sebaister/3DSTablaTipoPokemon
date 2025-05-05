@@ -1,36 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Búsqueda de Pokémon</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: #f8f8f8;
-            padding: 10px;
-        }
-        input {
-            padding: 5px;
-            font-size: 14px;
-            width: 90%;
-        }
-        .pokemon-card {
-            border: 1px solid #ccc;
-            background: #fff;
-            padding: 10px;
-            margin-top: 10px;
-        }
-        img {
-            max-width: 96px;
-            height: auto;
-        }
-    </style>
+  <title>Pokémon - Búsqueda</title>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f2f2f2;
+      margin: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .pokemon {
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 5px;
+      margin-bottom: 5px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Buscar Pokémon</h1>
-    <input type="text" id="searchInput" placeholder="Escribe el nombre del Pokémon">
-    <div id="results"></div>
+  <h1>Buscar Pokémon</h1>
+  <input type="text" id="busqueda" placeholder="Escribe un nombre o número...">
+  <div id="resultados"></div>
 
-    <script src="busqueda.js"></script>
+  <script src="busqueda.js"></script>
 </body>
 </html>
