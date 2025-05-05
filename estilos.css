@@ -118,8 +118,8 @@ body {
             text-align: left;
             color: #CCC;
         }
-.evo-link {
-    color: #0066cc;
-    text-decoration: underline;
-    cursor: pointer;
-}
+        .evo-link {
+            color: #0066cc;
+            text-decoration: underline;
+            cursor: pointer;
+        }
