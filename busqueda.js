@@ -9,15 +9,19 @@ function cargarDatos(){
   };
   xhr1.send();
   
-  var xhr2=new XMLHttpRequest();
-  xhr2.open("GET","types.json",true);
-  xhr2.onload=function(){
-    if(xhr2.status===200){
-      typeData=JSON.parse(xhr2.responseText);
-      if(document.getElementById("pokeInput").value)buscar();
-    }
-  };
-  xhr2.send();
+  // Cargar datos de tipos
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open("GET", "types.json", true);
+            xhr2.onreadystatechange = function() {
+                if (xhr2.readyState == 4 && xhr2.status == 200) {
+                    typeData = JSON.parse(xhr2.responseText);
+                    // Forzar mostrar detalles después de cargar los datos
+                    if (document.getElementById("pokeInput").value) {
+                        buscar();
+                    }
+                }
+            };
+            xhr2.send();
 }
 
         // Traducción de las estadísticas
