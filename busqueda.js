@@ -1,4 +1,4 @@
-var pokedata = [];
+        var pokedata = [];
         var typeData = {};
 
         // Cargar los datos de los Pokémon y los tipos
@@ -26,7 +26,7 @@ var pokedata = [];
                 }
             };
             xhr2.send();
-}
+        }
 
         // Traducción de las estadísticas
         function traducirEstadisticas(stat) {
@@ -62,10 +62,8 @@ var pokedata = [];
 
         // Calcular interacciones de tipos combinados
         function calcularInteracciones(tipos) {
-  if (!typeData || !typeData.gen1 || !tipos || tipos.length === 0) {
-    console.error("Datos de tipos no cargados");
-    return null;
-  }      
+            if (!typeData.gen1 || tipos.length === 0) return null;
+            
             var gen = 'gen1'; // Por defecto usamos gen1 para máxima compatibilidad
             
             // Determinar la generación correcta
@@ -178,8 +176,7 @@ var pokedata = [];
             if (interacciones.immune.length > 0) {
                 html += '<div class="type-section"><strong>Inmune a:</strong><div class="type-list">';
                 for (var i = 0; i < interacciones.immune.length; i++) {
-                    html += '<div class="type-tag immune ' + interacciones.immune[i] + '">' + 
-        resolveElectricAndPsychicTypes(capitalizeFirstLetter(interacciones.immune[i])) + '</div>';
+                    html += '<div class="type-tag immune ' + interacciones.immune[i] + '">' + resolveElectricAndPsychicTypes(capitalizeFirstLetter(type)) + '</div>';
                 }
                 html += '</div></div>';
             }
