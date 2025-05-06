@@ -248,7 +248,7 @@
         }
 
         // Mostrar detalles de tipos
-        function mostrarDetallesTipos(tipos) {
+        function mostrarDetallesTipos(tipos, pokemon) {  // Añadimos el parámetro pokemon
             var detailsContainer = document.getElementById('typeDetails');
             detailsContainer.innerHTML = '';
             
@@ -402,7 +402,7 @@
                 resultado.style.display = "block";
                 
                 // Mostrar interacciones de tipos
-                mostrarDetallesTipos(tipos);
+                mostrarDetallesTipos(tipos, pokemon);  // Pasamos el pokemon como parámetro
             } else {
                 alert("Pokémon no encontrado.");
             }
