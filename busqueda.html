@@ -76,6 +76,15 @@
             width: 80px;
             margin: 3px;
         }
+        
+        .type-warning {
+            background-color: #444;
+            color: #ffeb3b;
+            padding: 5px;
+            margin: 5px 0;
+            border-radius: 3px;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -255,6 +264,17 @@
             }
             
             var html = '<div class="type-header">Interacciones de Tipo</div>';
+            
+            // Agregar advertencia para Pokémon con cambios de tipo entre generaciones
+            if (pokemon) {
+                if ((pokemon.id === 35 || pokemon.id === 36 || pokemon.id === 39 || pokemon.id === 40) && 
+                    tipos.includes('hada')) {
+                    html += '<div class="type-warning">⚠️ Este Pokémon obtuvo el tipo Hada en la 6ª generación</div>';
+                }
+                if (pokemon.id === 81 || pokemon.id === 82) {
+                    html += '<div class="type-warning">⚠️ Este Pokémon obtuvo el tipo Acero en la 2ª generación</div>';
+                }
+            }
             
             // Debilidades
             if (Object.keys(interacciones.weak).length > 0) {
