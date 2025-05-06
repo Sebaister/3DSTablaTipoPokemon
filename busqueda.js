@@ -223,13 +223,16 @@ function buscar() {
     }
 
     if (pokemon) {
+        // Determinar la generación y la carpeta de sprites
         var genFolder = determinarGeneracion(pokemon.id);
         img.src = "sprites/" + genFolder + "/" + pokemon.id + ".png";
-        img.onerror = function () {
+        
+        // Manejo de error si la imagen no existe - usa MissingNo
+        img.onerror = function() {
             this.src = "sprites/MissingNo.png";
         };
 
-        pokeName.innerHTML = pokemon.nombre;
+        pokeName.innerHTML = pokemon.id + ". " + pokemon.nombre;
 
         var html = "<b>Tipos:</b> ";
         var tipos = [];
