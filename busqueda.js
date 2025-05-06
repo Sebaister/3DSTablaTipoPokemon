@@ -81,7 +81,21 @@ function determinarGeneracion(id) {
 function calcularInteracciones(tipos) {
     if (!typeData.gen1 || tipos.length === 0) return null;
     
-    var gen = 'gen1';
+    // Determinar la generación basada en los tipos
+    var gen = 'gen6'; // Por defecto usamos la última gen para cálculos más precisos
+    
+    // Si es tipo Hada o tiene Hada como segundo tipo, usamos gen6
+    if (tipos.includes('hada')) {
+        gen = 'gen6';
+    }
+    // Si tiene Acero o Siniestro y no tiene Hada, usamos gen2
+    else if (tipos.includes('acero') || tipos.includes('siniestro')) {
+        gen = 'gen2';
+    }
+    // Si solo tiene tipos de gen1, usamos gen1
+    else if (tipos.every(tipo => !['acero', 'siniestro', 'hada'].includes(tipo))) {
+        gen = 'gen1';
+    }
     
     if (tipos.length > 1) {
         gen = 'gen2';
