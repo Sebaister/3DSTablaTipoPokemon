@@ -81,7 +81,21 @@ function determinarGeneracion(id) {
 function calcularInteracciones(tipos) {
     if (!typeData.gen1 || tipos.length === 0) return null;
     
-    var gen = 'gen1';
+    // Determinar la generación basada en los tipos
+    var gen = 'gen6'; // Por defecto usamos la última gen para cálculos más precisos
+    
+    // Si es tipo Hada o tiene Hada como segundo tipo, usamos gen6
+    if (tipos.includes('hada')) {
+        gen = 'gen6';
+    }
+    // Si tiene Acero o Siniestro y no tiene Hada, usamos gen2
+    else if (tipos.includes('acero') || tipos.includes('siniestro')) {
+        gen = 'gen2';
+    }
+    // Si solo tiene tipos de gen1, usamos gen1
+    else if (tipos.every(tipo => !['acero', 'siniestro', 'hada'].includes(tipo))) {
+        gen = 'gen1';
+    }
     
     if (tipos.length > 1) {
         gen = 'gen2';
@@ -217,7 +231,7 @@ function buscar() {
         var info = document.getElementById("pokeInfo");
         var resultado = document.getElementById("resultado");
         var pokeName = document.getElementById("pokeName");
-    
+        
         var pokemon = null;
     
         if (!isNaN(input)) {
@@ -238,45 +252,7 @@ function buscar() {
         }
     
         if (pokemon) {
-            var genFolder = determinarGeneracion(pokemon.id);
-            img.src = "sprites/" + genFolder + "/" + pokemon.id + ".png";
-            
-            img.onerror = function() {
-                this.src = "sprites/MissingNo.png";
-            };
-    
-            pokeName.innerHTML = pokemon.id + ". " + pokemon.nombre;
-    
-            var html = "<b>Tipos:</b> ";
-            var tipos = [];
-            for (var i = 0; i < pokemon.tipos.length; i++) {
-                var tipo = pokemon.tipos[i].toLowerCase();
-                tipos.push(tipo);
-                html += '<span class="type-btn ' + tipo + '">' + resolveElectricAndPsychicTypes(pokemon.tipos[i]) + '</span> ';
-            }
-    
-            html += "<br><a id='tablaTiposBtn' href='index.html'>Revisar tabla de tipos</a><br><br>";
-            html += "<b>Estadísticas:</b><br>";
-            var stats = pokemon.stats;
-            for (var stat in stats) {
-                html += traducirEstadisticas(stat) + ": " + stats[stat] + "<br>";
-            }
-    
-            if (pokemon.evolucion.length > 0) {
-                var evo = pokemon.evolucion[0];
-                html += "<br><b>Evoluciona a:</b> " + evo.b + "<br>";
-                html += "<b>Condiciones:</b><br>";
-                for (var j = 0; j < evo.condiciones.length; j++) {
-                    html += "- " + evo.condiciones[j] + "<br>";
-                }
-            } else {
-                html += "<br><b>Sin evoluciones.</b>";
-            }
-    
-            info.innerHTML = html;
-            resultado.style.display = "block";
-            
-            mostrarDetallesTipos(tipos);
+            mostrarPokemon(pokemon);
         } else {
             alert("Pokémon no encontrado.");
         }
@@ -285,6 +261,80 @@ function buscar() {
         return;
     }
 }
+
+function mostrarPokemon(pokemon) {
+    var img = document.getElementById("pokeImg");
+    var info = document.getElementById("pokeInfo");
+    var resultado = document.getElementById("resultado");
+    var pokeName = document.getElementById("pokeName");
+
+    var genFolder = determinarGeneracion(pokemon.id);
+    img.src = "sprites/" + genFolder + "/" + pokemon.id + ".png";
+    
+    img.onerror = function() {
+        this.src = "sprites/MissingNo.png";
+    };
+
+    pokeName.innerHTML = pokemon.id + ". " + pokemon.nombre;
+
+    var html = "<b>Tipos:</b> ";
+    var tipos = [];
+    for (var i = 0; i < pokemon.tipos.length; i++) {
+        var tipo = pokemon.tipos[i].toLowerCase();
+        tipos.push(tipo);
+        html += '<span class="type-btn ' + tipo + '">' + resolveElectricAndPsychicTypes(pokemon.tipos[i]) + '</span> ';
+    }
+
+    html += "<br><a id='tablaTiposBtn' href='index.html'>Revisar tabla de tipos</a><br><br>";
+    html += "<b>Estadísticas:</b><br>";
+    var stats = pokemon.stats;
+    for (var stat in stats) {
+        html += traducirEstadisticas(stat) + ": " + stats[stat] + "<br>";
+    }
+
+    if (pokemon.evolucion.length > 0) {
+        var evo = pokemon.evolucion[0];
+        html += "<br><b>Evoluciona a:</b> " + evo.b + "<br>";
+        html += "<b>Condiciones:</b><br>";
+        for (var j = 0; j < evo.condiciones.length; j++) {
+            html += "- " + evo.condiciones[j] + "<br>";
+        }
+    } else {
+        html += "<br><b>Sin evoluciones.</b>";
+    }
+
+    info.innerHTML = html;
+    resultado.style.display = "block";
+    
+    mostrarDetallesTipos(tipos);
+}
+
+// Agregar eventos para los botones de navegación
+document.getElementById('prevPokemon').addEventListener('click', function() {
+    var currentId = parseInt(document.getElementById('pokeImg').src.split('/').pop().split('.')[0]);
+    var prevId = currentId - 1;
+    if (prevId < 1) prevId = pokedata.length;
+    
+    for (var i = 0; i < pokedata.length; i++) {
+        if (pokedata[i].id === prevId) {
+            mostrarPokemon(pokedata[i]);
+            break;
+        }
+    }
+});
+
+document.getElementById('nextPokemon').addEventListener('click', function() {
+    var currentId = parseInt(document.getElementById('pokeImg').src.split('/').pop().split('.')[0]);
+    var nextId = currentId + 1;
+    if (nextId > pokedata.length) nextId = 1;
+    
+    for (var i = 0; i < pokedata.length; i++) {
+        if (pokedata[i].id === nextId) {
+            mostrarPokemon(pokedata[i]);
+            break;
+        }
+    }
+});
 
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
     cargarDatos();

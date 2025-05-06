@@ -144,6 +144,19 @@ h2 {
     margin-bottom: 10px;
 }
 
+.nav-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.nav-button {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
 #pokeImg {
     width: 160px;
     height: auto;
