@@ -245,7 +245,7 @@
                     this.src = "sprites/MissingNo.png";
                 };
 
-                pokeName.innerHTML = pokemon.nombre;
+                pokeName.innerHTML = pokemon.id + ". " + pokemon.nombre;
 
                 var html = "<b>Tipos:</b> ";
                 var tipos = [];
