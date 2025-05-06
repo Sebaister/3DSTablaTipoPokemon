@@ -280,7 +280,8 @@
             if (interacciones.immune.length > 0) {
                 html += '<div class="type-section"><strong>Inmune a:</strong><div class="type-list">';
                 for (var i = 0; i < interacciones.immune.length; i++) {
-                    html += '<div class="type-tag immune ' + interacciones.immune[i] + '">' + resolveElectricAndPsychicTypes(capitalizeFirstLetter(type)) + '</div>';
+                    var immuneType = interacciones.immune[i];
+                    html += '<div class="type-tag immune ' + immuneType + '">' + resolveElectricAndPsychicTypes(capitalizeFirstLetter(immuneType)) + '</div>';
                 }
                 html += '</div></div>';
             }
