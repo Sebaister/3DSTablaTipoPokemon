@@ -3,57 +3,58 @@
 <head>
     <title>Tablas de Tipos Pokémon</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=400">
+    <meta name="viewport" content="width=320">
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
     <h1>Tablas de Tipos Pokémon</h1>
     
     <div class="menu">
-        <a href="#gen1" class="button">Gen 1</a>
-        <a href="#gen2" class="button">Gen 2-5</a>
-        <a href="#gen6" class="button">Gen 6+</a>
-        <a href="busqueda.html" class="button">Buscar Pokémon</a>
+        <div class="button-container">
+            <a href="#gen1" class="button">Gen 1</a>
+            <a href="#gen2" class="button">Gen 2-5</a>
+            <a href="#gen6" class="button">Gen 6+</a>
+            <a href="busqueda.html" class="button">Buscar Pokémon</a>
+        </div>
     </div>
 
     <!-- GENERACIÓN 1 -->
     <div id="gen1" class="content">
-        <h2>Generación 1 (Rojo/Azul/Amarillo)</h2>
+        <h2>Generación 1</h2>
         <div class="type-menu" id="gen1-types"></div>
         <div id="gen1-details"></div>
-        <div style="text-align:center;margin:10px 0;">
+        <div class="button-back">
             <a href="#" class="button">Volver</a>
         </div>
     </div>
 
     <!-- GENERACIÓN 2-5 -->
     <div id="gen2" class="content">
-        <h2>Generaciones 2-5 (Oro/Plata a Negro/Blanco)</h2>
+        <h2>Generaciones 2-5</h2>
         <div class="type-menu" id="gen2-types"></div>
         <div id="gen2-details"></div>
-        <div style="text-align:center;margin:10px 0;">
+        <div class="button-back">
             <a href="#" class="button">Volver</a>
         </div>
     </div>
 
     <!-- GENERACIÓN 6+ -->
     <div id="gen6" class="content">
-        <h2>Generación 6+ (X/Y - Escarlata/Violeta)</h2>
+        <h2>Generación 6+</h2>
         <div class="note">
-            <strong>Cambios importantes:</strong><br>
-            • Tipo Hada añadido (fuerte contra Dragón, Siniestro y Lucha)<br>
-            • Acero ya no resiste Siniestro y Fantasma<br>
-            • Planta ya no resiste Hada<br>
-            • Nuevas inmunidades y debilidades ajustadas
+            <strong>Cambios:</strong><br>
+            • Tipo Hada añadido<br>
+            • Cambios en Acero<br>
+            • Cambios en Planta<br>
+            • Nuevas inmunidades
         </div>
         <div class="type-menu" id="gen6-types"></div>
         <div id="gen6-details"></div>
-        <div style="text-align:center;margin:10px 0;">
+        <div class="button-back">
             <a href="#" class="button">Volver</a>
         </div>
     </div>
 
-    <script src="types.json"></script>
     <script src="script.js"></script>
 </body>
 </html>

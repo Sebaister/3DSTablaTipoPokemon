@@ -99,44 +99,54 @@ function createTypeDetails(genId, typeData) {
     }
 }
 
-// Cargar datos (adaptado para 3DS)
+// Función para cargar datos (optimizada para 3DS)
 function loadData() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'types.json', true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                var data = JSON.parse(xhr.responseText);
-                
-                // Generación 1
-                var gen1Types = [];
-                for (var type in data.gen1) {
-                    if (data.gen1.hasOwnProperty(type)) gen1Types.push(type);
+                try {
+                    var data = JSON.parse(xhr.responseText);
+                    
+                    // Generación 1
+                    var gen1Types = Object.keys(data.gen1 || {});
+                    createTypeButtons('gen1', gen1Types);
+                    createTypeDetails('gen1', data.gen1);
+                    
+                    // Generación 2-5
+                    var gen2Types = Object.keys(data.gen2 || {});
+                    createTypeButtons('gen2', gen2Types);
+                    createTypeDetails('gen2', data.gen2);
+                    
+                    // Generación 6+
+                    var gen6Types = Object.keys(data.gen6 || {});
+                    createTypeButtons('gen6', gen6Types);
+                    createTypeDetails('gen6', data.gen6);
+                } catch (e) {
+                    console.error('Error al procesar los datos:', e);
+                    mostrarError('Error al cargar los datos');
                 }
-                createTypeButtons('gen1', gen1Types);
-                createTypeDetails('gen1', data.gen1);
-                
-                // Generación 2-5
-                var gen2Types = [];
-                for (var type in data.gen2) {
-                    if (data.gen2.hasOwnProperty(type)) gen2Types.push(type);
-                }
-                createTypeButtons('gen2', gen2Types);
-                createTypeDetails('gen2', data.gen2);
-                
-                // Generación 6+
-                var gen6Types = [];
-                for (var type in data.gen6) {
-                    if (data.gen6.hasOwnProperty(type)) gen6Types.push(type);
-                }
-                createTypeButtons('gen6', gen6Types);
-                createTypeDetails('gen6', data.gen6);
             } else {
-                console.error('Error loading types data');
+                mostrarError('Error al cargar los datos');
             }
         }
     };
+    xhr.onerror = function() {
+        mostrarError('Error de conexión');
+    };
     xhr.send();
+}
+
+// Función para mostrar errores de manera amigable
+function mostrarError(mensaje) {
+    var containers = ['gen1-types', 'gen2-types', 'gen6-types'];
+    containers.forEach(function(id) {
+        var container = document.getElementById(id);
+        if (container) {
+            container.innerHTML = '<div class="error">' + mensaje + '</div>';
+        }
+    });
 }
 
 // Iniciar cuando el DOM esté listo

@@ -3,7 +3,7 @@
     "normal": {
       "weak": ["lucha"],
       "immune": ["fantasma"],
-      "note": "Movimientos Normales no afectan a Fantasmas, excepto con Fuerza Equina"
+      "note": "Movimientos Normales no afectan a Fantasmas"
     },
     "fuego": {
       "weak": ["agua", "tierra", "roca"],
@@ -279,7 +279,7 @@
       "weak": ["hielo", "dragon", "hada"],
       "resist": ["fuego", "agua", "planta", "electrico"],
       "strong": ["dragon"],
-      "immune": ["hada"]
+      "note": "En Gen 1, los movimientos tipo Dragón hacían daño fijo de 40 PS"
     }
   }
 }
