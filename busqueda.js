@@ -289,3 +289,56 @@
         } else {
             document.addEventListener('DOMContentLoaded', cargarDatos);
         }
+// ... existing code ...
+
+function navegarPokemon(direccion) {
+    var pokemonActual = document.getElementById("pokeInput").value.toLowerCase();
+    var pokemon = pokedata.find(p => p.nombre.toLowerCase() === pokemonActual);
+    
+    if (pokemon) {
+        var idActual = pokemon.id;
+        var nuevoId = idActual + direccion;
+        
+        // Buscar el siguiente/anterior Pokémon
+        var nuevoPokemon = pokedata.find(p => p.id === nuevoId);
+        
+        if (nuevoPokemon) {
+            document.getElementById("pokeInput").value = nuevoPokemon.nombre;
+            buscar();
+        }
+    }
+}
+
+function actualizarBotonesNavegacion(pokemon) {
+    var prevButton = document.getElementById("prevButton");
+    var nextButton = document.getElementById("nextButton");
+    
+    if (pokemon) {
+        // Ocultar botón anterior si es el primer Pokémon
+        prevButton.style.display = pokemon.id === 1 ? "none" : "inline";
+        
+        // Ocultar botón siguiente si es el último Pokémon
+        var ultimoId = Math.max(...pokedata.map(p => p.id));
+        nextButton.style.display = pokemon.id === ultimoId ? "none" : "inline";
+    } else {
+        // Ocultar ambos botones si no hay Pokémon seleccionado
+        prevButton.style.display = "none";
+        nextButton.style.display = "none";
+    }
+}
+
+// Modificar la función buscar existente para incluir la actualización de los botones
+function buscar() {
+    var input = document.getElementById("pokeInput").value.toLowerCase();
+    var pokemon = pokedata.find(p => p.nombre.toLowerCase() === input);
+    
+    // ... existing code ...
+    
+    actualizarBotonesNavegacion(pokemon);
+}
+
+// Agregar al cargarDatos para inicializar los botones
+function cargarDatos() {
+    // ... existing code ...
+    actualizarBotonesNavegacion(null);
+}
