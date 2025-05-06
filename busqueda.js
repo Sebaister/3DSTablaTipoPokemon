@@ -3,11 +3,25 @@ var typeData = {};
 
 // Cargar los datos de los Pokémon y los tipos
 function cargarDatos() {
+    function handleError(xhr) {
+        if (xhr.status !== 200) {
+            alert("Error al cargar datos. Por favor, intenta de nuevo.");
+        }
+    }
+
     var xhr1 = new XMLHttpRequest();
     xhr1.open("GET", "pokedata.json", true);
     xhr1.onreadystatechange = function () {
-        if (xhr1.readyState == 4 && xhr1.status == 200) {
-            pokedata = JSON.parse(xhr1.responseText);
+        if (xhr1.readyState == 4) {
+            if (xhr1.status == 200) {
+                try {
+                    pokedata = JSON.parse(xhr1.responseText);
+                } catch (e) {
+                    alert("Error al procesar datos");
+                }
+            } else {
+                handleError(xhr1);
+            }
         }
     };
     xhr1.send();
@@ -184,43 +198,48 @@ function buscar() {
     }
 
     if (pokemon) {
-        // Determinar la generación y la carpeta de sprites
-        var genFolder = determinarGeneracion(pokemon.id);
-        img.src = "sprites/" + genFolder + "/" + pokemon.id + ".png";
-        
-        // Manejo de error si la imagen no existe - usa MissingNo
-        img.onerror = function() {
-            this.src = "sprites/MissingNo.png";
-        };
+        try {
+            var genFolder = determinarGeneracion(pokemon.id);
+            img.src = "sprites/" + genFolder + "/" + pokemon.id + ".png";
+            
+            // Precarga de imagen para mejor rendimiento
+            var tempImg = new Image();
+            tempImg.onerror = function() {
+                img.src = "sprites/MissingNo.png";
+            };
+            tempImg.src = img.src;
+            
+            pokeName.innerHTML = pokemon.nombre;
 
-        pokeName.innerHTML = pokemon.id + ". " + pokemon.nombre;
-
-        var html = "<b>Tipos:</b> ";
-        var tipos = [];
-        pokemon.tipos.forEach(tipo => {
-            tipos.push(tipo.toLowerCase());
-            html += `<span class="type-btn ${tipo.toLowerCase()}">${resolveElectricAndPsychicTypes(tipo)}</span> `;
-        });
-
-        html += "<br><a id='tablaTiposBtn' href='index.html'>Revisar tabla de tipos</a><br><br>";
-        html += "<b>Estadísticas:</b><br>";
-        for (var stat in pokemon.stats) {
-            html += `${traducirEstadisticas(stat)}: ${pokemon.stats[stat]}<br>`;
-        }
-
-        if (pokemon.evolucion.length > 0) {
-            var evo = pokemon.evolucion[0];
-            html += `<br><b>Evoluciona a:</b> ${evo.b}<br><b>Condiciones:</b><br>`;
-            evo.condiciones.forEach(cond => {
-                html += `- ${cond}<br>`;
+            var html = "<b>Tipos:</b> ";
+            var tipos = [];
+            pokemon.tipos.forEach(tipo => {
+                tipos.push(tipo.toLowerCase());
+                html += `<span class="type-btn ${tipo.toLowerCase()}">${resolveElectricAndPsychicTypes(tipo)}</span> `;
             });
-        } else {
-            html += "<br><b>Sin evoluciones.</b>";
-        }
 
-        info.innerHTML = html;
-        resultado.style.display = "block";
-        mostrarDetallesTipos(tipos);
+            html += "<br><a id='tablaTiposBtn' href='index.html'>Revisar tabla de tipos</a><br><br>";
+            html += "<b>Estadísticas:</b><br>";
+            for (var stat in pokemon.stats) {
+                html += `${traducirEstadisticas(stat)}: ${pokemon.stats[stat]}<br>`;
+            }
+
+            if (pokemon.evolucion.length > 0) {
+                var evo = pokemon.evolucion[0];
+                html += `<br><b>Evoluciona a:</b> ${evo.b}<br><b>Condiciones:</b><br>`;
+                evo.condiciones.forEach(cond => {
+                    html += `- ${cond}<br>`;
+                });
+            } else {
+                html += "<br><b>Sin evoluciones.</b>";
+            }
+
+            info.innerHTML = html;
+            resultado.style.display = "block";
+            mostrarDetallesTipos(tipos);
+        } catch (e) {
+            alert("Error al mostrar el Pokémon");
+        }
     } else {
         alert("Pokémon no encontrado.");
     }
