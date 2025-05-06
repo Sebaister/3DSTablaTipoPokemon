@@ -402,7 +402,7 @@
                 resultado.style.display = "block";
                 
                 // Mostrar interacciones de tipos
-                mostrarDetallesTipos(pokemon.tipos.map(t => t.toLowerCase()), pokemon);
+                mostrarDetallesTipos(tipos, pokemon);  // Pasamos el array tipos que ya creamos
             } else {
                 alert("Pokémon no encontrado.");
             }
