@@ -163,7 +163,7 @@ function mostrarDetallesTipos(tipos) {
     if (interacciones.immune.length > 0) {
         html += '<div class="type-section"><strong>Inmune a:</strong><div class="type-list">';
         interacciones.immune.forEach(type => {
-            html += `<div class="type-tag immune ${type}">${resolveElectricAndPsychicTypes(capitalizeFirstLetter(type))}</div>`;
+            html += '<div class="type-tag immune ' + type + '">' + resolveElectricAndPsychicTypes(capitalizeFirstLetter(type)) + '</div>';
         });
         html += '</div></div>';
     }
