@@ -167,47 +167,8 @@ function mostrarDetallesTipos(tipos) {
 }
 
 // Buscar Pokémon
-function navegarPokemon(direccion) {
-    var pokemonActual = document.getElementById("pokeInput").value.toLowerCase();
-    var pokemon = pokedata.find(p => p.nombre.toLowerCase() === pokemonActual);
-    
-    if (pokemon) {
-        var idActual = pokemon.id;
-        var nuevoId = idActual + direccion;
-        
-        // Buscar el siguiente/anterior Pokémon
-        var nuevoPokemon = pokedata.find(p => p.id === nuevoId);
-        
-        if (nuevoPokemon) {
-            document.getElementById("pokeInput").value = nuevoPokemon.nombre;
-            buscar();
-        }
-    }
-}
-
-function actualizarBotonesNavegacion(pokemon) {
-    var prevButton = document.getElementById("prevButton");
-    var nextButton = document.getElementById("nextButton");
-    
-    if (pokemon) {
-        // Ocultar botón anterior si es el primer Pokémon
-        prevButton.style.display = pokemon.id === 1 ? "none" : "inline";
-        
-        // Ocultar botón siguiente si es el último Pokémon
-        var ultimoId = Math.max(...pokedata.map(p => p.id));
-        nextButton.style.display = pokemon.id === ultimoId ? "none" : "inline";
-    } else {
-        // Ocultar ambos botones si no hay Pokémon seleccionado
-        prevButton.style.display = "none";
-        nextButton.style.display = "none";
-    }
-}
-
-// Modificar la función buscar existente para incluir la actualización de los botones
 function buscar() {
-    var input = document.getElementById("pokeInput").value.toLowerCase();
-    var pokemon = pokedata.find(p => p.nombre.toLowerCase() === input);
-    
+    var input = document.getElementById("pokeInput").value.trim().toLowerCase();
     var img = document.getElementById("pokeImg");
     var info = document.getElementById("pokeInfo");
     var resultado = document.getElementById("resultado");
@@ -260,32 +221,6 @@ function buscar() {
     } else {
         alert("Pokémon no encontrado.");
     }
-
-    actualizarBotonesNavegacion(pokemon);
-}
-
-// Agregar al cargarDatos para inicializar los botones
-function cargarDatos() {
-    var xhr1 = new XMLHttpRequest();
-    xhr1.open("GET", "pokedata.json", true);
-    xhr1.onreadystatechange = function () {
-        if (xhr1.readyState == 4 && xhr1.status == 200) {
-            pokedata = JSON.parse(xhr1.responseText);
-        }
-    };
-    xhr1.send();
-
-    var xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", "types.json", true);
-    xhr2.onreadystatechange = function () {
-        if (xhr2.readyState == 4 && xhr2.status == 200) {
-            typeData = JSON.parse(xhr2.responseText);
-            if (document.getElementById("pokeInput").value) {
-                buscar();
-            }
-        }
-    };
-    xhr2.send();
 }
 
 // Iniciar al cargar
