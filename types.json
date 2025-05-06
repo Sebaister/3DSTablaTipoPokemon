@@ -182,7 +182,7 @@
   "gen6": {
     "hada": {
       "weak": ["veneno", "acero"],
-      "resist": ["lucha", "bicho", "siniestro", "dragon"],
+      "resist": ["lucha", "bicho", "siniestro"],
       "strong": ["lucha", "dragon", "siniestro"],
       "immune": ["dragon"],
       "note": "Introducido en Gen 6 para balancear el tipo Dragón y Siniestro"
@@ -278,8 +278,8 @@
     "dragon": {
       "weak": ["hielo", "dragon", "hada"],
       "resist": ["fuego", "agua", "planta", "electrico"],
-      "strong": ["dragon"]
-      // Eliminar la línea "immune": ["hada"]
+      "strong": ["dragon"],
+      "immune": ["hada"]
     }
   }
 }
