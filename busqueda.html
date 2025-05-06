@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Buscar Pokémon</title>
-    <meta name="viewport" content="width=320, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="estilos.css">
     <style>
         /* Estilos específicos para la página de búsqueda */
@@ -76,15 +76,6 @@
             width: 80px;
             margin: 3px;
         }
-        
-        .type-warning {
-            background-color: #444;
-            color: #ffeb3b;
-            padding: 5px;
-            margin: 5px 0;
-            border-radius: 3px;
-            font-size: 12px;
-        }
     </style>
 </head>
 <body>
@@ -130,12 +121,11 @@
             var xhr2 = new XMLHttpRequest();
             xhr2.open("GET", "types.json", true);
             xhr2.onreadystatechange = function() {
-                if (xhr2.readyState == 4) {
-                    if (xhr2.status == 200) {
-                        typeData = JSON.parse(xhr2.responseText);
-                        console.log("Datos de tipos cargados:", typeData);
-                    } else {
-                        console.error("Error al cargar types.json. Estado:", xhr2.status);
+                if (xhr2.readyState == 4 && xhr2.status == 200) {
+                    typeData = JSON.parse(xhr2.responseText);
+                    // Forzar mostrar detalles después de cargar los datos
+                    if (document.getElementById("pokeInput").value) {
+                        buscar();
                     }
                 }
             };
@@ -249,7 +239,7 @@
         }
 
         // Mostrar detalles de tipos
-        function mostrarDetallesTipos(tipos, pokemon) {  // Añadimos el parámetro pokemon
+        function mostrarDetallesTipos(tipos) {
             var detailsContainer = document.getElementById('typeDetails');
             detailsContainer.innerHTML = '';
             
@@ -265,17 +255,6 @@
             }
             
             var html = '<div class="type-header">Interacciones de Tipo</div>';
-            
-            // Agregar advertencia para Pokémon con cambios de tipo entre generaciones
-            if (pokemon) {
-                if ((pokemon.id === 35 || pokemon.id === 36 || pokemon.id === 39 || pokemon.id === 40) && 
-                    tipos.includes('hada')) {
-                    html += '<div class="type-warning">⚠️ Este Pokémon obtuvo el tipo Hada en la 6ª generación</div>';
-                }
-                if (pokemon.id === 81 || pokemon.id === 82) {
-                    html += '<div class="type-warning">⚠️ Este Pokémon obtuvo el tipo Acero en la 2ª generación</div>';
-                }
-            }
             
             // Debilidades
             if (Object.keys(interacciones.weak).length > 0) {
@@ -301,8 +280,7 @@
             if (interacciones.immune.length > 0) {
                 html += '<div class="type-section"><strong>Inmune a:</strong><div class="type-list">';
                 for (var i = 0; i < interacciones.immune.length; i++) {
-                    var immuneType = interacciones.immune[i];
-                    html += '<div class="type-tag immune ' + immuneType + '">' + resolveElectricAndPsychicTypes(capitalizeFirstLetter(immuneType)) + '</div>';
+                    html += '<div class="type-tag immune ' + interacciones.immune[i] + '">' + resolveElectricAndPsychicTypes(capitalizeFirstLetter(type)) + '</div>';
                 }
                 html += '</div></div>';
             }
@@ -371,7 +349,7 @@
                     this.src = "sprites/MissingNo.png";
                 };
 
-                pokeName.innerHTML = pokemon.id + ". " + pokemon.nombre;
+                pokeName.innerHTML = pokemon.nombre;
 
                 var html = "<b>Tipos:</b> ";
                 var tipos = [];
@@ -403,7 +381,7 @@
                 resultado.style.display = "block";
                 
                 // Mostrar interacciones de tipos
-                mostrarDetallesTipos(tipos, pokemon);  // Pasamos el array tipos que ya creamos
+                mostrarDetallesTipos(tipos);
             } else {
                 alert("Pokémon no encontrado.");
             }
