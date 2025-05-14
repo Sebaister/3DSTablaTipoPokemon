@@ -116,6 +116,12 @@ function calcularInteracciones(tipos) {
     
     for (var i = 0; i < tipos.length; i++) {
         var tipo = tipos[i].toLowerCase();
+        
+        // Normalizar tipos con acento para la búsqueda en typeData
+        if (tipo === 'dragón') tipo = 'dragon';
+        if (tipo === 'eléctrico') tipo = 'electrico';
+        if (tipo === 'psíquico') tipo = 'psiquico';
+        
         if (!typeData[gen] || !typeData[gen][tipo]) continue;
         var data = typeData[gen][tipo];
         
@@ -182,7 +188,7 @@ function mostrarDetallesTipos(tipos) {
         html.push('<div class="type-section"><strong>Débil contra:</strong><div class="type-list">');
         for (var type in interacciones.weak) {
             var multiplier = interacciones.weak[type] > 1 ? ' (x4)' : ' (x2)';
-            html.push('<div class="type-tag weak ' + type + '">' + resolveElectricAndPsychicTypes(capitalizeFirstLetter(type)) + multiplier + '</div>');
+            html.push('<div class="type-tag weak ' + type + '">' + formatearNombresTipos(capitalizeFirstLetter(type)) + multiplier + '</div>');
         }
         html.push('</div></div>');
     }
@@ -191,7 +197,7 @@ function mostrarDetallesTipos(tipos) {
         html.push('<div class="type-section"><strong>Resistente a:</strong><div class="type-list">');
         for (var type in interacciones.resist) {
             var multiplier = interacciones.resist[type] > 1 ? ' (x1/4)' : ' (x1/2)';
-            html.push('<div class="type-tag resist ' + type + '">' + resolveElectricAndPsychicTypes(capitalizeFirstLetter(type)) + multiplier + '</div>');
+            html.push('<div class="type-tag resist ' + type + '">' + formatearNombresTipos(capitalizeFirstLetter(type)) + multiplier + '</div>');
         }
         html.push('</div></div>');
     }
@@ -200,7 +206,7 @@ function mostrarDetallesTipos(tipos) {
         html.push('<div class="type-section"><strong>Inmune a:</strong><div class="type-list">');
         for (var i = 0; i < interacciones.immune.length; i++) {
             var immuneType = interacciones.immune[i];
-            html.push('<div class="type-tag immune ' + immuneType + '">' + resolveElectricAndPsychicTypes(capitalizeFirstLetter(immuneType)) + '</div>');
+            html.push('<div class="type-tag immune ' + immuneType + '">' + formatearNombresTipos(capitalizeFirstLetter(immuneType)) + '</div>');
         }
         html.push('</div></div>');
     }
@@ -208,7 +214,7 @@ function mostrarDetallesTipos(tipos) {
     if (Object.keys(interacciones.strong).length > 0) {
         html.push('<div class="type-section"><strong>Fuerte contra:</strong><div class="type-list">');
         for (var type in interacciones.strong) {
-            html.push('<div class="type-tag strong ' + type + '">' + resolveElectricAndPsychicTypes(capitalizeFirstLetter(type)) + '</div>');
+            html.push('<div class="type-tag strong ' + type + '">' + formatearNombresTipos(capitalizeFirstLetter(type)) + '</div>');
         }
         html.push('</div></div>');
     }
@@ -217,14 +223,34 @@ function mostrarDetallesTipos(tipos) {
     detailsContainer.style.display = 'block';
 }
 
-function resolveElectricAndPsychicTypes(type) {
-    if(type === "Electrico") {
+function formatearNombresTipos(type) {
+    // Primero normalizamos el tipo a minúsculas
+    var typeLower = type.toLowerCase();
+    
+    // Casos especiales para tipos sin acento
+    if(typeLower === "electrico") {
         return "Eléctrico";
     } 
-    if(type === "Psiquico") {
+    if(typeLower === "psiquico") {
         return "Psíquico";
     }
-    return type; // Simplificado el else
+    if(typeLower === "dragon") {
+        return "Dragón";
+    }
+    
+    // Casos especiales para tipos que ya vienen con acento
+    if(typeLower === "dragón") {
+        return "Dragón";
+    }
+    if(typeLower === "eléctrico") {
+        return "Eléctrico";
+    }
+    if(typeLower === "psíquico") {
+        return "Psíquico";
+    }
+    
+    // Para cualquier otro tipo, capitalizamos la primera letra
+    return type.charAt(0).toUpperCase() + type.slice(1);
 }
 
 function buscar() {
@@ -291,7 +317,14 @@ function buscar() {
         for (var i = 0; i < pokemon.tipos.length; i++) {
             var tipo = pokemon.tipos[i].toLowerCase();
             tipos.push(tipo);
-            infoHtml += '<span class="type-btn ' + tipo + '">' + resolveElectricAndPsychicTypes(tipo) + '</span> ';
+            
+            // Normalizar el tipo para la clase CSS
+            var tipoClase = tipo;
+            if (tipo === 'dragón') tipoClase = 'dragon';
+            if (tipo === 'eléctrico') tipoClase = 'electrico';
+            if (tipo === 'psíquico') tipoClase = 'psiquico';
+            
+            infoHtml += '<span class="type-btn ' + tipoClase + '">' + formatearNombresTipos(tipo) + '</span> ';
         }
 
         infoHtml += "<br><a href='index.html' class='table-button'>Revisar tabla de tipos</a><br>";
