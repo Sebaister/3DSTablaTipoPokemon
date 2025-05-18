@@ -22,6 +22,29 @@
             text-decoration: none;
             border-radius: 5px;
         }
+        
+        /* Estilos para autocompletar */
+        .sugerencias-container {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            max-width: 200px;
+            z-index: 100;
+            display: none;
+        }
+        
+        .sugerencia-item {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        
+        .sugerencia-item:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .sugerencia-item.selected {
+            background-color: #e0e0e0;
+        }
     </style>
 </head>
 <body>
@@ -64,3 +87,8 @@
     <script src="busqueda.js"></script>
 </body>
 </html>
+<style>
+    .sugerencia-item.selected {
+        background-color: #e0e0e0;
+    }
+</style>

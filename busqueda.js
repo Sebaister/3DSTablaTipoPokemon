@@ -391,12 +391,109 @@ function navegarPokemon(direccion) {
     }
 }
 
+// Función para autocompletar
+function autocompletar() {
+    var input = document.getElementById("pokeInput");
+    var searchValue = input.value.toLowerCase();
+    
+    // Limpiar sugerencias anteriores
+    var sugerenciasContainer = document.getElementById("sugerencias");
+    if (!sugerenciasContainer) {
+        sugerenciasContainer = document.createElement("div");
+        sugerenciasContainer.id = "sugerencias";
+        sugerenciasContainer.className = "sugerencias-container";
+        input.parentNode.insertBefore(sugerenciasContainer, input.nextSibling);
+    } else {
+        sugerenciasContainer.innerHTML = "";
+    }
+    
+    // Si el campo está vacío, no mostrar sugerencias
+    if (!searchValue) {
+        sugerenciasContainer.style.display = "none";
+        return;
+    }
+    
+    // Buscar coincidencias
+    var coincidencias = [];
+    for (var i = 0; i < pokedata.length && coincidencias.length < 5; i++) {
+        if (pokedata[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
+            coincidencias.push(pokedata[i]);
+        }
+    }
+    
+    // Mostrar sugerencias
+    if (coincidencias.length > 0) {
+        sugerenciasContainer.style.display = "block";
+        for (var i = 0; i < coincidencias.length; i++) {
+            var sugerencia = document.createElement("div");
+            sugerencia.className = "sugerencia-item";
+            sugerencia.innerHTML = coincidencias[i].nombre;
+            
+            // Función para seleccionar sugerencia
+            (function(nombre) {
+                sugerencia.onclick = function() {
+                    input.value = nombre;
+                    sugerenciasContainer.style.display = "none";
+                    buscar();
+                };
+            })(coincidencias[i].nombre);
+            
+            sugerenciasContainer.appendChild(sugerencia);
+        }
+    } else {
+        sugerenciasContainer.style.display = "none";
+    }
+}
+
 // Código extraído del script en el HTML
 // Asegurarnos de que los datos se carguen al inicio
-window.onload = cargarDatos;
+window.onload = function() {
+    cargarDatos();
+    
+    // Agregar evento para autocompletar
+    var input = document.getElementById("pokeInput");
+    if (input) {
+        input.addEventListener("input", autocompletar);
+        // Ocultar sugerencias al perder el foco
+        input.addEventListener("blur", function() {
+            setTimeout(function() {
+                var sugerencias = document.getElementById("sugerencias");
+                if (sugerencias) {
+                    sugerencias.style.display = "none";
+                }
+            }, 200); // Pequeño retraso para permitir clic en sugerencias
+        });
+    }
+};
+
+// Consideraciones para Nintendo 3DS
+
+Esta implementación es compatible con el navegador de Nintendo 3DS porque:
+
+1. No utiliza características modernas de JavaScript como `fetch`, `Promise` o arrow functions
+2. Usa manipulación DOM básica que es compatible con navegadores antiguos
+3. Mantiene un rendimiento ligero con un límite de 5 sugerencias
+4. Usa eventos básicos como `input`, `blur` y `click` que son compatibles con el navegador de 3DS
+5. No depende de bibliotecas externas
+
+## Navegación con D-pad
+
+También podemos mejorar la navegación para que funcione con el D-pad de la 3DS, permitiendo navegar por las sugerencias:
 
 // Añadir manejo de teclas para navegación
 document.addEventListener('keydown', function(event) {
+    var sugerencias = document.getElementById("sugerencias");
+    var items = sugerencias ? sugerencias.getElementsByClassName("sugerencia-item") : [];
+    var selectedIndex = -1;
+    
+    // Buscar elemento seleccionado actualmente
+    for (var i = 0; i < items.length; i++) {
+        if (items[i].classList.contains("selected")) {
+            selectedIndex = i;
+            break;
+        }
+    }
+    
     // Tecla izquierda
     if (event.keyCode === 37) {
         document.getElementById('prevPokemon').focus();
@@ -405,8 +502,34 @@ document.addEventListener('keydown', function(event) {
     else if (event.keyCode === 39) {
         document.getElementById('nextPokemon').focus();
     }
-    // Tecla A (generalmente es Enter en navegadores)
-    else if (event.keyCode === 13 && document.activeElement.tagName === 'BUTTON') {
-        document.activeElement.click();
+    // Tecla abajo (para navegar por sugerencias)
+    else if (event.keyCode === 40 && sugerencias && sugerencias.style.display !== "none") {
+        event.preventDefault();
+        if (selectedIndex < items.length - 1) {
+            if (selectedIndex >= 0) {
+                items[selectedIndex].classList.remove("selected");
+            }
+            items[selectedIndex + 1].classList.add("selected");
+        }
+    }
+    // Tecla arriba (para navegar por sugerencias)
+    else if (event.keyCode === 38 && sugerencias && sugerencias.style.display !== "none") {
+        event.preventDefault();
+        if (selectedIndex > 0) {
+            items[selectedIndex].classList.remove("selected");
+            items[selectedIndex - 1].classList.add("selected");
+        }
+    }
+    // Tecla Enter
+    else if (event.keyCode === 13) {
+        if (sugerencias && sugerencias.style.display !== "none" && selectedIndex >= 0) {
+            // Seleccionar sugerencia
+            var input = document.getElementById("pokeInput");
+            input.value = items[selectedIndex].innerHTML;
+            sugerencias.style.display = "none";
+            buscar();
+        } else if (document.activeElement.tagName === 'BUTTON') {
+            document.activeElement.click();
+        }
     }
 });
