@@ -193,7 +193,7 @@ h2 {
 #search-container {
     padding: 2px 0;
     text-align: center;
-    position: fixed !important; /* Forzar posición fija */
+    position: fixed !important;
     bottom: 0;
     left: 0;
     right: 0;
@@ -201,7 +201,7 @@ h2 {
     border-top: 1px solid #444;
     height: auto;
     min-height: 40px;
-    z-index: 1000; /* Asegurar que esté por encima de otros elementos */
+    z-index: 1000;
 }
 
 #search-container h1 {
@@ -214,7 +214,7 @@ h2 {
 
 #resultado {
     padding: 6px;
-    margin-bottom: 45px; /* Ajustado según la nueva altura */
+    margin-bottom: 45px;
     text-align: center;
 }
 
@@ -225,14 +225,6 @@ h2 {
     align-items: center;
 }
 
-.nav-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-/* Estilos para las flechas de navegación */
 .nav-container {
     display: flex;
     align-items: center;
@@ -250,7 +242,6 @@ h2 {
     margin: 0 5px;
 }
 
-/* Estilos para los botones de navegación */
 .nav-button {
     background: none;
     border: none;
@@ -301,16 +292,6 @@ h2 {
     text-align: left;
     width: 300px;
     margin: 10px auto;
-}
-
-#tablaTiposBtn {
-    background-color: #444;
-    padding: 5px;
-    color: #FFF;
-    font-size: 10px;
-    text-decoration: none;
-    margin-top: 10px;
-    display: inline-block;
 }
 
 input[type="text"] {
@@ -378,13 +359,13 @@ button {
     background-color: white;
     border: 1px solid #ccc;
     max-width: 200px;
-    z-index: 1001; /* Mayor que el z-index del search-container */
+    z-index: 1001;
     display: none;
-    bottom: 100%; /* Posicionar encima del campo de búsqueda */
+    bottom: 100%;
     left: 50%;
-    transform: translateX(-50%); /* Centrar horizontalmente */
-    margin-bottom: 5px; /* Espacio entre las sugerencias y el campo */
-    color: #000; /* Asegurar que el texto sea visible en fondo blanco */
+    transform: translateX(-50%);
+    margin-bottom: 5px;
+    color: #000;
 }
 
 .sugerencia-item {
