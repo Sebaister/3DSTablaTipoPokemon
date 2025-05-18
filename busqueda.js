@@ -281,6 +281,10 @@ function buscar() {
             } else if (pokedata[i].nombre.toLowerCase() === searchValue) {
                 pokemon = pokedata[i];
                 break;
+            } else if (pokedata[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
+                // Buscar coincidencias que comiencen con el texto ingresado
+                pokemon = pokedata[i];
+                break;
             }
         }
 
