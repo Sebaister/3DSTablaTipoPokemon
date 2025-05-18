@@ -393,7 +393,6 @@ function navegarPokemon(direccion) {
     }
 }
 
-// Función para autocompletar
 function autocompletar() {
     var input = document.getElementById("pokeInput");
     var searchValue = input.value.toLowerCase();
@@ -404,7 +403,9 @@ function autocompletar() {
         sugerenciasContainer = document.createElement("div");
         sugerenciasContainer.id = "sugerencias";
         sugerenciasContainer.className = "sugerencias-container";
-        input.parentNode.insertBefore(sugerenciasContainer, input.nextSibling);
+        // Insertar antes del input para que aparezca encima
+        var formElement = input.parentNode;
+        formElement.insertBefore(sugerenciasContainer, formElement.firstChild);
     } else {
         sugerenciasContainer.innerHTML = "";
     }
