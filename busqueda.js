@@ -255,6 +255,8 @@ function formatearNombresTipos(type) {
 
 function buscar() {
     try {
+        // Eliminada alerta de depuración
+        
         if (!pokedata || !pokedata.length) {
             alert("No hay datos cargados");
             return;
@@ -445,8 +447,7 @@ function autocompletar() {
     }
 }
 
-// Código extraído del script en el HTML
-// Asegurarnos de que los datos se carguen al inicio
+// Código para cargar datos al inicio
 window.onload = function() {
     cargarDatos();
     
@@ -465,20 +466,6 @@ window.onload = function() {
         });
     }
 };
-
-// Consideraciones para Nintendo 3DS
-
-Esta implementación es compatible con el navegador de Nintendo 3DS porque:
-
-1. No utiliza características modernas de JavaScript como `fetch`, `Promise` o arrow functions
-2. Usa manipulación DOM básica que es compatible con navegadores antiguos
-3. Mantiene un rendimiento ligero con un límite de 5 sugerencias
-4. Usa eventos básicos como `input`, `blur` y `click` que son compatibles con el navegador de 3DS
-5. No depende de bibliotecas externas
-
-## Navegación con D-pad
-
-También podemos mejorar la navegación para que funcione con el D-pad de la 3DS, permitiendo navegar por las sugerencias:
 
 // Añadir manejo de teclas para navegación
 document.addEventListener('keydown', function(event) {
