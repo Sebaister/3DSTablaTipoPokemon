@@ -508,8 +508,8 @@ window.onload = function() {
     document.addEventListener('keydown', manejarTeclas);
 };
 
-// Añadir manejo de teclas para navegación
-document.addEventListener('keydown', function(event) {
+// Función para manejar las teclas (separada para mejor organización)
+function manejarTeclas(event) {
     var sugerencias = document.getElementById("sugerencias");
     var items = sugerencias ? sugerencias.getElementsByClassName("sugerencia-item") : [];
     var selectedIndex = -1;
@@ -538,6 +538,9 @@ document.addEventListener('keydown', function(event) {
                 items[selectedIndex].classList.remove("selected");
             }
             items[selectedIndex + 1].classList.add("selected");
+        } else if (selectedIndex === -1 && items.length > 0) {
+            // Si no hay ningún elemento seleccionado, seleccionar el primero
+            items[0].classList.add("selected");
         }
     }
     // Tecla arriba (para navegar por sugerencias)
@@ -553,11 +556,11 @@ document.addEventListener('keydown', function(event) {
         if (sugerencias && sugerencias.style.display !== "none" && selectedIndex >= 0) {
             // Seleccionar sugerencia
             var input = document.getElementById("pokeInput");
-            input.value = items[selectedIndex].innerHTML;
+            input.value = items[selectedIndex].getAttribute('data-nombre');
             sugerencias.style.display = "none";
             buscar();
         } else if (document.activeElement.tagName === 'BUTTON') {
             document.activeElement.click();
         }
     }
-});
+}
