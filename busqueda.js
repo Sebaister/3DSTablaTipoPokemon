@@ -1,75 +1,50 @@
+// Variables globales
 var pokedata = [];
 var typeData = {};
-
-// Reemplazar esta función
-function cargarDatos() {
-    try {
-        // Cargar datos solo si no están ya cargados
-        if (pokedata.length === 0) {
-            var xhr1 = new XMLHttpRequest();
-            xhr1.open("GET", "pokedata.json", true); // Asíncrono para mejor rendimiento
-            xhr1.onreadystatechange = function() {
-                if (xhr1.readyState === 4) {
-                    if (xhr1.status === 200) {
-                        try {
-                            // Usar JSON.parse en lugar de eval para mejor seguridad y rendimiento
-                            pokedata = JSON.parse(xhr1.responseText);
-                            
-                            // Cargar datos de tipos después de cargar pokedata
-                            cargarTipos();
-                        } catch(e) {
-                            alert("Error al procesar datos de Pokémon");
-                        }
-                    } else {
-                        alert("Error al cargar pokedata.json");
-                    }
-                }
-            };
-            xhr1.send();
-        } else if (Object.keys(typeData).length === 0) {
-            // Si ya tenemos pokedata pero no typeData
-            cargarTipos();
-        }
-    } catch(e) {
-        alert("Error de conexión");
-    }
-}
-
-// Función separada para cargar tipos
-function cargarTipos() {
-    if (Object.keys(typeData).length === 0) {
-        var xhr2 = new XMLHttpRequest();
-        xhr2.open("GET", "types.json", true);
-        xhr2.onreadystatechange = function() {
-            if (xhr2.readyState === 4) {
-                if (xhr2.status === 200) {
-                    try {
-                        // Usar JSON.parse en lugar de eval
-                        typeData = JSON.parse(xhr2.responseText);
-                    } catch(e) {
-                        alert("Error al procesar datos de tipos");
-                    }
-                } else {
-                    alert("Error al cargar types.json");
-                }
-            }
-        };
-        xhr2.send();
-    }
-}
-
-// Optimización de la función buscar con caché
 var ultimaBusqueda = "";
 var resultadoCache = null;
 
-function buscar() {
+// Función de utilidad
+function $(id) {
+    return document.getElementById(id);
+}
+
+// Cargar datos
+function cargarDatos() {
+    // Cargar datos de Pokémon
+    fetch('pokedata.json')
+        .then(function(response) {
+            if (!response.ok) throw new Error('Error al cargar pokedata.json');
+            return response.json();
+        })
+        .then(function(data) {
+            pokedata = data;
+            // Cargar datos de tipos después
+            return fetch('types.json');
+        })
+        .then(function(response) {
+            if (!response.ok) throw new Error('Error al cargar types.json');
+            return response.json();
+        })
+        .then(function(data) {
+            typeData = data;
+        })
+        .catch(function(error) {
+            alert('Error: ' + error.message);
+        });
+}
+
+// Función de búsqueda
+function buscar(event) {
+    if (event) event.preventDefault();
+    
     try {
         if (!pokedata || !pokedata.length) {
             alert("No hay datos cargados");
             return;
         }
 
-        var inputElement = document.getElementById("pokeInput");
+        var inputElement = $("pokeInput");
         if (!inputElement) {
             alert("Error: No se encuentra el campo de búsqueda");
             return;
@@ -80,7 +55,7 @@ function buscar() {
             alert("Por favor ingrese un nombre o número");
             return;
         }
-        searchValue = searchValue.toLowerCase().replace(/^\s+|\s+$/g, '');
+        searchValue = searchValue.toLowerCase().trim();
         
         // Usar caché si la búsqueda es la misma
         if (searchValue === ultimaBusqueda && resultadoCache) {
@@ -102,7 +77,7 @@ function buscar() {
         
         mostrarResultado(pokemon);
     } catch(e) {
-        alert("Error en la búsqueda");
+        alert("Error en la búsqueda: " + e.message);
     }
 }
 

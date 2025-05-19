@@ -14,25 +14,27 @@ function showType(typeId) {
     }
 }
 
-// Función para capitalizar (nueva)
+// Funciones de utilidad
+function $(id) {
+    return document.getElementById(id);
+}
+
 function capitalizeFirstLetter(string) {
-    if (typeof string !== 'string') return string;
-    return formatearNombresTipos(string.charAt(0).toUpperCase() + string.slice(1));
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function formatearNombresTipos(tipo) {
-    // Convertir tipos sin acento a versiones con acento para mostrar
-    if (typeof tipo === 'string') {
-        tipo = tipo.replace(/^dragon$/i, 'Dragón');
-        tipo = tipo.replace(/^electrico$/i, 'Eléctrico');
-        tipo = tipo.replace(/^psiquico$/i, 'Psíquico');
-    }
-    return tipo;
+function formatearNombresTipos(nombre) {
+    // Mantener la función original para compatibilidad
+    return nombre;
 }
 
-// Función para crear botones (adaptada)
+function mostrarError(mensaje) {
+    alert(mensaje);
+}
+
+// Funciones para crear elementos de UI
 function createTypeButtons(genId, types) {
-    var container = document.getElementById(genId + '-types');
+    var container = $(genId + '-types');
     if (!container) return;
     
     container.innerHTML = '';
@@ -42,13 +44,22 @@ function createTypeButtons(genId, types) {
         var button = document.createElement('button');
         button.className = 'type-btn ' + type;
         button.textContent = formatearNombresTipos(capitalizeFirstLetter(type));
-        button.onclick = function(t) {
-            return function() {
-                showType(genId + '-' + t);
-            };
-        }(type);
+        button.setAttribute('data-type', type);
+        button.setAttribute('data-gen', genId);
+        button.setAttribute('role', 'button');
+        button.setAttribute('tabindex', '0');
         container.appendChild(button);
     }
+    
+    // Usar delegación de eventos para mejor rendimiento
+    container.addEventListener('click', function(e) {
+        var target = e.target;
+        if (target.classList.contains('type-btn')) {
+            var type = target.getAttribute('data-type');
+            var gen = target.getAttribute('data-gen');
+            showType(gen + '-' + type);
+        }
+    });
 }
 
 // Función para crear detalles (adaptada)
@@ -110,66 +121,58 @@ function createTypeDetails(genId, typeData) {
     }
 }
 
-// Función para cargar datos (optimizada)
+// Mejorar la carga de datos
 function loadData() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'types.json', true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                try {
-                    var data = JSON.parse(xhr.responseText);
-                    
-                    // Procesamiento por lotes para mejorar rendimiento
-                    setTimeout(function() {
-                        // Generación 1
-                        var gen1Types = Object.keys(data.gen1 || {});
-                        createTypeButtons('gen1', gen1Types);
-                        createTypeDetails('gen1', data.gen1);
-                        
-                        setTimeout(function() {
-                            // Generación 2-5
-                            var gen2Types = Object.keys(data.gen2 || {});
-                            createTypeButtons('gen2', gen2Types);
-                            createTypeDetails('gen2', data.gen2);
-                            
-                            setTimeout(function() {
-                                // Generación 6+
-                                var gen6Types = Object.keys(data.gen6 || {});
-                                createTypeButtons('gen6', gen6Types);
-                                createTypeDetails('gen6', data.gen6);
-                            }, 0);
-                        }, 0);
-                    }, 0);
-                } catch (e) {
-                    console.error('Error al procesar los datos:', e);
-                    mostrarError('Error al cargar los datos');
-                }
-            } else {
-                mostrarError('Error al cargar los datos');
+    fetch('types.json')
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error('Error al cargar los datos');
             }
-        }
-    };
-    xhr.onerror = function() {
-        mostrarError('Error de conexión');
-    };
-    xhr.send();
+            return response.json();
+        })
+        .then(function(data) {
+            // Procesamiento por lotes para mejorar rendimiento
+            setTimeout(function() {
+                // Generación 1
+                var gen1Types = Object.keys(data.gen1 || {});
+                createTypeButtons('gen1', gen1Types);
+                createTypeDetails('gen1', data.gen1);
+                
+                setTimeout(function() {
+                    // Generación 2-5
+                    var gen2Types = Object.keys(data.gen2 || {});
+                    createTypeButtons('gen2', gen2Types);
+                    createTypeDetails('gen2', data.gen2);
+                    
+                    setTimeout(function() {
+                        // Generación 6+
+                        var gen6Types = Object.keys(data.gen6 || {});
+                        createTypeButtons('gen6', gen6Types);
+                        createTypeDetails('gen6', data.gen6);
+                    }, 0);
+                }, 0);
+            }, 0);
+        })
+        .catch(function(error) {
+            console.error('Error:', error);
+            mostrarError('Error al cargar los datos');
+        });
 }
 
-// Función para mostrar errores de manera amigable
-function mostrarError(mensaje) {
-    var containers = ['gen1-types', 'gen2-types', 'gen6-types'];
-    containers.forEach(function(id) {
-        var container = document.getElementById(id);
-        if (container) {
-            container.innerHTML = '<div class="error">' + mensaje + '</div>';
-        }
-    });
-}
-
-// Iniciar cuando el DOM esté listo
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadData);
-} else {
+// Inicialización
+document.addEventListener('DOMContentLoaded', function() {
     loadData();
-}
+    
+    // Función para manejar la visibilidad del logo
+    function actualizarLogoVisibilidad() {
+        var hash = window.location.hash;
+        var defaultLogo = $('defaultLogo');
+        if (defaultLogo) {
+            defaultLogo.style.display = (hash && hash !== '#') ? 'none' : 'block';
+        }
+    }
+    
+    // Eventos optimizados
+    window.addEventListener('hashchange', actualizarLogoVisibilidad);
+    actualizarLogoVisibilidad();
+});

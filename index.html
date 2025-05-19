@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <title>Tablas de Tipos Pokémon</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
@@ -11,16 +13,16 @@
     
     <div class="menu">
         <div class="button-container">
-            <a href="#gen1" class="button">Gen 1</a>
-            <a href="#gen2" class="button">Gen 2-5</a>
-            <a href="#gen6" class="button">Gen 6+</a>
-            <a href="busqueda.html" class="button">Buscar Pokémon</a>
+            <a href="#gen1" class="button" role="button" tabindex="1">Gen 1</a>
+            <a href="#gen2" class="button" role="button" tabindex="2">Gen 2-5</a>
+            <a href="#gen6" class="button" role="button" tabindex="3">Gen 6+</a>
+            <a href="busqueda.html" class="button" role="button" tabindex="4">Buscar Pokémon</a>
         </div>
     </div>
 
     <!-- Logo por defecto -->
-    <div id="defaultLogo" style="text-align: center; margin-top: 20px;">
-        <img src="sprites/pokelogo.png" alt="Pokémon Logo" style="max-width: 80%; height: auto;">
+    <div id="defaultLogo" class="logo-container">
+        <img src="sprites/pokelogo.png" alt="Pokémon Logo" class="responsive-logo">
     </div>
 
     <!-- GENERACIÓN 1 -->
@@ -29,7 +31,7 @@
         <div class="type-menu" id="gen1-types"></div>
         <div id="gen1-details"></div>
         <div class="button-back">
-            <a href="#" class="button">Volver</a>
+            <a href="#" class="button" role="button">Volver</a>
         </div>
     </div>
 
@@ -39,7 +41,7 @@
         <div class="type-menu" id="gen2-types"></div>
         <div id="gen2-details"></div>
         <div class="button-back">
-            <a href="#" class="button">Volver</a>
+            <a href="#" class="button" role="button">Volver</a>
         </div>
     </div>
 
@@ -56,24 +58,24 @@
         <div class="type-menu" id="gen6-types"></div>
         <div id="gen6-details"></div>
         <div class="button-back">
-            <a href="#" class="button">Volver</a>
+            <a href="#" class="button" role="button">Volver</a>
         </div>
     </div>
 
     <script src="script.js"></script>
-    <script>
-        // Función optimizada para manejar la visibilidad del logo
-        function actualizarLogoVisibilidad() {
-            var hash = window.location.hash;
-            var defaultLogo = document.getElementById('defaultLogo');
-            if (defaultLogo) {
-                defaultLogo.style.display = (hash && hash !== '#') ? 'none' : 'block';
-            }
-        }
-        
-        // Eventos optimizados
-        window.addEventListener('hashchange', actualizarLogoVisibilidad);
-        window.addEventListener('load', actualizarLogoVisibilidad);
-    </script>
 </body>
 </html>
+<script>
+    // Función optimizada para manejar la visibilidad del logo
+    function actualizarLogoVisibilidad() {
+        var hash = window.location.hash;
+        var defaultLogo = document.getElementById('defaultLogo');
+        if (defaultLogo) {
+            defaultLogo.style.display = (hash && hash !== '#') ? 'none' : 'block';
+        }
+    }
+    
+    // Eventos optimizados
+    window.addEventListener('hashchange', actualizarLogoVisibilidad);
+    window.addEventListener('load', actualizarLogoVisibilidad);
+</script>
