@@ -1,25 +1,23 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Buscar Pokémon</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=320">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="nintendo" content="true">
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-    <!-- Botón de volver a la página principal -->
+    <!-- Botón de volver a la página principal (pequeño y en la esquina superior izquierda) -->
     <div class="button-back-small">
-        <a href="index.html" class="button-small" role="button" tabindex="1">Volver</a>
+        <a href="index.html" class="button-small" tabindex="1">Volver</a>
     </div>
 
-    <div id="logoContainer" class="logo-container">
-        <img src="sprites/pokelogo.png" alt="Pokémon Logo" class="responsive-logo">
+    <div id="logoContainer" style="text-align: center; margin-top: 20px;">
+        <img src="sprites/pokelogo.png" alt="Pokémon Logo" style="max-width: 80%; height: auto;">
     </div>
 
-    <div id="resultado" class="hidden">
+    <div id="resultado" style="display: none;">
         <div id="pokeContainer">
             <img id="pokeImg" src="sprites/MissingNo.png" alt="Pokemon">
             <div id="pokeName"></div>
@@ -33,14 +31,14 @@
     <div id="search-container">
         <h1>Buscar Pokémon</h1>
         <div class="nav-container">
-            <button id="prevPokemon" class="nav-button" onclick="navegarPokemon(-1);" tabindex="2" aria-label="Pokémon anterior">
+            <button id="prevPokemon" class="nav-button" onclick="navegarPokemon(-1);" tabindex="2">
                 <img src="sprites/izq.png" class="nav-arrow" alt="Anterior">
             </button>
-            <form id="searchForm" onsubmit="buscar(event); return false;">
-                <input type="text" id="pokeInput" tabindex="3" autocomplete="off" aria-label="Nombre o número de Pokémon">
+            <form onsubmit="buscar(); return false;">
+                <input type="text" id="pokeInput" tabindex="3" autocomplete="off">
                 <input type="submit" value="Buscar" tabindex="4">
             </form>
-            <button id="nextPokemon" class="nav-button" onclick="navegarPokemon(1);" tabindex="5" aria-label="Siguiente Pokémon">
+            <button id="nextPokemon" class="nav-button" onclick="navegarPokemon(1);" tabindex="5">
                 <img src="sprites/der.png" class="nav-arrow" alt="Siguiente">
             </button>
         </div>

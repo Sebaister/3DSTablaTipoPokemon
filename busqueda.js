@@ -1,77 +1,75 @@
-// Variables globales
 var pokedata = [];
 var typeData = {};
+
+// Reemplazar esta función
+function cargarDatos() {
+    try {
+        // Cargar datos solo si no están ya cargados
+        if (pokedata.length === 0) {
+            var xhr1 = new XMLHttpRequest();
+            xhr1.open("GET", "pokedata.json", true); // Asíncrono para mejor rendimiento
+            xhr1.onreadystatechange = function() {
+                if (xhr1.readyState === 4) {
+                    if (xhr1.status === 200) {
+                        try {
+                            // Usar JSON.parse en lugar de eval para mejor seguridad y rendimiento
+                            pokedata = JSON.parse(xhr1.responseText);
+                            
+                            // Cargar datos de tipos después de cargar pokedata
+                            cargarTipos();
+                        } catch(e) {
+                            alert("Error al procesar datos de Pokémon");
+                        }
+                    } else {
+                        alert("Error al cargar pokedata.json");
+                    }
+                }
+            };
+            xhr1.send();
+        } else if (Object.keys(typeData).length === 0) {
+            // Si ya tenemos pokedata pero no typeData
+            cargarTipos();
+        }
+    } catch(e) {
+        alert("Error de conexión");
+    }
+}
+
+// Función separada para cargar tipos
+function cargarTipos() {
+    if (Object.keys(typeData).length === 0) {
+        var xhr2 = new XMLHttpRequest();
+        xhr2.open("GET", "types.json", true);
+        xhr2.onreadystatechange = function() {
+            if (xhr2.readyState === 4) {
+                if (xhr2.status === 200) {
+                    try {
+                        // Usar JSON.parse en lugar de eval
+                        typeData = JSON.parse(xhr2.responseText);
+                    } catch(e) {
+                        alert("Error al procesar datos de tipos");
+                    }
+                } else {
+                    alert("Error al cargar types.json");
+                }
+            }
+        };
+        xhr2.send();
+    }
+}
+
+// Optimización de la función buscar con caché
 var ultimaBusqueda = "";
 var resultadoCache = null;
-var datosListos = false;
 
-// Función de utilidad
-function $(id) {
-    return document.getElementById(id);
-}
-
-// Cargar datos
-function cargarDatos() {
-    // Mostrar mensaje de carga
-    var logoContainer = $("logoContainer");
-    if (logoContainer) {
-        logoContainer.innerHTML = "<p>Cargando datos...</p>";
-    }
-    
-    // Primero cargar datos de tipos (más pequeño)
-    var xhr1 = new XMLHttpRequest();
-    xhr1.open('GET', 'types.json', true);
-    xhr1.onreadystatechange = function() {
-        if (xhr1.readyState === 4) {
-            if (xhr1.status === 200) {
-                try {
-                    typeData = JSON.parse(xhr1.responseText);
-                    
-                    // Luego cargar datos de Pokémon
-                    var xhr2 = new XMLHttpRequest();
-                    xhr2.open('GET', 'pokedata.json', true);
-                    xhr2.onreadystatechange = function() {
-                        if (xhr2.readyState === 4) {
-                            if (xhr2.status === 200) {
-                                try {
-                                    pokedata = JSON.parse(xhr2.responseText);
-                                    datosListos = true;
-                                    
-                                    // Restaurar logo
-                                    if (logoContainer) {
-                                        logoContainer.innerHTML = '<img src="sprites/pokelogo.png" alt="Pokémon Logo" class="responsive-logo">';
-                                    }
-                                } catch(e) {
-                                    alert('Error al procesar pokedata.json: ' + e.message);
-                                }
-                            } else {
-                                alert('Error al cargar pokedata.json: ' + xhr2.status);
-                            }
-                        }
-                    };
-                    xhr2.send();
-                } catch(e) {
-                    alert('Error al procesar types.json: ' + e.message);
-                }
-            } else {
-                alert('Error al cargar types.json: ' + xhr1.status);
-            }
-        }
-    };
-    xhr1.send();
-}
-
-// Función de búsqueda
-function buscar(event) {
-    if (event) event.preventDefault();
-    
+function buscar() {
     try {
-        if (!datosListos) {
-            alert("No hay datos cargados. Por favor espera unos segundos y vuelve a intentar.");
+        if (!pokedata || !pokedata.length) {
+            alert("No hay datos cargados");
             return;
         }
 
-        var inputElement = $("pokeInput");
+        var inputElement = document.getElementById("pokeInput");
         if (!inputElement) {
             alert("Error: No se encuentra el campo de búsqueda");
             return;
@@ -82,40 +80,29 @@ function buscar(event) {
             alert("Por favor ingrese un nombre o número");
             return;
         }
-        searchValue = searchValue.toLowerCase().trim();
+        searchValue = searchValue.toLowerCase().replace(/^\s+|\s+$/g, '');
         
-        // Búsqueda simplificada para 3DS
-        var pokemon = null;
-        
-        // Buscar por ID (número)
-        if (!isNaN(searchValue)) {
-            var id = parseInt(searchValue, 10);
-            for (var i = 0; i < pokedata.length; i++) {
-                if (pokedata[i].id === id) {
-                    pokemon = pokedata[i];
-                    break;
-                }
-            }
-        } 
-        // Buscar por nombre
-        else {
-            for (var i = 0; i < pokedata.length; i++) {
-                if (pokedata[i].nombre.toLowerCase() === searchValue || 
-                    pokedata[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
-                    pokemon = pokedata[i];
-                    break;
-                }
-            }
+        // Usar caché si la búsqueda es la misma
+        if (searchValue === ultimaBusqueda && resultadoCache) {
+            mostrarResultado(resultadoCache);
+            return;
         }
+        
+        // Optimización: Búsqueda más eficiente
+        var pokemon = buscarPokemon(searchValue);
 
         if (!pokemon) {
             alert("Pokémon no encontrado");
             return;
         }
         
+        // Guardar en caché
+        ultimaBusqueda = searchValue;
+        resultadoCache = pokemon;
+        
         mostrarResultado(pokemon);
     } catch(e) {
-        alert("Error en la búsqueda: " + e.message);
+        alert("Error en la búsqueda");
     }
 }
 
@@ -635,16 +622,14 @@ function autocompletar() {
     }
     
     // Si el campo está vacío, no mostrar sugerencias
-    if (!searchValue || !datosListos) {
+    if (!searchValue) {
         sugerenciasContainer.style.display = "none";
         return;
     }
     
-    // Limitar a máximo 3 coincidencias para mejor rendimiento
+    // Buscar coincidencias
     var coincidencias = [];
-    var maxCoincidencias = 3;
-    
-    for (var i = 0; i < pokedata.length && coincidencias.length < maxCoincidencias; i++) {
+    for (var i = 0; i < pokedata.length && coincidencias.length < 3; i++) {
         if (pokedata[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
             coincidencias.push(pokedata[i]);
         }
