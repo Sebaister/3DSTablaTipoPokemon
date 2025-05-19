@@ -11,28 +11,33 @@ function $(id) {
 
 // Cargar datos
 function cargarDatos() {
-    // Cargar datos de Pokémon
-    fetch('pokedata.json')
-        .then(function(response) {
-            if (!response.ok) throw new Error('Error al cargar pokedata.json');
-            return response.json();
-        })
-        .then(function(data) {
-            pokedata = data;
-            // Cargar datos de tipos después
-            return fetch('types.json');
-        })
+    // Primero cargar datos de tipos (más pequeño)
+    fetch('types.json')
         .then(function(response) {
             if (!response.ok) throw new Error('Error al cargar types.json');
             return response.json();
         })
         .then(function(data) {
             typeData = data;
+            // Luego cargar datos de Pokémon
+            return fetch('pokedata.json');
+        })
+        .then(function(response) {
+            if (!response.ok) throw new Error('Error al cargar pokedata.json');
+            return response.json();
+        })
+        .then(function(data) {
+            pokedata = data;
+            // Indicar que los datos están listos
+            console.log("Datos cargados correctamente");
         })
         .catch(function(error) {
             alert('Error: ' + error.message);
         });
 }
+
+// Llamar a cargarDatos cuando se carga la página
+document.addEventListener('DOMContentLoaded', cargarDatos);
 
 // Función de búsqueda
 function buscar(event) {
@@ -40,7 +45,7 @@ function buscar(event) {
     
     try {
         if (!pokedata || !pokedata.length) {
-            alert("No hay datos cargados");
+            alert("No hay datos cargados. Por favor espera unos segundos y vuelve a intentar.");
             return;
         }
 
@@ -57,23 +62,34 @@ function buscar(event) {
         }
         searchValue = searchValue.toLowerCase().trim();
         
-        // Usar caché si la búsqueda es la misma
-        if (searchValue === ultimaBusqueda && resultadoCache) {
-            mostrarResultado(resultadoCache);
-            return;
-        }
+        // Búsqueda simplificada para 3DS
+        var pokemon = null;
         
-        // Optimización: Búsqueda más eficiente
-        var pokemon = buscarPokemon(searchValue);
+        // Buscar por ID (número)
+        if (!isNaN(searchValue)) {
+            var id = parseInt(searchValue, 10);
+            for (var i = 0; i < pokedata.length; i++) {
+                if (pokedata[i].id === id) {
+                    pokemon = pokedata[i];
+                    break;
+                }
+            }
+        } 
+        // Buscar por nombre
+        else {
+            for (var i = 0; i < pokedata.length; i++) {
+                if (pokedata[i].nombre.toLowerCase() === searchValue || 
+                    pokedata[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
+                    pokemon = pokedata[i];
+                    break;
+                }
+            }
+        }
 
         if (!pokemon) {
             alert("Pokémon no encontrado");
             return;
         }
-        
-        // Guardar en caché
-        ultimaBusqueda = searchValue;
-        resultadoCache = pokemon;
         
         mostrarResultado(pokemon);
     } catch(e) {

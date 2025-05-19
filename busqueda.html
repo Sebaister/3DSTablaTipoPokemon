@@ -35,7 +35,7 @@
             <button id="prevPokemon" class="nav-button" onclick="navegarPokemon(-1);" tabindex="2" aria-label="Pokémon anterior">
                 <img src="sprites/izq.png" class="nav-arrow" alt="Anterior">
             </button>
-            <form id="searchForm">
+            <form id="searchForm" onsubmit="buscar(event); return false;">
                 <input type="text" id="pokeInput" tabindex="3" autocomplete="off" aria-label="Nombre o número de Pokémon">
                 <input type="submit" value="Buscar" tabindex="4">
             </form>

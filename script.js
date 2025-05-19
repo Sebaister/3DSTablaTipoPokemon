@@ -131,27 +131,26 @@ function loadData() {
             return response.json();
         })
         .then(function(data) {
-            // Procesamiento por lotes para mejorar rendimiento
-            setTimeout(function() {
+            // Procesamiento simplificado para 3DS
+            try {
                 // Generación 1
                 var gen1Types = Object.keys(data.gen1 || {});
                 createTypeButtons('gen1', gen1Types);
                 createTypeDetails('gen1', data.gen1);
                 
-                setTimeout(function() {
-                    // Generación 2-5
-                    var gen2Types = Object.keys(data.gen2 || {});
-                    createTypeButtons('gen2', gen2Types);
-                    createTypeDetails('gen2', data.gen2);
-                    
-                    setTimeout(function() {
-                        // Generación 6+
-                        var gen6Types = Object.keys(data.gen6 || {});
-                        createTypeButtons('gen6', gen6Types);
-                        createTypeDetails('gen6', data.gen6);
-                    }, 0);
-                }, 0);
-            }, 0);
+                // Generación 2-5
+                var gen2Types = Object.keys(data.gen2 || {});
+                createTypeButtons('gen2', gen2Types);
+                createTypeDetails('gen2', data.gen2);
+                
+                // Generación 6+
+                var gen6Types = Object.keys(data.gen6 || {});
+                createTypeButtons('gen6', gen6Types);
+                createTypeDetails('gen6', data.gen6);
+            } catch(e) {
+                console.error('Error al procesar tipos:', e);
+                mostrarError('Error al procesar los datos de tipos');
+            }
         })
         .catch(function(error) {
             console.error('Error:', error);
