@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="nintendo" content="true">
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
@@ -66,7 +67,7 @@
 </body>
 </html>
 <script>
-    // Función optimizada para manejar la visibilidad del logo
+    // Función simplificada para manejar la visibilidad del logo
     function actualizarLogoVisibilidad() {
         var hash = window.location.hash;
         var defaultLogo = document.getElementById('defaultLogo');
@@ -76,6 +77,11 @@
     }
     
     // Eventos optimizados
-    window.addEventListener('hashchange', actualizarLogoVisibilidad);
-    window.addEventListener('load', actualizarLogoVisibilidad);
+    if (window.addEventListener) {
+        window.addEventListener('hashchange', actualizarLogoVisibilidad);
+        window.addEventListener('load', actualizarLogoVisibilidad);
+    } else if (window.attachEvent) {
+        window.attachEvent('onhashchange', actualizarLogoVisibilidad);
+        window.attachEvent('onload', actualizarLogoVisibilidad);
+    }
 </script>

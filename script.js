@@ -1,4 +1,4 @@
-// Función para mostrar el tipo seleccionado (original)
+// Función para mostrar el tipo seleccionado (optimizada para 3DS)
 function showType(typeId) {
     // Oculta todos los detalles primero
     var details = document.getElementsByClassName('type-detail');
@@ -10,11 +10,23 @@ function showType(typeId) {
     var element = document.getElementById(typeId);
     if (element) {
         element.style.display = 'block';
-        element.scrollIntoView();
+        // Usar try-catch para manejar posibles errores en 3DS
+        try {
+            element.scrollIntoView();
+        } catch(e) {
+            // Fallback para 3DS si scrollIntoView no está disponible
+            window.scrollTo(0, element.offsetTop);
+        }
+        
+        // Ocultar el logo cuando se muestra un tipo
+        var defaultLogo = document.getElementById('defaultLogo');
+        if (defaultLogo) {
+            defaultLogo.style.display = 'none';
+        }
     }
 }
 
-// Funciones de utilidad
+// Funciones de utilidad optimizadas para 3DS
 function $(id) {
     return document.getElementById(id);
 }
@@ -32,7 +44,7 @@ function mostrarError(mensaje) {
     alert(mensaje);
 }
 
-// Funciones para crear elementos de UI
+// Funciones para crear elementos de UI (optimizadas)
 function createTypeButtons(genId, types) {
     var container = $(genId + '-types');
     if (!container) return;
@@ -48,21 +60,17 @@ function createTypeButtons(genId, types) {
         button.setAttribute('data-gen', genId);
         button.setAttribute('role', 'button');
         button.setAttribute('tabindex', '0');
+        // Usar función anónima con closure para preservar valores
+        (function(currentType, currentGen) {
+            button.onclick = function() {
+                showType(currentGen + '-' + currentType);
+            };
+        })(type, genId);
         container.appendChild(button);
     }
-    
-    // Usar delegación de eventos para mejor rendimiento
-    container.addEventListener('click', function(e) {
-        var target = e.target;
-        if (target.classList.contains('type-btn')) {
-            var type = target.getAttribute('data-type');
-            var gen = target.getAttribute('data-gen');
-            showType(gen + '-' + type);
-        }
-    });
 }
 
-// Función para crear detalles (adaptada)
+// Función para crear detalles (optimizada para 3DS)
 function createTypeDetails(genId, typeData) {
     var container = document.getElementById(genId + '-details');
     if (!container) return;
@@ -121,57 +129,67 @@ function createTypeDetails(genId, typeData) {
     }
 }
 
-// Mejorar la carga de datos
+// Carga de datos optimizada para 3DS
 function loadData() {
-    fetch('types.json')
-        .then(function(response) {
-            if (!response.ok) {
-                throw new Error('Error al cargar los datos');
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'types.json', true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                try {
+                    var data = JSON.parse(xhr.responseText);
+                    
+                    // Procesamiento simplificado para 3DS
+                    var gen1Types = Object.keys(data.gen1 || {});
+                    createTypeButtons('gen1', gen1Types);
+                    createTypeDetails('gen1', data.gen1);
+                    
+                    // Generación 2-5
+                    var gen2Types = Object.keys(data.gen2 || {});
+                    createTypeButtons('gen2', gen2Types);
+                    createTypeDetails('gen2', data.gen2);
+                    
+                    // Generación 6+
+                    var gen6Types = Object.keys(data.gen6 || {});
+                    createTypeButtons('gen6', gen6Types);
+                    createTypeDetails('gen6', data.gen6);
+                } catch(e) {
+                    console.error('Error al procesar tipos:', e);
+                    mostrarError('Error al procesar los datos de tipos');
+                }
+            } else {
+                mostrarError('Error al cargar datos: ' + xhr.status);
             }
-            return response.json();
-        })
-        .then(function(data) {
-            // Procesamiento simplificado para 3DS
-            try {
-                // Generación 1
-                var gen1Types = Object.keys(data.gen1 || {});
-                createTypeButtons('gen1', gen1Types);
-                createTypeDetails('gen1', data.gen1);
-                
-                // Generación 2-5
-                var gen2Types = Object.keys(data.gen2 || {});
-                createTypeButtons('gen2', gen2Types);
-                createTypeDetails('gen2', data.gen2);
-                
-                // Generación 6+
-                var gen6Types = Object.keys(data.gen6 || {});
-                createTypeButtons('gen6', gen6Types);
-                createTypeDetails('gen6', data.gen6);
-            } catch(e) {
-                console.error('Error al procesar tipos:', e);
-                mostrarError('Error al procesar los datos de tipos');
-            }
-        })
-        .catch(function(error) {
-            console.error('Error:', error);
-            mostrarError('Error al cargar los datos');
-        });
+        }
+    };
+    xhr.send();
 }
 
-// Inicialización
-document.addEventListener('DOMContentLoaded', function() {
-    loadData();
-    
-    // Función para manejar la visibilidad del logo
-    function actualizarLogoVisibilidad() {
-        var hash = window.location.hash;
-        var defaultLogo = $('defaultLogo');
-        if (defaultLogo) {
-            defaultLogo.style.display = (hash && hash !== '#') ? 'none' : 'block';
+// Inicialización optimizada para 3DS
+if (document.addEventListener) {
+    document.addEventListener('DOMContentLoaded', function() {
+        loadData();
+        
+        // Función para manejar la visibilidad del logo
+        function actualizarLogoVisibilidad() {
+            var hash = window.location.hash;
+            var defaultLogo = $('defaultLogo');
+            if (defaultLogo) {
+                defaultLogo.style.display = (hash && hash !== '#') ? 'none' : 'block';
+            }
         }
-    }
-    
-    // Eventos optimizados
-    window.addEventListener('hashchange', actualizarLogoVisibilidad);
-    actualizarLogoVisibilidad();
-});
+        
+        // Eventos optimizados
+        if (window.addEventListener) {
+            window.addEventListener('hashchange', actualizarLogoVisibilidad);
+        } else if (window.attachEvent) {
+            // Soporte para IE antiguo que podría estar en 3DS
+            window.attachEvent('onhashchange', actualizarLogoVisibilidad);
+        }
+        
+        actualizarLogoVisibilidad();
+    });
+} else if (document.attachEvent) {
+    // Soporte para navegadores antiguos
+    document.attachEvent('onDOMContentLoaded', loadData);
+}

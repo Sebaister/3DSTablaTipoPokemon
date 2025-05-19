@@ -10,9 +10,9 @@ body {
     margin: 0;
     padding: 2px;
     font-size: 12px;
-    -webkit-text-size-adjust: none;
-    text-size-adjust: none;
     line-height: 1.4;
+    width: 320px;
+    margin: 0 auto;
 }
 
 /* Encabezados */
@@ -60,7 +60,6 @@ h2 {
     display: inline-block;
     text-decoration: none;
     border-radius: 4px;
-    transition: background-color 0.2s;
 }
 
 .button {
@@ -137,11 +136,8 @@ h2 {
 }
 
 .type-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 2px;
+    display: block;
+    text-align: center;
     margin: 2px 0;
 }
 
@@ -171,6 +167,7 @@ h2 {
     margin: 3px;
     padding: 5px 8px;
     font-size: 11px;
+    display: inline-block;
 }
 
 /* Asegurar que todos los tipos tengan el mismo tamaño */
@@ -231,9 +228,8 @@ h2 {
 
 /* Estilos de búsqueda y resultados */
 #search-container {
-    padding: 2px 0;
     text-align: center;
-    position: fixed !important;
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
@@ -260,26 +256,20 @@ h2 {
 
 #pokeContainer {
     margin-bottom: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    text-align: center;
 }
 
 .nav-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
     margin: 0;
 }
 
 .nav-arrow {
-    width: 100%;
-    height: 100%;
-    max-width: 24px;
-    max-height: 24px;
-    object-fit: contain;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
     margin: 0 5px;
+    vertical-align: middle;
 }
 
 .nav-button {
@@ -290,9 +280,8 @@ h2 {
     outline: none;
     width: 30px;
     height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .nav-button:focus {
@@ -301,7 +290,7 @@ h2 {
 }
 
 .nav-button:active {
-    transform: scale(0.95);
+    opacity: 0.8;
 }
 
 #search-container form {
@@ -393,7 +382,7 @@ button {
     display: none;
     bottom: 100%;
     left: 50%;
-    transform: translateX(-50%);
+    margin-left: -100px;
     margin-bottom: 5px;
     color: #000;
 }

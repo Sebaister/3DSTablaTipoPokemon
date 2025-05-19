@@ -3,6 +3,7 @@ var pokedata = [];
 var typeData = {};
 var ultimaBusqueda = "";
 var resultadoCache = null;
+var datosListos = false;
 
 // Función de utilidad
 function $(id) {
@@ -11,40 +12,61 @@ function $(id) {
 
 // Cargar datos
 function cargarDatos() {
+    // Mostrar mensaje de carga
+    var logoContainer = $("logoContainer");
+    if (logoContainer) {
+        logoContainer.innerHTML = "<p>Cargando datos...</p>";
+    }
+    
     // Primero cargar datos de tipos (más pequeño)
-    fetch('types.json')
-        .then(function(response) {
-            if (!response.ok) throw new Error('Error al cargar types.json');
-            return response.json();
-        })
-        .then(function(data) {
-            typeData = data;
-            // Luego cargar datos de Pokémon
-            return fetch('pokedata.json');
-        })
-        .then(function(response) {
-            if (!response.ok) throw new Error('Error al cargar pokedata.json');
-            return response.json();
-        })
-        .then(function(data) {
-            pokedata = data;
-            // Indicar que los datos están listos
-            console.log("Datos cargados correctamente");
-        })
-        .catch(function(error) {
-            alert('Error: ' + error.message);
-        });
+    var xhr1 = new XMLHttpRequest();
+    xhr1.open('GET', 'types.json', true);
+    xhr1.onreadystatechange = function() {
+        if (xhr1.readyState === 4) {
+            if (xhr1.status === 200) {
+                try {
+                    typeData = JSON.parse(xhr1.responseText);
+                    
+                    // Luego cargar datos de Pokémon
+                    var xhr2 = new XMLHttpRequest();
+                    xhr2.open('GET', 'pokedata.json', true);
+                    xhr2.onreadystatechange = function() {
+                        if (xhr2.readyState === 4) {
+                            if (xhr2.status === 200) {
+                                try {
+                                    pokedata = JSON.parse(xhr2.responseText);
+                                    datosListos = true;
+                                    
+                                    // Restaurar logo
+                                    if (logoContainer) {
+                                        logoContainer.innerHTML = '<img src="sprites/pokelogo.png" alt="Pokémon Logo" class="responsive-logo">';
+                                    }
+                                } catch(e) {
+                                    alert('Error al procesar pokedata.json: ' + e.message);
+                                }
+                            } else {
+                                alert('Error al cargar pokedata.json: ' + xhr2.status);
+                            }
+                        }
+                    };
+                    xhr2.send();
+                } catch(e) {
+                    alert('Error al procesar types.json: ' + e.message);
+                }
+            } else {
+                alert('Error al cargar types.json: ' + xhr1.status);
+            }
+        }
+    };
+    xhr1.send();
 }
-
-// Llamar a cargarDatos cuando se carga la página
-document.addEventListener('DOMContentLoaded', cargarDatos);
 
 // Función de búsqueda
 function buscar(event) {
     if (event) event.preventDefault();
     
     try {
-        if (!pokedata || !pokedata.length) {
+        if (!datosListos) {
             alert("No hay datos cargados. Por favor espera unos segundos y vuelve a intentar.");
             return;
         }
@@ -613,14 +635,16 @@ function autocompletar() {
     }
     
     // Si el campo está vacío, no mostrar sugerencias
-    if (!searchValue) {
+    if (!searchValue || !datosListos) {
         sugerenciasContainer.style.display = "none";
         return;
     }
     
-    // Buscar coincidencias
+    // Limitar a máximo 3 coincidencias para mejor rendimiento
     var coincidencias = [];
-    for (var i = 0; i < pokedata.length && coincidencias.length < 3; i++) {
+    var maxCoincidencias = 3;
+    
+    for (var i = 0; i < pokedata.length && coincidencias.length < maxCoincidencias; i++) {
         if (pokedata[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
             coincidencias.push(pokedata[i]);
         }
