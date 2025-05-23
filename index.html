@@ -1,113 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html lang="es-CL">
 <head>
-    <title>Tablas de Tipos Pokémon</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=320">
-    <link rel="stylesheet" href="estilos.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Usa HTML no más, po wn!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .highlight {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-left: 4px solid #0078d7;
+            margin: 20px 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Tablas de Tipos Pokémon</h1>
+    <h1>¡Usa HTML no más, po wn!</h1>
     
-    <div class="menu">
-        <div class="button-container">
-            <a href="#gen1" class="button">Gen 1</a>
-            <a href="#gen2" class="button">Gen 2-5</a>
-            <a href="#gen6" class="button">Gen 6+</a>
-<<<<<<< HEAD
-            <a href="#pokeapi" class="button">PokeAPI</a>
-=======
->>>>>>> d55bf6cb65ea14eb542985107d32d699592ab053
-            <a href="busqueda.html" class="button">Buscar Pokémon</a>
-        </div>
-    </div>
+    <section>
+        <p>
+            ¡Oye, saco weas! ¿Sabí qué carga más rápido que tu wea de framework toda inflada? HTML puro sin weas. ¿Y sabí qué no se cae cada martes? HTML que funciona al tiro, po. ¿Pa' qué chucha te complicai tanto, wn? Andai webeando como si estuvierai construyendo un cohete espacial cuando lo único que necesitai es un botón y algo de texto, po.
+        </p>
 
-    <!-- Logo por defecto -->
-    <div id="defaultLogo" style="text-align: center; margin-top: 20px;">
-        <img src="sprites/pokelogo.png" alt="Pokémon Logo" style="max-width: 80%; height: auto;">
-    </div>
+        <p>
+            Te cuento la firme, wn: la web estaba la raja antes de que tus frameworks inflados salieran de la chucha. Andai gastando como quinientas lucas en un framework bacán como si fuera un bolso de marca, solo pa' cargar las mismas weas que podríai haber llevado en una bolsa del súper del 95. ¿Pa' qué chucha andai saltando por todos estos aros cuando HTML ha estado ahí, listo pa' usarse, desde el principio de la internet, po wn?
+        </p>
+    </section>
 
-    <!-- GENERACIÓN 1 -->
-    <div id="gen1" class="content">
-        <h2>Generación 1</h2>
-        <div class="type-menu" id="gen1-types"></div>
-        <div id="gen1-details"></div>
-        <div class="button-back">
-            <a href="#" class="button">Volver</a>
-        </div>
-    </div>
-
-    <!-- GENERACIÓN 2-5 -->
-    <div id="gen2" class="content">
-        <h2>Generaciones 2-5</h2>
-        <div class="type-menu" id="gen2-types"></div>
-        <div id="gen2-details"></div>
-        <div class="button-back">
-            <a href="#" class="button">Volver</a>
-        </div>
-    </div>
-
-    <!-- GENERACIÓN 6+ -->
-    <div id="gen6" class="content">
-        <h2>Generación 6+</h2>
-        <div class="note">
-            <strong>Cambios:</strong><br>
-            • Tipo Hada añadido<br>
-            • Cambios en Acero<br>
-            • Cambios en Planta<br>
-            • Nuevas inmunidades
-        </div>
-        <div class="type-menu" id="gen6-types"></div>
-        <div id="gen6-details"></div>
-        <div class="button-back">
-            <a href="#" class="button">Volver</a>
-<<<<<<< HEAD
-        </div>
-    </div>
-
-    <!-- POKEAPI SECTION -->
-    <div id="pokeapi" class="content">
-        <h2>Explorador de PokeAPI</h2>
-        <div class="pokeapi-search">
-            <div class="search-container">
-                <select id="searchType">
-                    <option value="pokemon">Pokémon</option>
-                    <option value="type">Tipo</option>
-                    <option value="move">Movimiento</option>
-                    <option value="ability">Habilidad</option>
-                    <option value="item">Objeto</option>
-                </select>
-                <input type="text" id="searchInput" placeholder="Buscar...">
-                <button id="searchButton">Buscar</button>
-            </div>
-        </div>
-        <div id="pokeapi-results"></div>
-        <div id="pokeapi-details"></div>
-        <div class="button-back">
-            <a href="#" class="button">Volver</a>
-=======
->>>>>>> d55bf6cb65ea14eb542985107d32d699592ab053
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-<<<<<<< HEAD
-    <script src="pokeapi.js"></script>
-=======
->>>>>>> d55bf6cb65ea14eb542985107d32d699592ab053
-    <script>
-        // Función optimizada para manejar la visibilidad del logo
-        function actualizarLogoVisibilidad() {
-            var hash = window.location.hash;
-            var defaultLogo = document.getElementById('defaultLogo');
-            if (defaultLogo) {
-                defaultLogo.style.display = (hash && hash !== '#') ? 'none' : 'block';
-            }
-        }
+    <section>
+        <h2>¿Así que te llamai desarrollador web? Qué penca, wn.</h2>
         
-        // Eventos optimizados
-        window.addEventListener('hashchange', actualizarLogoVisibilidad);
-        window.addEventListener('load', actualizarLogoVisibilidad);
-    </script>
+        <p>
+            Debe ser talla, po wn. ¿Cachai siquiera cómo mostrar un botón en la pantalla sin todas las weas modernas que usai? Mira, sacowea, aquí está tu botón:
+        </p>
+
+        <button>Botón culiao</button>
+
+        <p>
+            Tatúate este código en la frente pa' que te acordí cuando veai tu cara de perno en el espejo:
+        </p>
+
+        <div class="highlight">
+            &lt;button&gt;Botón culiao&lt;/button&gt;
+        </div>
+
+        <p>
+            Pero, ¿te fijaste en algo, wn? Esta wea de HTML es como el conejo Energizer de Internet. No necesita plugins ni actualizaciones. Tu framework bacán se está ahogando en su propia exageración, obsoleto antes de que terminí el tutorial, mientras este botón sigue funcionando la raja como un campeón. Ha estado aquí desde que la web era una guagua llorona, y seguramente seguirá de pie cuando tu stack sea solo una nota polvorienta en la historia de commits en el GitHub de algún pobre wn.
+        </p>
+
+        <p>
+            ¿No podí hacer interfaces bacanes con HTML? ¿En serio, wn? Mira esta wea, po:
+        </p>
+
+        <button>Botón la zorra</button>
+
+        <p>
+            Por qué es bacán:
+        </p>
+
+        <ul>
+            <li>Se ve, po</li>
+            <li>Se puede hacer clic</li>
+            <li>Es simplemente la raja</li>
+        </ul>
+
+        <p>
+            En serio, ¿qué más necesitai, wn? ¿Un reconocimiento por usar un framework pa' hacer lo que HTML hace de forma nativa? ¿Quizás una estrellita de oro por lograr complicar algo que ya estaba resuelto desde hace décadas? ¿Qué más querí, po wn? HTML funciona, y no necesita tus weas pa' demostrarlo.
+        </p>
+    </section>
+
+    <section>
+        <h2>Ahora tenemos IA, ¿y todavía usai frameworks de JS? ¿La dura, wn?</h2>
+        
+        <p>
+            La IA ha llegado, como un regalo del cielo (o al menos de la fortaleza de nerds de Sam Altman), lista pa' escribir tu app de tareas en cinco segundos. Puede generar HTML a pixel perfecto, arreglar tus cagazos, y probablemente hasta limpiarte el poto si lo pedí por favor. Pero no, tú seguí abrazando tus frameworks culiaos como si fueran la última chela en el desierto. ¿Qué wea te pasa? ¿Estai tan enganchado a tus mil dependencias y un proceso de construcción que dura más que tu última polola (que te mandó a la chucha)?
+        </p>
+
+        <p>
+            El ejército de IA de Sam Altman se está cagando de la risa mientras tú estai empantanado en la mierda del DOM virtual de React, rezando pa' que tu app no se ahogue en su propio cadáver descompuesto. Esto no es progreso. Es una tragedia, po wn. Tení un Ferrari brillante en tu cochera, y todavía andai en un triciclo oxidado con una rueda pinchada. Ponle, po wn.
+        </p>
+    </section>
+
+    <section>
+        <h2>Por qué HTML es la raja</h2>
+
+        <h3>Todos cachan HTML</h3>
+        
+        <p>
+            Escucha, wn. Todo-el-mundo cacha HTML. ¿Tu bisabuelita? Ella estaba ahí, en la trinchera de la Segunda Guerra Mundial, esquivando balas nazis mientras codeaba a mano layouts &lt;table&gt; pa' mandar mensajes a los Aliados. ¿Tu abuelo? Tiene un doctorado en HTML de la Universidad de "A quién chucha le importa", probablemente colgado al lado de su trofeo de "Sobreviví al internet por teléfono". ¿Tu viejo? Ese wn estaba murmurando &lt;div&gt; y &lt;span&gt; antes de siquiera poder decir "mamá". Chucha, hasta tu perro tiene una pega extra haciendo sitios HTML en Fiverr. Entonces, ¿por qué chucha seguimos detenidos, y respondiendo a tus preguntas weónas? Por la cresta, ponle, po.
+        </p>
+
+        <h3>No tení problemas de hidratación como en React. Toma agua, po wn.</h3>
+        
+        <p>
+            ¿Qué chucha es un error de hidratación? Suena como una wea que algún barista hipster diría cuando tu latte de avena carísimo no está lo suficientemente húmedo. "Oh, lo siento, wn, tu café tiene un error de hidratación". No weí. ¿Y "tree shaking"? ¿La dura? ¿Estai webeando? ¿Qué es esto, un bootcamp de programación o una convención de leñadores? "Sí, jefe, pasé todo el día sacudiendo árboles pa' reducir mi paquete de JavaScript. ¿Dónde está mi camisa de leñador?". ¿Quién chucha inventa estas weas pretenciosas? No tengo tiempo pa' descifrar tu sopa de letras llena de palabras raras, wn. HTML no hace estas weas. Simplemente funciona, po.
+        </p>
+    </section>
+
+    <footer>
+        <p>© 2023 Usa HTML no más, po wn! - Versión Chilena</p>
+    </footer>
 </body>
 </html>
