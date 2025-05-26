@@ -1,114 +1,79 @@
 <!DOCTYPE html>
-<html lang="es-CL">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simplemente Usa HTML de una Puta Vez</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        h1 {
-            color: #333;
-            border-bottom: 2px solid #333;
-            padding-bottom: 10px;
-        }
-        h2 {
-            color: #666;
-            margin-top: 30px;
-        }
-        .highlight {
-            background-color: #ffeb3b;
-            padding: 2px 4px;
-        }
-        code {
-            background-color: #f5f5f5;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-family: monospace;
-        }
-        pre {
-            background-color: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-        }
-    </style>
+    <title>Tablas de Tipos Pokémon</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=320">
+    <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-    <h1>Simplemente Usa HTML de una Puta Vez</h1>
+    <h1>Tablas de Tipos Pokémon</h1>
     
-    <p>¿Cachái qué wea carga más rápido que tu weá de framework toda inflá? <strong>HTML puro, conchetumare.</strong></p>
-    
-    <p>¿Andai puro weando, po weón? ¿Necesitái 100kb de JavaScript pa mostrar texto? ¿En serio, culiao?</p>
-    
-    <h2>¿Por qué wea usar HTML?</h2>
-    
-    <ul>
-        <li><strong>Es rápido como la cagá:</strong> No hay weas que cargar, no hay dependencias de mierda</li>
-        <li><strong>Funciona en cualquier lado:</strong> Desde un Nokia 3310 hasta la última wea de iPhone</li>
-        <li><strong>Es accesible:</strong> Los lectores de pantalla no se vuelven locos con tu código culiá</li>
-        <li><strong>SEO de pana:</strong> Google entiende HTML, no tu framework de moda</li>
-    </ul>
-    
-    <h2>Pero weón, ¿y la interactividad?</h2>
-    
-    <p>¿Cachái que HTML tiene formularios? ¿Sabí que podí hacer hartas weas sin JavaScript? Andai puro inventando problemas que no existen, po culiao.</p>
-    
-    <h2>"Pero necesito componentes reutilizables"</h2>
-    
-    <p>¿En serio, weón? ¿Pa qué wea necesitái un componente pa un botón? Es un <code>&lt;button&gt;</code>, no la wea más complicada del mundo.</p>
-    
-    <h2>"Mi jefe me obliga a usar React"</h2>
-    
-    <p>Bueno, ahí sí que estai cagao, po hermano. Pero al menos podí usar HTML semántico dentro de tu JSX culiá.</p>
-    
-    <h2>¿Cómo empezar?</h2>
-    
-    <ol>
-        <li>Abrí un editor de texto cualquiera</li>
-        <li>Escribí <code>&lt;!DOCTYPE html&gt;</code></li>
-        <li>Agregá tu contenido</li>
-        <li>Guardá como <code>.html</code></li>
-        <li>Abrí en el navegador</li>
-        <li>¡Listo, po weón!</li>
-    </ol>
-    
-    <h2>Ejemplo básico pa que no andí perdío</h2>
-    
-    <pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;Mi página culiá&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h1&gt;Hola, soy un título&lt;/h1&gt;
-    &lt;p&gt;Y yo soy un párrafo. ¿Viste qué fácil?&lt;/p&gt;
-    &lt;a href=\"https://ejemplo.com\"&gt;Un link, po&lt;/a&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-    
-    <h2>¿Y el CSS?</h2>
-    
-    <p>Obvio que podí usar CSS, no soy un animal. Pero empezá con HTML primero, después le metí estilo. Una cosa a la vez, po weón.</p>
-    
-    <h2>"Pero mi sitio se ve como las weas sin CSS"</h2>
-    
-    <p>¿Y qué wea? Al menos funciona y carga al tiro. Preferible eso a tu SPA que tarda 10 segundos en mostrar \"Hola Mundo\".</p>
-    
-    <h2>Conclusión</h2>
-    
-    <p>Dejá de complicarte la vida con frameworks de mierda. HTML existe desde los 90 y sigue funcionando de pana. Tu sitio web no necesita ser una aplicación espacial, po culiao.</p>
-    
-    <p><strong>Simplemente usá HTML de una puta vez.</strong></p>
-    
-    <hr>
-    
-    <p><em>Este sitio está hecho en HTML puro, obviamente. Sin JavaScript, sin frameworks, sin webpacks culiás. Solo HTML y un poquito de CSS pa que no se vea tan feo.</em></p>
-    
+    <div class="menu">
+        <div class="button-container">
+            <a href="#gen1" class="button">Gen 1</a>
+            <a href="#gen2" class="button">Gen 2-5</a>
+            <a href="#gen6" class="button">Gen 6+</a>
+            <a href="busqueda.html" class="button">Buscar Pokémon</a>
+        </div>
+    </div>
+
+    <!-- Logo por defecto -->
+    <div id="defaultLogo" style="text-align: center; margin-top: 20px;">
+        <img src="sprites/pokelogo.png" alt="Pokémon Logo" style="max-width: 80%; height: auto;">
+    </div>
+
+    <!-- GENERACIÓN 1 -->
+    <div id="gen1" class="content">
+        <h2>Generación 1</h2>
+        <div class="type-menu" id="gen1-types"></div>
+        <div id="gen1-details"></div>
+        <div class="button-back">
+            <a href="#" class="button">Volver</a>
+        </div>
+    </div>
+
+    <!-- GENERACIÓN 2-5 -->
+    <div id="gen2" class="content">
+        <h2>Generaciones 2-5</h2>
+        <div class="type-menu" id="gen2-types"></div>
+        <div id="gen2-details"></div>
+        <div class="button-back">
+            <a href="#" class="button">Volver</a>
+        </div>
+    </div>
+
+    <!-- GENERACIÓN 6+ -->
+    <div id="gen6" class="content">
+        <h2>Generación 6+</h2>
+        <div class="note">
+            <strong>Cambios:</strong><br>
+            • Tipo Hada añadido<br>
+            • Cambios en Acero<br>
+            • Cambios en Planta<br>
+            • Nuevas inmunidades
+        </div>
+        <div class="type-menu" id="gen6-types"></div>
+        <div id="gen6-details"></div>
+        <div class="button-back">
+            <a href="#" class="button">Volver</a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Función optimizada para manejar la visibilidad del logo
+        function actualizarLogoVisibilidad() {
+            var hash = window.location.hash;
+            var defaultLogo = document.getElementById('defaultLogo');
+            if (defaultLogo) {
+                defaultLogo.style.display = (hash && hash !== '#') ? 'none' : 'block';
+            }
+        }
+        
+        // Eventos optimizados
+        window.addEventListener('hashchange', actualizarLogoVisibilidad);
+        window.addEventListener('load', actualizarLogoVisibilidad);
+    </script>
 </body>
 </html>
