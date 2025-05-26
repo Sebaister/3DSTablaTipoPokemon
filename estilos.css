@@ -8,6 +8,11 @@ body {
     font-size: 12px;
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
+    /* Optimización para New 3DS */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 h1, h2 {
@@ -78,32 +83,23 @@ h2 {
     text-align: center;
     font-weight: bold;
     min-width: 80px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    box-sizing: border-box;
-    height: auto;
-    line-height: 1.2;
-    overflow: visible;
-    white-space: nowrap;
-    border: none;
+    /* Reemplazar text-shadow complejo por uno simple */
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8);
+    /* Optimizar transiciones */
+    -webkit-transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease;
 }
 
-/* Estilos para las secciones de interacciones */
-.type-section {
-    margin: 2px 0;
-    text-align: center;
-}
-
-.type-section strong {
-    display: block;
-    margin: 2px 0;
-    text-align: center;
-    font-size: 14px;
-}
-
+/* Optimizar flexbox para New 3DS */
 .type-list {
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
+    -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
+    -webkit-justify-content: center;
     justify-content: center;
+    -webkit-align-items: center;
     align-items: center;
     gap: 2px;
     margin: 2px 0;

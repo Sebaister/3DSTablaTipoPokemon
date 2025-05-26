@@ -465,42 +465,46 @@ function buscar() {
     }
 }
 
+// Optimizar la función de búsqueda con debouncing
+var timeoutBusqueda;
+function buscarConDebounce() {
+    clearTimeout(timeoutBusqueda);
+    timeoutBusqueda = setTimeout(buscar, 300);
+}
+
+// Optimizar navegación de Pokémon
+var pokemonActual = 0;
 function navegarPokemon(direccion) {
-    try {
-        // Obtener el Pokémon actual
-        var pokemonActual = null;
-        var nombreElement = document.getElementById("pokeName");
-        
-        if (nombreElement && nombreElement.innerHTML) {
-            // Extraer el número del Pokémon actual
-            var idActual = parseInt(nombreElement.innerHTML.split(".")[0]);
-            
-            if (!isNaN(idActual)) {
-                // Calcular el nuevo ID
-                var nuevoId = idActual + direccion;
-                
-                // Asegurarse de que el ID esté dentro del rango válido
-                if (nuevoId > 0 && nuevoId <= pokedata.length) {
-                    // Buscar el Pokémon con el nuevo ID
-                    document.getElementById("pokeInput").value = nuevoId;
-                    buscar();
-                }
-            }
-        } else {
-            // Si no hay Pokémon mostrado, mostrar el primero o el último
-            if (direccion > 0) {
-                document.getElementById("pokeInput").value = "1";
-            } else {
-                document.getElementById("pokeInput").value = pokedata.length.toString();
-            }
-            buscar();
-        }
-    } catch(e) {
-        alert("Error al navegar: " + e.message);
+    if (!pokedata || !pokedata.length) return;
+    
+    pokemonActual += direccion;
+    
+    // Ciclar al principio/final
+    if (pokemonActual >= pokedata.length) pokemonActual = 0;
+    if (pokemonActual < 0) pokemonActual = pokedata.length - 1;
+    
+    var pokemon = pokedata[pokemonActual];
+    if (pokemon) {
+        document.getElementById('pokeInput').value = pokemon.nombre;
+        mostrarResultado(pokemon);
     }
 }
 
-// Función para manejar las teclas (separada para mejor organización)
+// Optimizar el manejo de memoria
+function limpiarCache() {
+    ultimaBusqueda = "";
+    resultadoCache = null;
+    // Limpiar imágenes no utilizadas
+    var imagenes = document.getElementsByTagName('img');
+    for (var i = 0; i < imagenes.length; i++) {
+        if (imagenes[i].src && imagenes[i].src.indexOf('sprites/') !== -1) {
+            if (!imagenes[i].parentNode || imagenes[i].style.display === 'none') {
+                imagenes[i].src = '';
+            }
+        }
+    }
+}
+
 function manejarTeclas(event) {
     var sugerencias = document.getElementById("sugerencias");
     var items = sugerencias ? sugerencias.getElementsByClassName("sugerencia-item") : [];

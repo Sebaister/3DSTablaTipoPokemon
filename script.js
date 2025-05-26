@@ -173,3 +173,33 @@ if (document.readyState === 'loading') {
 } else {
     loadData();
 }
+
+// Añadir después de la función loadData()
+function optimizarImagenes() {
+    // Precargar solo las imágenes críticas
+    var imagenesCriticas = ['sprites/pokelogo.png', 'sprites/izq.png', 'sprites/der.png'];
+    imagenesCriticas.forEach(function(src) {
+        var img = new Image();
+        img.src = src;
+    });
+}
+
+// Lazy loading para sprites de Pokémon
+function cargarSpriteOptimizado(id) {
+    var img = new Image();
+    img.onload = function() {
+        var pokeImg = document.getElementById('pokeImg');
+        if (pokeImg) pokeImg.src = this.src;
+    };
+    img.onerror = function() {
+        var pokeImg = document.getElementById('pokeImg');
+        if (pokeImg) pokeImg.src = 'sprites/MissingNo.png';
+    };
+    
+    // Determinar generación para optimizar carga
+    var gen = id <= 151 ? '1gen' : id <= 251 ? '2gen' : id <= 386 ? '3gen' : 
+              id <= 493 ? '4gen' : id <= 649 ? '5gen' : id <= 721 ? '6gen' : 
+              id <= 809 ? '7gen' : id <= 905 ? '8gen' : '9gen';
+    
+    img.src = 'sprites/' + gen + '/' + id + '.png';
+}

@@ -3,7 +3,12 @@
 <head>
     <title>Tablas de Tipos Pokémon</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=320">
+    <!-- Optimizado para New 3DS -->
+    <meta name="viewport" content="width=320, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Precargar recursos críticos -->
+    <link rel="preload" href="estilos.css" as="style">
+    <link rel="preload" href="types.json" as="fetch">
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
@@ -62,18 +67,38 @@
 
     <script src="script.js"></script>
     <script>
-        // Función optimizada para manejar la visibilidad del logo
-        function actualizarLogoVisibilidad() {
-            var hash = window.location.hash;
-            var defaultLogo = document.getElementById('defaultLogo');
-            if (defaultLogo) {
-                defaultLogo.style.display = (hash && hash !== '#') ? 'none' : 'block';
+        // Optimización específica para New 3DS
+        function optimizarParaNew3DS() {
+            // Reducir la frecuencia de actualizaciones
+            var ultimoScroll = 0;
+            window.addEventListener('scroll', function() {
+                var ahora = Date.now();
+                if (ahora - ultimoScroll > 100) {
+                    ultimoScroll = ahora;
+                    actualizarLogoVisibilidad();
+                }
+            }, { passive: true });
+            
+            // Optimizar el manejo de hash
+            var ultimoHash = '';
+            function manejarHashOptimizado() {
+                var hashActual = window.location.hash;
+                if (hashActual !== ultimoHash) {
+                    ultimoHash = hashActual;
+                    actualizarLogoVisibilidad();
+                }
             }
+            
+            window.addEventListener('hashchange', manejarHashOptimizado);
+            window.addEventListener('load', manejarHashOptimizado);
         }
         
-        // Eventos optimizados
-        window.addEventListener('hashchange', actualizarLogoVisibilidad);
-        window.addEventListener('load', actualizarLogoVisibilidad);
+        // Inicializar optimizaciones
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', optimizarParaNew3DS);
+        } else {
+            optimizarParaNew3DS();
+        }
     </script>
 </body>
 </html>
