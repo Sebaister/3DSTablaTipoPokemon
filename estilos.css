@@ -406,7 +406,8 @@ button {
 }
 
 #search-container {
-    position: absolute !important; /* Cambio de fixed a absolute */
+    position: -webkit-sticky;
+    position: sticky;
     bottom: 0;
     left: 0;
     right: 0;
@@ -416,9 +417,44 @@ button {
     min-height: 70px;
     z-index: 1000;
     text-align: center;
+    margin-top: auto; /* Empuja hacia abajo */
+}
+
+/* Fallback para navegadores que no soportan sticky */
+@supports not (position: sticky) {
+    #search-container {
+        position: static;
+        margin-top: 20px;
+    }
 }
 
 /* Asegurar que el contenido principal no se superponga */
 .main-content {
     margin-bottom: 80px;
+}
+
+/* Optimizaciones específicas para 3DS */
+@media screen and (max-width: 400px) {
+    #search-container {
+        height: 80px;
+        min-height: 80px;
+    }
+    
+    #search-container input[type="text"] {
+        font-size: 16px; /* Evita zoom automático en 3DS */
+        height: 35px;
+        padding: 8px;
+    }
+    
+    #search-container button {
+        font-size: 14px;
+        padding: 10px 15px;
+        min-height: 40px;
+    }
+}
+
+/* Asegurar que el viewport sea estable */
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
 }
