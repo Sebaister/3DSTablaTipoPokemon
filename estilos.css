@@ -1,10 +1,11 @@
 /* Optimización de selectores */
 body {
     font-family: Arial, sans-serif;
-    background-color: #000;
+    background-color: #000; /* Fondo negro mantenido */
     color: #FFF;
     margin: 0;
     padding: 2px;
+    padding-bottom: 35px; /* Espacio para la barra fija */
     font-size: 12px;
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
@@ -13,6 +14,8 @@ body {
     transform: translateZ(0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    position: relative;
+    min-height: 100vh;
 }
 
 h1, h2 {
@@ -193,22 +196,34 @@ h2 {
 /* Problema actual */
 /* Solución compatible con Nintendo 3DS */
 #search-container {
-    padding: 2px 0;
+    padding: 1px 0; /* Reducido de 2px a 1px */
     text-align: center;
-    /* Usar position: absolute en lugar de fixed para 3DS */
-    position: absolute;
+    /* Posicionamiento fijo compatible con 3DS */
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100%;
-    background-color: #000;
+    background-color: #000; /* Fondo negro */
     border-top: 1px solid #444;
-    height: auto;
-    min-height: 40px;
+    height: 30px; /* Altura fija mínima */
+    min-height: 30px; /* Reducido de 40px a 30px */
     z-index: 1000;
-    /* Fallback para navegadores que soportan fixed */
-    position: -webkit-sticky;
-    position: sticky;
+    /* Fallback para navegadores problemáticos */
+    box-sizing: border-box;
+}
+
+/* Fallback específico para 3DS si fixed no funciona */
+@media screen and (max-width: 400px) {
+    #search-container {
+        position: absolute;
+        bottom: 0;
+    }
+    
+    html, body {
+        height: 100%;
+        overflow-x: hidden;
+    }
 }
 
 body {
@@ -302,6 +317,12 @@ body {
     display: inline-block;
     margin: 0;
     vertical-align: middle;
+    line-height: 1; /* Reduce el espacio entre líneas */
+}
+
+/* Asegurar que el contenido no se superponga */
+.main-content, .container {
+    margin-bottom: 35px;
 }
 
 #pokeImg {
@@ -329,37 +350,43 @@ body {
 }
 
 input[type="text"] {
-    font-size: 11px;
-    padding: 2px;
-    width: 70px;
-    height: 18px;
-    margin: 0 3px;
+    font-size: 10px; /* Reducido de 11px */
+    padding: 1px 2px; /* Reducido padding vertical */
+    width: 65px; /* Reducido de 70px */
+    height: 16px; /* Reducido de 18px */
+    margin: 0 2px; /* Reducido margen */
     border: 1px solid #666;
-    border-radius: 3px;
+    border-radius: 2px;
     text-align: center;
     vertical-align: middle;
+    background-color: #222; /* Fondo oscuro */
+    color: #FFF;
 }
 
 input[type="submit"] {
-    font-size: 11px;
-    padding: 2px;
-    width: 60px;
-    height: 22px;
-    margin: 0 3px;
+    font-size: 10px; /* Reducido de 11px */
+    padding: 1px 2px; /* Reducido padding */
+    width: 55px; /* Reducido de 60px */
+    height: 18px; /* Reducido de 22px */
+    margin: 0 2px;
     background-color: #E00;
     color: white;
     border: 1px solid #900;
-    border-radius: 3px;
+    border-radius: 2px;
     cursor: pointer;
     vertical-align: middle;
 }
 
 button {
-    font-size: 10px;
+    font-size: 9px; /* Reducido de 10px */
     padding: 1px;
-    width: 60px;
+    width: 55px; /* Reducido de 60px */
     margin: 1px;
-    height: 16px;
+    height: 14px; /* Reducido de 16px */
+    background-color: #333;
+    color: #FFF;
+    border: 1px solid #666;
+    border-radius: 2px;
 }
 
 .note {
