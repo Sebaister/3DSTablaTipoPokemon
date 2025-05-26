@@ -314,10 +314,11 @@ body {
 }
 
 #search-container form {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     margin: 0;
-    vertical-align: middle;
-    line-height: 1; /* Reduce el espacio entre líneas */
+    gap: 2px;
+    line-height: 1;
 }
 
 /* Asegurar que el contenido no se superponga */
@@ -350,25 +351,25 @@ body {
 }
 
 input[type="text"] {
-    font-size: 10px; /* Reducido de 11px */
-    padding: 1px 2px; /* Reducido padding vertical */
-    width: 65px; /* Reducido de 70px */
-    height: 16px; /* Reducido de 18px */
-    margin: 0 2px; /* Reducido margen */
+    font-size: 9px;
+    padding: 1px 2px;
+    width: 60px;
+    height: 14px;
+    margin: 0 1px;
     border: 1px solid #666;
     border-radius: 2px;
     text-align: center;
     vertical-align: middle;
-    background-color: #222; /* Fondo oscuro */
+    background-color: #222;
     color: #FFF;
 }
 
 input[type="submit"] {
-    font-size: 10px; /* Reducido de 11px */
-    padding: 1px 2px; /* Reducido padding */
-    width: 55px; /* Reducido de 60px */
-    height: 18px; /* Reducido de 22px */
-    margin: 0 2px;
+    font-size: 9px;
+    padding: 1px 3px;
+    width: 50px;
+    height: 16px;
+    margin: 0 1px;
     background-color: #E00;
     color: white;
     border: 1px solid #900;
@@ -378,15 +379,16 @@ input[type="submit"] {
 }
 
 button {
-    font-size: 9px; /* Reducido de 10px */
-    padding: 1px;
-    width: 55px; /* Reducido de 60px */
-    margin: 1px;
-    height: 14px; /* Reducido de 16px */
+    font-size: 8px;
+    padding: 1px 2px;
+    width: 45px;
+    margin: 0 1px;
+    height: 14px;
     background-color: #333;
     color: #FFF;
     border: 1px solid #666;
     border-radius: 2px;
+    vertical-align: middle;
 }
 
 .note {
@@ -433,18 +435,22 @@ button {
 }
 
 #search-container {
-    position: -webkit-sticky;
-    position: sticky;
+    padding: 1px 0;
+    text-align: center;
+    position: fixed !important; /* Forzar posición fija */
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #333;
-    border-top: 2px solid #555;
-    height: 70px;
-    min-height: 70px;
-    z-index: 1000;
-    text-align: center;
-    margin-top: auto; /* Empuja hacia abajo */
+    width: 100%;
+    background-color: #000 !important; /* Forzar fondo negro */
+    border-top: 1px solid #444;
+    height: 28px; /* Altura más pequeña */
+    min-height: 28px;
+    z-index: 9999; /* Z-index más alto */
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Fallback para navegadores que no soportan sticky */
