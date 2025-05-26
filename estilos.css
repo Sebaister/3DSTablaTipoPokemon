@@ -190,18 +190,56 @@ h2 {
 .immune { background-color: #999; }
 
 /* Estilos de búsqueda y resultados */
+/* Problema actual */
+/* Solución compatible con Nintendo 3DS */
 #search-container {
     padding: 2px 0;
     text-align: center;
-    position: fixed !important;
+    /* Usar position: absolute en lugar de fixed para 3DS */
+    position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
+    width: 100%;
     background-color: #000;
     border-top: 1px solid #444;
     height: auto;
     min-height: 40px;
     z-index: 1000;
+    /* Fallback para navegadores que soportan fixed */
+    position: -webkit-sticky;
+    position: sticky;
+}
+
+/* Asegurar que el body tenga position relative para que absolute funcione */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #FFF;
+    margin: 0;
+    padding: 2px;
+    font-size: 12px;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+    position: relative; /* ← Añadir esto */
+    min-height: 100vh; /* ← Añadir esto */
+}
+
+/* Alternativa específica para Nintendo 3DS */
+@media screen and (max-width: 400px) {
+    #search-container {
+        position: static;
+        margin-top: 20px;
+        border: 1px solid #444;
+        border-radius: 5px;
+    }
+    
+    /* Ajustar el margen del resultado para compensar */
+    #resultado {
+        padding: 6px;
+        margin-bottom: 10px; /* Reducir margen */
+        text-align: center;
+    }
 }
 
 #search-container h1 {
