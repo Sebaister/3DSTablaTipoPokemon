@@ -211,18 +211,14 @@ h2 {
     position: sticky;
 }
 
-/* Asegurar que el body tenga position relative para que absolute funcione */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #000;
-    color: #FFF;
     margin: 0;
-    padding: 2px;
-    font-size: 12px;
-    -webkit-text-size-adjust: none;
-    text-size-adjust: none;
-    position: relative; /* ← Añadir esto */
-    min-height: 100vh; /* ← Añadir esto */
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 80px; /* Espacio para la barra de búsqueda */
 }
 
 /* Alternativa específica para Nintendo 3DS */
@@ -407,4 +403,22 @@ button {
 
 .sugerencia-item.selected {
     background-color: #e0e0e0;
+}
+
+#search-container {
+    position: absolute !important; /* Cambio de fixed a absolute */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #333;
+    border-top: 2px solid #555;
+    height: 70px;
+    min-height: 70px;
+    z-index: 1000;
+    text-align: center;
+}
+
+/* Asegurar que el contenido principal no se superponga */
+.main-content {
+    margin-bottom: 80px;
 }
