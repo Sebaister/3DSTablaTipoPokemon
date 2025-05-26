@@ -226,14 +226,21 @@ h2 {
     }
 }
 
+/* ELIMINAR ESTAS LÍNEAS (229-237): */
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #000 !important; /* Fondo negro forzado */
     position: relative;
     min-height: 100vh;
-    padding-bottom: 80px; /* Espacio para la barra de búsqueda */
+    padding-bottom: 50px;
+    /* Optimizaciones para 3DS */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    font-size: 14px;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
 }
 
 /* Alternativa específica para Nintendo 3DS */
