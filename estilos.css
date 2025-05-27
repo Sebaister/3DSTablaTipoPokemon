@@ -1,20 +1,13 @@
 /* Optimización de selectores */
 body {
     font-family: Arial, sans-serif;
-    background-color: #000; /* Fondo negro mantenido */
+    background-color: #000;
     color: #FFF;
     margin: 0;
     padding: 2px;
-    padding-bottom: 35px; /* Espacio para la barra fija */
     font-size: 12px;
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    position: relative;
-    min-height: 100vh;
 }
 
 h1, h2 {
@@ -85,23 +78,32 @@ h2 {
     text-align: center;
     font-weight: bold;
     min-width: 80px;
-    /* Reemplazar text-shadow complejo por uno simple */
-    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8);
-    /* Optimizar transiciones */
-    -webkit-transition: background-color 0.2s ease;
-    transition: background-color 0.2s ease;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    height: auto;
+    line-height: 1.2;
+    overflow: visible;
+    white-space: nowrap;
+    border: none;
 }
 
-/* Optimizar flexbox para New 3DS */
+/* Estilos para las secciones de interacciones */
+.type-section {
+    margin: 2px 0;
+    text-align: center;
+}
+
+.type-section strong {
+    display: block;
+    margin: 2px 0;
+    text-align: center;
+    font-size: 14px;
+}
+
 .type-list {
-    display: -webkit-box;
-    display: -webkit-flex;
     display: flex;
-    -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
-    -webkit-justify-content: center;
     justify-content: center;
-    -webkit-align-items: center;
     align-items: center;
     gap: 2px;
     margin: 2px 0;
@@ -192,54 +194,18 @@ h2 {
 .immune { background-color: #999; }
 
 /* Estilos de búsqueda y resultados */
-/* Problema actual */
-/* Solución compatible con Nintendo 3DS */
 #search-container {
-    padding: 1px 0; /* Reducido de 2px a 1px */
+    padding: 2px 0;
     text-align: center;
-    /* Posicionamiento fijo compatible con 3DS */
-    position: fixed;
+    position: fixed !important;
     bottom: 0;
     left: 0;
     right: 0;
-    width: 100%;
-    background-color: #000; /* Fondo negro */
+    background-color: #000;
     border-top: 1px solid #444;
-    height: 30px; /* Altura fija mínima */
-    min-height: 30px; /* Reducido de 40px a 30px */
+    height: auto;
+    min-height: 40px;
     z-index: 1000;
-    /* Fallback para navegadores problemáticos */
-    box-sizing: border-box;
-}
-
-/* Fallback específico para 3DS si fixed no funciona */
-@media screen and (max-width: 400px) {
-    #search-container {
-        position: absolute;
-        bottom: 0;
-    }
-    
-    html, body {
-        height: 100%;
-        overflow-x: hidden;
-    }
-}
-
-/* Alternativa específica para Nintendo 3DS */
-@media screen and (max-width: 400px) {
-    #search-container {
-        position: static;
-        margin-top: 20px;
-        border: 1px solid #444;
-        border-radius: 5px;
-    }
-    
-    /* Ajustar el margen del resultado para compensar */
-    #resultado {
-        padding: 6px;
-        margin-bottom: 10px; /* Reducir margen */
-        text-align: center;
-    }
 }
 
 #search-container h1 {
@@ -303,16 +269,9 @@ h2 {
 }
 
 #search-container form {
-    display: inline-flex;
-    align-items: center;
+    display: inline-block;
     margin: 0;
-    gap: 2px;
-    line-height: 1;
-}
-
-/* Asegurar que el contenido no se superponga */
-.main-content, .container {
-    margin-bottom: 35px;
+    vertical-align: middle;
 }
 
 #pokeImg {
@@ -340,44 +299,37 @@ h2 {
 }
 
 input[type="text"] {
-    font-size: 9px;
-    padding: 1px 2px;
-    width: 60px;
-    height: 14px;
-    margin: 0 1px;
+    font-size: 11px;
+    padding: 2px;
+    width: 70px;
+    height: 18px;
+    margin: 0 3px;
     border: 1px solid #666;
-    border-radius: 2px;
+    border-radius: 3px;
     text-align: center;
     vertical-align: middle;
-    background-color: #222;
-    color: #FFF;
 }
 
 input[type="submit"] {
-    font-size: 9px;
-    padding: 1px 3px;
-    width: 50px;
-    height: 16px;
-    margin: 0 1px;
+    font-size: 11px;
+    padding: 2px;
+    width: 60px;
+    height: 22px;
+    margin: 0 3px;
     background-color: #E00;
     color: white;
     border: 1px solid #900;
-    border-radius: 2px;
+    border-radius: 3px;
     cursor: pointer;
     vertical-align: middle;
 }
 
 button {
-    font-size: 8px;
-    padding: 1px 2px;
-    width: 45px;
-    margin: 0 1px;
-    height: 14px;
-    background-color: #333;
-    color: #FFF;
-    border: 1px solid #666;
-    border-radius: 2px;
-    vertical-align: middle;
+    font-size: 10px;
+    padding: 1px;
+    width: 60px;
+    margin: 1px;
+    height: 16px;
 }
 
 .note {
@@ -421,78 +373,4 @@ button {
 
 .sugerencia-item.selected {
     background-color: #e0e0e0;
-}
-
-#search-container {
-    padding: 1px 0;
-    text-align: center;
-    position: fixed !important; /* Forzar posición fija */
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    background-color: #000 !important; /* Forzar fondo negro */
-    border-top: 1px solid #444;
-    height: 28px; /* Altura más pequeña */
-    min-height: 28px;
-    z-index: 9999; /* Z-index más alto */
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Fallback para navegadores que no soportan sticky */
-@supports not (position: sticky) {
-    #search-container {
-        position: static;
-        margin-top: 20px;
-    }
-}
-
-/* Asegurar que el contenido principal no se superponga */
-.main-content {
-    margin-bottom: 80px;
-}
-
-/* Optimizaciones específicas para 3DS */
-/* Media query corregida para Nintendo 3DS */
-@media screen and (max-width: 400px) {
-    #search-container {
-        position: fixed !important;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        height: 35px;
-        background-color: #000 !important;
-        z-index: 9999;
-        border-top: 1px solid #444;
-    }
-    
-    #search-container input[type="text"] {
-        width: 120px;
-        height: 20px;
-        font-size: 10px;
-        padding: 2px;
-    }
-    
-    #search-container input[type="submit"], 
-    #search-container button {
-        height: 22px;
-        font-size: 9px;
-        padding: 2px 6px;
-        margin: 0 2px;
-    }
-    
-    /* Ajustar el contenido para evitar solapamiento */
-    body {
-        padding-bottom: 40px !important;
-    }
-}
-
-/* Asegurar que el viewport sea estable */
-html {
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
 }
