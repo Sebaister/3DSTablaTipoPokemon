@@ -2,92 +2,8 @@
 <html>
 <head>
     <title>Tablas de Tipos Pokémon</title>
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Tablas de Tipos Pokémon</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=320">
-        <link rel="stylesheet" href="estilos.css">
-    </head>
-    <body>
-        <h1>Tablas de Tipos Pokémon</h1>
-        
-        <div class="menu">
-            <div class="button-container">
-                <a href="#gen1" class="button">Gen 1</a>
-                <a href="#gen2" class="button">Gen 2-5</a>
-                <a href="#gen6" class="button">Gen 6+</a>
-                <a href="busqueda.html" class="button">Buscar Pokémon</a>
-            </div>
-        </div>
-    
-        <!-- Logo por defecto -->
-        <div id="defaultLogo" style="text-align: center; margin-top: 20px;">
-            <img src="sprites/pokelogo.png" alt="Pokémon Logo" style="max-width: 80%; height: auto;">
-        </div>
-    
-        <!-- GENERACIÓN 1 -->
-        <div id="gen1" class="content">
-            <h2>Generación 1</h2>
-            <div class="type-menu" id="gen1-types"></div>
-            <div id="gen1-details"></div>
-            <div class="button-back">
-                <a href="#" class="button">Volver</a>
-            </div>
-        </div>
-    
-        <!-- GENERACIÓN 2-5 -->
-        <div id="gen2" class="content">
-            <h2>Generaciones 2-5</h2>
-            <div class="type-menu" id="gen2-types"></div>
-            <div id="gen2-details"></div>
-            <div class="button-back">
-                <a href="#" class="button">Volver</a>
-            </div>
-        </div>
-    
-        <!-- GENERACIÓN 6+ -->
-        <div id="gen6" class="content">
-            <h2>Generación 6+</h2>
-            <div class="note">
-                <strong>Cambios:</strong><br>
-                • Tipo Hada añadido<br>
-                • Cambios en Acero<br>
-                • Cambios en Planta<br>
-                • Nuevas inmunidades
-            </div>
-            <div class="type-menu" id="gen6-types"></div>
-            <div id="gen6-details"></div>
-            <div class="button-back">
-                <a href="#" class="button">Volver</a>
-            </div>
-        </div>
-    
-        <script src="script.js"></script>
-        <script>
-            // Función optimizada para manejar la visibilidad del logo
-            function actualizarLogoVisibilidad() {
-                var hash = window.location.hash;
-                var defaultLogo = document.getElementById('defaultLogo');
-                if (defaultLogo) {
-                    defaultLogo.style.display = (hash && hash !== '#') ? 'none' : 'block';
-                }
-            }
-            
-            // Eventos optimizados
-            window.addEventListener('hashchange', actualizarLogoVisibilidad);
-            window.addEventListener('load', actualizarLogoVisibilidad);
-        </script>
-    </body>
-    </html>
-        <meta charset="utf-8">
-    <!-- Optimizado para New 3DS -->
-    <meta name="viewport" content="width=320, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Precargar recursos críticos -->
-    <link rel="preload" href="estilos.css" as="style">
-    <link rel="preload" href="types.json" as="fetch">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=320">
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
@@ -146,38 +62,18 @@
 
     <script src="script.js"></script>
     <script>
-        // Optimización específica para New 3DS
-        function optimizarParaNew3DS() {
-            // Reducir la frecuencia de actualizaciones
-            var ultimoScroll = 0;
-            window.addEventListener('scroll', function() {
-                var ahora = Date.now();
-                if (ahora - ultimoScroll > 100) {
-                    ultimoScroll = ahora;
-                    actualizarLogoVisibilidad();
-                }
-            }, { passive: true });
-            
-            // Optimizar el manejo de hash
-            var ultimoHash = '';
-            function manejarHashOptimizado() {
-                var hashActual = window.location.hash;
-                if (hashActual !== ultimoHash) {
-                    ultimoHash = hashActual;
-                    actualizarLogoVisibilidad();
-                }
+        // Función optimizada para manejar la visibilidad del logo
+        function actualizarLogoVisibilidad() {
+            var hash = window.location.hash;
+            var defaultLogo = document.getElementById('defaultLogo');
+            if (defaultLogo) {
+                defaultLogo.style.display = (hash && hash !== '#') ? 'none' : 'block';
             }
-            
-            window.addEventListener('hashchange', manejarHashOptimizado);
-            window.addEventListener('load', manejarHashOptimizado);
         }
         
-        // Inicializar optimizaciones
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', optimizarParaNew3DS);
-        } else {
-            optimizarParaNew3DS();
-        }
+        // Eventos optimizados
+        window.addEventListener('hashchange', actualizarLogoVisibilidad);
+        window.addEventListener('load', actualizarLogoVisibilidad);
     </script>
 </body>
 </html>
