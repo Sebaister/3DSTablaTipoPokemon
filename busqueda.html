@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Buscar Pokémon</title>
     <meta name="viewport" content="width=320">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Buscador de Pokémon compatible con Nintendo 3DS">
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-    <!-- Botón de volver a la página principal (pequeño y en la esquina superior izquierda) -->
+    <!-- Botón de volver a la página principal -->
     <div class="button-back-small">
         <a href="index.html" class="button-small" tabindex="1">Volver</a>
     </div>
@@ -19,7 +19,7 @@
 
     <div id="resultado" style="display: none;">
         <div id="pokeContainer">
-            <img id="pokeImg" src="sprites/MissingNo.png" alt="Pokemon">
+            <img id="pokeImg" src="sprites/MissingNo.png" alt="Pokemon" loading="lazy">
             <div id="pokeName"></div>
         </div>
         <div id="pokeInfo">
@@ -31,14 +31,14 @@
     <div id="search-container">
         <h1>Buscar Pokémon</h1>
         <div class="nav-container">
-            <button id="prevPokemon" class="nav-button" onclick="navegarPokemon(-1);" tabindex="2">
+            <button id="prevPokemon" class="nav-button" tabindex="2">
                 <img src="sprites/izq.png" class="nav-arrow" alt="Anterior">
             </button>
-            <form onsubmit="buscar(); return false;">
-                <input type="text" id="pokeInput" tabindex="3" autocomplete="off">
+            <form id="searchForm">
+                <input type="text" id="pokeInput" tabindex="3" autocomplete="off" placeholder="Nombre o número">
                 <input type="submit" value="Buscar" tabindex="4">
             </form>
-            <button id="nextPokemon" class="nav-button" onclick="navegarPokemon(1);" tabindex="5">
+            <button id="nextPokemon" class="nav-button" tabindex="5">
                 <img src="sprites/der.png" class="nav-arrow" alt="Siguiente">
             </button>
         </div>

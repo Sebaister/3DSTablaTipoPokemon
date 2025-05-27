@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <title>Tablas de Tipos Pokémon</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=320">
+    <meta name="description" content="Tablas de tipos Pokémon compatibles con Nintendo 3DS">
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
@@ -11,10 +12,10 @@
     
     <div class="menu">
         <div class="button-container">
-            <a href="#gen1" class="button">Gen 1</a>
-            <a href="#gen2" class="button">Gen 2-5</a>
-            <a href="#gen6" class="button">Gen 6+</a>
-            <a href="busqueda.html" class="button">Buscar Pokémon</a>
+            <a href="#gen1" class="button" tabindex="1">Gen 1</a>
+            <a href="#gen2" class="button" tabindex="2">Gen 2-5</a>
+            <a href="#gen6" class="button" tabindex="3">Gen 6+</a>
+            <a href="busqueda.html" class="button" tabindex="4">Buscar Pokémon</a>
         </div>
     </div>
 
@@ -62,7 +63,7 @@
 
     <script src="script.js"></script>
     <script>
-        // Función optimizada para manejar la visibilidad del logo
+        // Función para manejar la visibilidad del logo
         function actualizarLogoVisibilidad() {
             var hash = window.location.hash;
             var defaultLogo = document.getElementById('defaultLogo');
@@ -71,9 +72,29 @@
             }
         }
         
-        // Eventos optimizados
+        // Eventos
         window.addEventListener('hashchange', actualizarLogoVisibilidad);
         window.addEventListener('load', actualizarLogoVisibilidad);
+
+        // Mejorar navegación con teclado
+        document.addEventListener('keydown', function(e) {
+            // Teclas de flecha para navegar entre botones
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                var activeElement = document.activeElement;
+                var tabIndex = parseInt(activeElement.getAttribute('tabindex')) || 0;
+                var nextElement = document.querySelector('[tabindex="' + (tabIndex + 1) + '"]');
+                if (nextElement) nextElement.focus();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                var activeElement = document.activeElement;
+                var tabIndex = parseInt(activeElement.getAttribute('tabindex')) || 0;
+                if (tabIndex > 1) {
+                    var prevElement = document.querySelector('[tabindex="' + (tabIndex - 1) + '"]');
+                    if (prevElement) prevElement.focus();
+                }
+            }
+        });
     </script>
 </body>
 </html>
