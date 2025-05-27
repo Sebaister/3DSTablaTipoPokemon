@@ -204,5 +204,7 @@ function mostrarError(mensaje) {
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', loadData);
 } else {
+    // Verificar si la carga de datos se ha iniciado
+    console.log("Iniciando carga de datos...");
     loadData();
 }
