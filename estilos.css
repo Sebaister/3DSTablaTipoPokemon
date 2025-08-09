@@ -244,9 +244,20 @@ h2 {
     text-shadow: 1px 1px 1px #000;
 }
 
+/* Asegurar que el contenido no se superponga con la barra fija */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #FFF;
+    margin: 0;
+    padding: 2px;
+    padding-bottom: 50px; /* Espacio para la barra fija */
+    font-size: 12px;
+}
+
 #resultado {
     padding: 6px;
-    margin-bottom: 45px;
+    margin-bottom: 50px; /* Margen para evitar superposición */
     text-align: center;
 }
 
