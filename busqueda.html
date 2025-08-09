@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=320, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="estilos.css">
+    <style>
+        /* Estilos específicos para 3DS */
+        html, body {
+            height: 100%;
+            position: relative;
+            overflow-x: hidden;
+        }
+    </style>
 </head>
 <body>
     <!-- Botón de volver a la página principal (pequeño y en la esquina superior izquierda) -->
@@ -45,5 +53,20 @@
     </div>
 
     <script src="busqueda.js"></script>
+    <script>
+        // Script adicional para asegurar posicionamiento en 3DS
+        window.addEventListener('load', function() {
+            var searchContainer = document.getElementById('search-container');
+            if (searchContainer) {
+                // Forzar reposicionamiento después de la carga
+                setTimeout(function() {
+                    searchContainer.style.position = 'absolute';
+                    searchContainer.style.bottom = '0px';
+                    searchContainer.style.left = '0px';
+                    searchContainer.style.right = '0px';
+                }, 100);
+            }
+        });
+    </script>
 </body>
 </html>
