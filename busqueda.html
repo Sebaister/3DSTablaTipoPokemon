@@ -44,5 +44,24 @@
     </div>
 
     <script src="busqueda.js"></script>
+    <script>
+        // Script específico para simular position fixed en Nintendo 3DS
+        function posicionarBarraFija() {
+            var searchContainer = document.getElementById('search-container');
+            if (searchContainer) {
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                var windowHeight = window.innerHeight || document.documentElement.clientHeight;
+                searchContainer.style.top = (scrollTop + windowHeight - searchContainer.offsetHeight) + 'px';
+            }
+        }
+        
+        // Ejecutar al cargar y al hacer scroll
+        window.addEventListener('load', posicionarBarraFija);
+        window.addEventListener('scroll', posicionarBarraFija);
+        window.addEventListener('resize', posicionarBarraFija);
+        
+        // Ejecutar periódicamente para asegurar posición
+        setInterval(posicionarBarraFija, 100);
+    </script>
 </body>
 </html>
