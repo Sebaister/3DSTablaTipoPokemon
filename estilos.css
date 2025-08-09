@@ -221,85 +221,19 @@ h2 {
 .strong { background-color: #26F; }
 .immune { background-color: #999; }
 
-/* Estilos de búsqueda y resultados - CORREGIDO PARA 3DS */
+/* Estilos de búsqueda y resultados */
 #search-container {
     padding: 2px 0;
     text-align: center;
-    position: absolute !important; /* Cambiar de fixed a absolute para 3DS */
+    position: fixed !important;
     bottom: 0;
     left: 0;
     right: 0;
-    width: 100%; /* Agregar width explícito */
     background-color: #000;
     border-top: 1px solid #444;
     height: auto;
     min-height: 40px;
     z-index: 1000;
-    box-sizing: border-box; /* Asegurar que el padding no cause overflow */
-}
-
-/* Contenedor de navegación - SIMPLIFICADO PARA 3DS */
-.nav-container {
-    text-align: center; /* Reemplazar flexbox con text-align */
-    margin: 0;
-    white-space: nowrap; /* Evitar que los elementos se envuelvan */
-}
-
-.nav-button {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    outline: none;
-    width: 30px;
-    height: 30px;
-    display: inline-block; /* Cambiar de flex a inline-block */
-    vertical-align: middle; /* Alinear verticalmente */
-    text-align: center;
-}
-
-#search-container form {
-    display: inline-block;
-    margin: 0 5px; /* Agregar margen para separación */
-    vertical-align: middle;
-}
-
-/* Contenedor de Pokémon - SIMPLIFICADO PARA 3DS */
-#pokeContainer {
-    margin-bottom: 5px;
-    text-align: center; /* Reemplazar flexbox */
-}
-
-/* Asegurar que el contenido no se superponga con la barra fija */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #000;
-    color: #FFF;
-    margin: 0;
-    padding: 2px;
-    padding-bottom: 50px; /* Agregar padding inferior para la barra fija */
-    font-size: 12px;
-    -webkit-text-size-adjust: none;
-    text-size-adjust: none;
-}
-
-/* Ajustar el margen del resultado para que no se superponga */
-#resultado {
-    padding: 6px;
-    margin-bottom: 50px; /* Aumentar margen inferior */
-    text-align: center;
-}
-
-/* Fallback para navegadores que no soportan position fixed */
-@media screen and (max-width: 400px) {
-    #search-container {
-        position: absolute !important;
-        bottom: 0;
-    }
-    
-    body {
-        padding-bottom: 60px;
-    }
 }
 
 #search-container h1 {
