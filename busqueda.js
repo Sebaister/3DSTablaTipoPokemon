@@ -1,378 +1,684 @@
-// ... existing code ...
+var pokedata = [];
+var typeData = {};
 
-// Función para buscar Pokémon
-function buscar() {
-    var input = document.getElementById("pokeInput");
-    var valor = input.value.trim();
-    
-    if (valor === "") {
-        alert("Por favor ingresa un nombre o número de Pokémon");
-        return;
-    }
-    
-    // Usar caché si la búsqueda es la misma
-    if (valor === ultimaBusqueda && resultadoCache) {
-        mostrarPokemon(resultadoCache);
-        return;
-    }
-    
-    var pokemon = buscarPokemon(valor);
-    
-    if (pokemon) {
-        // Guardar en caché
-        ultimaBusqueda = valor;
-        resultadoCache = pokemon;
-        pokemonActual = pokemon;
-        mostrarPokemon(pokemon);
-    } else {
-        alert("No se encontró ningún Pokémon con ese nombre o número");
-    }
-    
-    // Limpiar sugerencias
-    var sugerencias = document.getElementById("sugerencias");
-    if (sugerencias) {
-        sugerencias.style.display = "none";
+// Reemplazar esta función
+function cargarDatos() {
+    try {
+        // Cargar datos solo si no están ya cargados
+        if (pokedata.length === 0) {
+            var xhr1 = new XMLHttpRequest();
+            xhr1.open("GET", "pokedata.json", true); // Asíncrono para mejor rendimiento
+            xhr1.onreadystatechange = function() {
+                if (xhr1.readyState === 4) {
+                    if (xhr1.status === 200) {
+                        try {
+                            // Usar JSON.parse en lugar de eval para mejor seguridad y rendimiento
+                            pokedata = JSON.parse(xhr1.responseText);
+                            
+                            // Cargar datos de tipos después de cargar pokedata
+                            cargarTipos();
+                        } catch(e) {
+                            alert("Error al procesar datos de Pokémon");
+                        }
+                    } else {
+                        alert("Error al cargar pokedata.json");
+                    }
+                }
+            };
+            xhr1.send();
+        } else if (Object.keys(typeData).length === 0) {
+            // Si ya tenemos pokedata pero no typeData
+            cargarTipos();
+        }
+    } catch(e) {
+        alert("Error de conexión");
     }
 }
 
-// Función para mostrar el Pokémon encontrado
-function mostrarPokemon(pokemon) {
-    if (!pokemon) return;
-    
-    var resultado = document.getElementById("resultado");
-    var pokeImg = document.getElementById("pokeImg");
-    var pokeName = document.getElementById("pokeName");
-    var pokeInfo = document.getElementById("pokeInfo");
-    var typeDetails = document.getElementById("typeDetails");
-    
-    // Mostrar el contenedor de resultados
-    resultado.style.display = "block";
-    
-    // Determinar la generación para la imagen
-    var gen = 1;
-    if (pokemon.id > 151 && pokemon.id <= 251) gen = 2;
-    else if (pokemon.id > 251 && pokemon.id <= 386) gen = 3;
-    else if (pokemon.id > 386 && pokemon.id <= 493) gen = 4;
-    else if (pokemon.id > 493 && pokemon.id <= 649) gen = 5;
-    else if (pokemon.id > 649 && pokemon.id <= 721) gen = 6;
-    else if (pokemon.id > 721 && pokemon.id <= 809) gen = 7;
-    else if (pokemon.id > 809) gen = 8;
-    
-    // Actualizar imagen
-    pokeImg.src = "sprites/gen" + gen + "/" + pokemon.id + ".png";
-    pokeImg.alt = pokemon.nombre;
-    
-    // Actualizar nombre y número
-    pokeName.textContent = "#" + pokemon.id + " - " + pokemon.nombre;
-    
-    // Construir información del Pokémon
-    var infoHTML = "<div class='info-section'>";
-    
-    // Mostrar tipos
-    infoHTML += "<div class='type-list'>";
-    for (var i = 0; i < pokemon.tipos.length; i++) {
-        infoHTML += "<div class='type-tag " + pokemon.tipos[i] + "'>" + 
-            formatearNombresTipos(capitalizeFirstLetter(pokemon.tipos[i])) + "</div>";
+// Función separada para cargar tipos
+function cargarTipos() {
+    if (Object.keys(typeData).length === 0) {
+        var xhr2 = new XMLHttpRequest();
+        xhr2.open("GET", "types.json", true);
+        xhr2.onreadystatechange = function() {
+            if (xhr2.readyState === 4) {
+                if (xhr2.status === 200) {
+                    try {
+                        // Usar JSON.parse en lugar de eval
+                        typeData = JSON.parse(xhr2.responseText);
+                    } catch(e) {
+                        alert("Error al procesar datos de tipos");
+                    }
+                } else {
+                    alert("Error al cargar types.json");
+                }
+            }
+        };
+        xhr2.send();
     }
-    infoHTML += "</div>";
-    
-    // Mostrar estadísticas si están disponibles
-    if (pokemon.stats) {
-        infoHTML += "<div class='stats-container'>";
-        infoHTML += "<div class='stat'><span>HP:</span> " + pokemon.stats.hp + "</div>";
-        infoHTML += "<div class='stat'><span>Ataque:</span> " + pokemon.stats.atk + "</div>";
-        infoHTML += "<div class='stat'><span>Defensa:</span> " + pokemon.stats.def + "</div>";
-        infoHTML += "<div class='stat'><span>Atq. Esp:</span> " + pokemon.stats.spa + "</div>";
-        infoHTML += "<div class='stat'><span>Def. Esp:</span> " + pokemon.stats.spd + "</div>";
-        infoHTML += "<div class='stat'><span>Velocidad:</span> " + pokemon.stats.spe + "</div>";
-        infoHTML += "</div>";
+}
+
+// Optimización de la función buscar con caché
+var ultimaBusqueda = "";
+var resultadoCache = null;
+
+function buscar() {
+    try {
+        if (!pokedata || !pokedata.length) {
+            alert("No hay datos cargados");
+            return;
+        }
+
+        var inputElement = document.getElementById("pokeInput");
+        if (!inputElement) {
+            alert("Error: No se encuentra el campo de búsqueda");
+            return;
+        }
+
+        var searchValue = inputElement.value;
+        if (!searchValue) {
+            alert("Por favor ingrese un nombre o número");
+            return;
+        }
+        searchValue = searchValue.toLowerCase().replace(/^\s+|\s+$/g, '');
+        
+        // Usar caché si la búsqueda es la misma
+        if (searchValue === ultimaBusqueda && resultadoCache) {
+            mostrarResultado(resultadoCache);
+            return;
+        }
+        
+        // Optimización: Búsqueda más eficiente
+        var pokemon = buscarPokemon(searchValue);
+
+        if (!pokemon) {
+            alert("Pokémon no encontrado");
+            return;
+        }
+        
+        // Guardar en caché
+        ultimaBusqueda = searchValue;
+        resultadoCache = pokemon;
+        
+        mostrarResultado(pokemon);
+    } catch(e) {
+        alert("Error en la búsqueda");
+    }
+}
+
+// Función separada para buscar Pokémon
+function buscarPokemon(searchValue) {
+    // Primero intentar buscar por ID (más rápido)
+    if (!isNaN(searchValue)) {
+        var id = parseInt(searchValue, 10);
+        // Búsqueda binaria para IDs (asumiendo que están ordenados)
+        var inicio = 0;
+        var fin = pokedata.length - 1;
+        
+        while (inicio <= fin) {
+            var medio = Math.floor((inicio + fin) / 2);
+            if (pokedata[medio].id === id) {
+                return pokedata[medio];
+            } else if (pokedata[medio].id < id) {
+                inicio = medio + 1;
+            } else {
+                fin = medio - 1;
+            }
+        }
     }
     
-    infoHTML += "</div>";
-    pokeInfo.innerHTML = infoHTML;
+    // Si no se encontró por ID, buscar por nombre
+    for (var i = 0; i < pokedata.length; i++) {
+        if (pokedata[i].nombre.toLowerCase() === searchValue) {
+            return pokedata[i];
+        } else if (pokedata[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
+            return pokedata[i];
+        }
+    }
     
-    // Mostrar detalles de tipos
-    mostrarDetallesTipos(pokemon, typeDetails);
-    
-    // Ocultar logo
+    return null;
+}
+
+// Función separada para mostrar el resultado
+function mostrarResultado(pokemon) {
+    // Ocultar el logo cuando se encuentra un Pokémon
     var logoContainer = document.getElementById("logoContainer");
     if (logoContainer) {
         logoContainer.style.display = "none";
     }
+
+    var resultadoElement = document.getElementById("resultado");
+    var pokeImgElement = document.getElementById("pokeImg");
+    var pokeNameElement = document.getElementById("pokeName");
+    var pokeInfoElement = document.getElementById("pokeInfo");
+
+    if (!resultadoElement || !pokeImgElement || !pokeNameElement || !pokeInfoElement) {
+        alert("Error: Elementos no encontrados");
+        return;
+    }
+
+    resultadoElement.style.display = "block";
+    pokeImgElement.src = "sprites/" + determinarGeneracion(pokemon.id) + "/" + pokemon.id + ".png";
+    pokeImgElement.onerror = function() {
+        this.src = "sprites/MissingNo.png";
+    };
+    pokeNameElement.innerHTML = pokemon.id + ". " + pokemon.nombre;
+
+    // Construir HTML de una sola vez para mejor rendimiento
+    var infoHtml = construirInfoHTML(pokemon);
+    document.getElementById("pokeInfo").innerHTML = infoHtml;
+    
+    mostrarDetallesTipos(pokemon.tipos);
 }
 
-// Función para mostrar detalles de tipos
-function mostrarDetallesTipos(pokemon, container) {
-    if (!pokemon || !container) return;
-    
-    // Determinar qué generación de tipos usar
-    var genData;
-    if (pokemon.id <= 151) {
-        genData = typeData.gen1;
-    } else if (pokemon.id <= 649) {
-        genData = typeData.gen2;
-    } else {
-        genData = typeData.gen6;
-    }
-    
-    var htmlParts = [];
-    var debilidades = {};
-    var resistencias = {};
-    var inmunidades = {};
-    
-    // Procesar cada tipo del Pokémon
+// Función para construir el HTML de la información
+function construirInfoHTML(pokemon) {
+    var infoHtml = "<b>Tipos:</b> ";
+    var tipos = [];
     for (var i = 0; i < pokemon.tipos.length; i++) {
-        var tipo = pokemon.tipos[i];
-        var tipoData = genData[tipo];
+        var tipo = pokemon.tipos[i].toLowerCase();
+        tipos.push(tipo);
         
-        if (!tipoData) continue;
+        // Normalizar el tipo para la clase CSS
+        var tipoClase = tipo;
+        if (tipo === 'dragón') tipoClase = 'dragon';
+        if (tipo === 'eléctrico') tipoClase = 'electrico';
+        if (tipo === 'psíquico') tipoClase = 'psiquico';
         
-        // Procesar debilidades
-        if (tipoData.weak) {
-            for (var j = 0; j < tipoData.weak.length; j++) {
-                var weakType = tipoData.weak[j];
-                debilidades[weakType] = (debilidades[weakType] || 1) * 2;
-            }
+        infoHtml += '<span class="type-btn ' + tipoClase + '">' + formatearNombresTipos(tipo) + '</span> ';
+    }
+
+    infoHtml += "<br><a href='index.html' class='table-button'>Revisar tabla de tipos</a><br>";
+    infoHtml += "<b>Estadísticas:</b><br>";
+    
+    for (var stat in pokemon.stats) {
+        infoHtml += traducirEstadisticas(stat) + ": " + pokemon.stats[stat] + "<br>";
+    }
+
+    if (pokemon.evolucion && pokemon.evolucion.length > 0) {
+        var evo = pokemon.evolucion[0];
+        infoHtml += "<br><b>Evoluciona a:</b> " + evo.b + "<br>";
+        infoHtml += "<b>Condiciones:</b><br>";
+        for (var i = 0; i < evo.condiciones.length; i++) {
+            infoHtml += "- " + evo.condiciones[i] + "<br>";
         }
-        
-        // Procesar resistencias
-        if (tipoData.resist) {
-            for (var j = 0; j < tipoData.resist.length; j++) {
-                var resistType = tipoData.resist[j];
-                resistencias[resistType] = (resistencias[resistType] || 1) * 0.5;
-            }
-        }
-        
-        // Procesar inmunidades
-        if (tipoData.immune) {
-            for (var j = 0; j < tipoData.immune.length; j++) {
-                inmunidades[tipoData.immune[j]] = 0;
-            }
-        }
+    } else {
+        infoHtml += "<br><b>Sin evoluciones.</b>";
     }
     
-    // Ajustar debilidades y resistencias
-    for (var tipo in debilidades) {
-        if (inmunidades[tipo]) {
-            delete debilidades[tipo];
-        } else if (resistencias[tipo]) {
-            var factor = debilidades[tipo] * resistencias[tipo];
-            if (factor === 1) {
-                delete debilidades[tipo];
-                delete resistencias[tipo];
-            } else if (factor < 1) {
-                delete debilidades[tipo];
-                resistencias[tipo] = factor;
-            } else {
-                debilidades[tipo] = factor;
-                delete resistencias[tipo];
-            }
-        }
-    }
-    
-    // Construir HTML para debilidades
-    if (Object.keys(debilidades).length > 0) {
-        htmlParts.push('<div class="type-section"><strong>Débil contra:</strong><div class="type-list">');        
-        for (var tipo in debilidades) {
-            var factor = debilidades[tipo];
-            var className = factor >= 4 ? "very-weak" : "weak";
-            htmlParts.push('<div class="type-tag ' + className + ' ' + tipo + '">' + 
-                formatearNombresTipos(capitalizeFirstLetter(tipo)) + 
-                (factor >= 4 ? ' (x4)' : '') + '</div>');
-        }
-        htmlParts.push('</div></div>');
-    }
-    
-    // Construir HTML para resistencias
-    if (Object.keys(resistencias).length > 0) {
-        htmlParts.push('<div class="type-section"><strong>Resistente a:</strong><div class="type-list">');        
-        for (var tipo in resistencias) {
-            var factor = resistencias[tipo];
-            var className = factor <= 0.25 ? "very-resist" : "resist";
-            htmlParts.push('<div class="type-tag ' + className + ' ' + tipo + '">' + 
-                formatearNombresTipos(capitalizeFirstLetter(tipo)) + 
-                (factor <= 0.25 ? ' (x¼)' : '') + '</div>');
-        }
-        htmlParts.push('</div></div>');
-    }
-    
-    // Construir HTML para inmunidades
-    if (Object.keys(inmunidades).length > 0) {
-        htmlParts.push('<div class="type-section"><strong>Inmune a:</strong><div class="type-list">');        
-        for (var tipo in inmunidades) {
-            htmlParts.push('<div class="type-tag immune ' + tipo + '">' + 
-                formatearNombresTipos(capitalizeFirstLetter(tipo)) + '</div>');
-        }
-        htmlParts.push('</div></div>');
-    }
-    
-    container.innerHTML = htmlParts.join('');
+    return infoHtml;
 }
 
-// Función para navegar entre Pokémon
-function navegarPokemon(direccion) {
-    if (!pokemonActual) return;
-    
-    var nuevoId = pokemonActual.id + direccion;
-    
-    // Asegurarse de que el ID esté en rango
-    if (nuevoId < 1) nuevoId = pokedata.length;
-    if (nuevoId > pokedata.length) nuevoId = 1;
-    
-    // Buscar por ID (búsqueda binaria)
-    var inicio = 0;
-    var fin = pokedata.length - 1;
-    
-    while (inicio <= fin) {
-        var medio = Math.floor((inicio + fin) / 2);
-        if (pokedata[medio].id === nuevoId) {
-            pokemonActual = pokedata[medio];
-            mostrarPokemon(pokemonActual);
-            // Actualizar el input
-            document.getElementById("pokeInput").value = pokemonActual.nombre;
-            return;
-        } else if (pokedata[medio].id < nuevoId) {
-            inicio = medio + 1;
-        } else {
-            fin = medio - 1;
-        }
-    }
+function traducirEstadisticas(stat) {
+    var traducciones = {
+        "hp": "PS",
+        "attack": "Ataque",
+        "defense": "Defensa",
+        "special-attack": "Ataque Especial",
+        "special-defense": "Defensa Especial",
+        "speed": "Velocidad"
+    };
+    return traducciones[stat] || stat;
 }
 
-// Función para manejar teclas
-function manejarTeclas(e) {
-    // Si hay un diálogo de sugerencias abierto
-    var sugerencias = document.getElementById("sugerencias");
-    if (sugerencias && sugerencias.style.display !== "none") {
-        var items = sugerencias.getElementsByTagName("div");
-        var seleccionado = sugerencias.querySelector(".seleccionado");
-        var index = -1;
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function determinarGeneracion(id) {
+    if (id >= 1 && id <= 151) return "1gen";
+    else if (id >= 152 && id <= 251) return "2gen";
+    else if (id >= 252 && id <= 386) return "3gen";
+    else if (id >= 387 && id <= 493) return "4gen";
+    else if (id >= 494 && id <= 649) return "5gen";
+    else if (id >= 650 && id <= 721) return "6gen";
+    else if (id >= 722 && id <= 809) return "7gen";
+    else if (id >= 810 && id <= 898) return "8gen";
+    else if (id >= 899 && id <= 1025) return "9gen";
+    else return "unknown";
+}
+
+function calcularInteracciones(tipos) {
+    if (!typeData.gen1 || !tipos || tipos.length === 0) return null;
+    
+    var gen = 'gen6';
+    
+    // Reemplazar includes y every por bucles for tradicionales
+    var tieneHada = false;
+    var tieneAceroOSiniestro = false;
+    var todosTiposGen1 = true;
+    
+    for (var i = 0; i < tipos.length; i++) {
+        if (tipos[i] === 'hada') {
+            tieneHada = true;
+        }
+        if (tipos[i] === 'acero' || tipos[i] === 'siniestro') {
+            tieneAceroOSiniestro = true;
+        }
+        if (tipos[i] === 'acero' || tipos[i] === 'siniestro' || tipos[i] === 'hada') {
+            todosTiposGen1 = false;
+        }
+    }
+    
+    if (tieneHada) {
+        gen = 'gen6';
+    } else if (tieneAceroOSiniestro) {
+        gen = 'gen2';
+    } else if (todosTiposGen1) {
+        gen = 'gen1';
+    }
+    
+    if (tipos.length > 1) {
+        gen = 'gen2';
+    } else {
+        if (tipos[0] === 'hada') gen = 'gen6';
+        else if (tipos[0] === 'acero' || tipos[0] === 'siniestro') gen = 'gen2';
+    }
+    
+    var resultado = {
+        weak: {},
+        resist: {},
+        strong: {},
+        immune: []
+    };
+    
+    for (var i = 0; i < tipos.length; i++) {
+        var tipo = tipos[i].toLowerCase();
         
-        // Encontrar el índice del elemento seleccionado
-        if (seleccionado) {
-            for (var i = 0; i < items.length; i++) {
-                if (items[i] === seleccionado) {
-                    index = i;
-                    break;
+        // Normalizar tipos con acento para la búsqueda en typeData
+        if (tipo === 'dragón') tipo = 'dragon';
+        if (tipo === 'eléctrico') tipo = 'electrico';
+        if (tipo === 'psíquico') tipo = 'psiquico';
+        
+        if (!typeData[gen] || !typeData[gen][tipo]) continue;
+        var data = typeData[gen][tipo];
+        
+        if (data.weak) {
+            for (var j = 0; j < data.weak.length; j++) {
+                var weakType = data.weak[j];
+                resultado.weak[weakType] = (resultado.weak[weakType] || 0) + 1;
+            }
+        }
+        
+        if (data.resist) {
+            for (var j = 0; j < data.resist.length; j++) {
+                var resistType = data.resist[j];
+                resultado.resist[resistType] = (resultado.resist[resistType] || 0) + 1;
+            }
+        }
+        
+        if (data.strong) {
+            for (var j = 0; j < data.strong.length; j++) {
+                var strongType = data.strong[j];
+                resultado.strong[strongType] = (resultado.strong[strongType] || 0) + 1;
+            }
+        }
+        
+        if (data.immune) {
+            for (var j = 0; j < data.immune.length; j++) {
+                var immuneType = data.immune[j];
+                if (resultado.immune.indexOf(immuneType) === -1) {
+                    resultado.immune.push(immuneType);
                 }
             }
         }
-        
-        // Navegar con teclas de flecha
-        if (e.key === "ArrowDown") {
-            e.preventDefault();
-            if (index < items.length - 1) {
-                if (seleccionado) seleccionado.classList.remove("seleccionado");
-                items[index + 1].classList.add("seleccionado");
+    }
+    
+    for (var type in resultado.weak) {
+        if (resultado.resist[type]) {
+            if (resultado.weak[type] === resultado.resist[type]) {
+                delete resultado.weak[type];
+                delete resultado.resist[type];
             }
-        } else if (e.key === "ArrowUp") {
-            e.preventDefault();
-            if (index > 0) {
-                if (seleccionado) seleccionado.classList.remove("seleccionado");
-                items[index - 1].classList.add("seleccionado");
-            }
-        } else if (e.key === "Enter" && seleccionado) {
-            e.preventDefault();
-            document.getElementById("pokeInput").value = seleccionado.textContent;
-            sugerencias.style.display = "none";
-            buscar();
-        } else if (e.key === "Escape") {
-            sugerencias.style.display = "none";
         }
+    }
+    
+    return resultado;
+}
+
+function mostrarDetallesTipos(tipos) {
+    var detailsContainer = document.getElementById('typeDetails');
+    if (!tipos || tipos.length === 0 || !typeData.gen1) {
+        detailsContainer.style.display = 'none';
         return;
     }
     
-    // Navegación entre Pokémon con teclas de flecha
-    if (e.key === "ArrowLeft") {
-        navegarPokemon(-1);
-    } else if (e.key === "ArrowRight") {
-        navegarPokemon(1);
+    var interacciones = calcularInteracciones(tipos);
+    if (!interacciones) {
+        detailsContainer.style.display = 'none';
+        return;
+    }
+    
+    // Optimización: Construir HTML de una sola vez
+    var html = ['<div class="type-header">Interacciones de Tipo</div>'];
+    
+    if (Object.keys(interacciones.weak).length > 0) {
+        html.push('<div class="type-section"><strong>Débil contra:</strong><div class="type-list">');
+        for (var type in interacciones.weak) {
+            var multiplier = interacciones.weak[type] > 1 ? ' (x4)' : ' (x2)';
+            html.push('<div class="type-tag weak ' + type + '">' + formatearNombresTipos(capitalizeFirstLetter(type)) + multiplier + '</div>');
+        }
+        html.push('</div></div>');
+    }
+    
+    if (Object.keys(interacciones.resist).length > 0) {
+        html.push('<div class="type-section"><strong>Resistente a:</strong><div class="type-list">');
+        for (var type in interacciones.resist) {
+            var multiplier = interacciones.resist[type] > 1 ? ' (x1/4)' : ' (x1/2)';
+            html.push('<div class="type-tag resist ' + type + '">' + formatearNombresTipos(capitalizeFirstLetter(type)) + multiplier + '</div>');
+        }
+        html.push('</div></div>');
+    }
+    
+    if (interacciones.immune.length > 0) {
+        html.push('<div class="type-section"><strong>Inmune a:</strong><div class="type-list">');
+        for (var i = 0; i < interacciones.immune.length; i++) {
+            var immuneType = interacciones.immune[i];
+            html.push('<div class="type-tag immune ' + immuneType + '">' + formatearNombresTipos(capitalizeFirstLetter(immuneType)) + '</div>');
+        }
+        html.push('</div></div>');
+    }
+    
+    if (Object.keys(interacciones.strong).length > 0) {
+        html.push('<div class="type-section"><strong>Fuerte contra:</strong><div class="type-list">');
+        for (var type in interacciones.strong) {
+            html.push('<div class="type-tag strong ' + type + '">' + formatearNombresTipos(capitalizeFirstLetter(type)) + '</div>');
+        }
+        html.push('</div></div>');
+    }
+    
+    detailsContainer.innerHTML = html.join('');
+    detailsContainer.style.display = 'block';
+}
+
+function formatearNombresTipos(type) {
+    // Primero normalizamos el tipo a minúsculas
+    var typeLower = type.toLowerCase();
+    
+    // Casos especiales para tipos sin acento
+    if(typeLower === "electrico") {
+        return "Eléctrico";
+    } 
+    if(typeLower === "psiquico") {
+        return "Psíquico";
+    }
+    if(typeLower === "dragon") {
+        return "Dragón";
+    }
+    
+    // Casos especiales para tipos que ya vienen con acento
+    if(typeLower === "dragón") {
+        return "Dragón";
+    }
+    if(typeLower === "eléctrico") {
+        return "Eléctrico";
+    }
+    if(typeLower === "psíquico") {
+        return "Psíquico";
+    }
+    
+    // Para cualquier otro tipo, capitalizamos la primera letra
+    return type.charAt(0).toUpperCase() + type.slice(1);
+}
+
+function buscar() {
+    try {
+        if (!pokedata || !pokedata.length) {
+            alert("No hay datos cargados");
+            return;
+        }
+
+        var inputElement = document.getElementById("pokeInput");
+        if (!inputElement) {
+            alert("Error: No se encuentra el campo de búsqueda");
+            return;
+        }
+
+        var searchValue = inputElement.value;
+        if (!searchValue) {
+            alert("Por favor ingrese un nombre o número");
+            return;
+        }
+        searchValue = searchValue.toLowerCase().replace(/^\s+|\s+$/g, '');
+
+        // Usar caché si la búsqueda es la misma
+        if (searchValue === ultimaBusqueda && resultadoCache) {
+            mostrarResultado(resultadoCache);
+            return;
+        }
+        
+        // Optimización: Búsqueda más eficiente
+        var pokemon = buscarPokemon(searchValue);
+
+        if (!pokemon) {
+            alert("Pokémon no encontrado");
+            return;
+        }
+        
+        // Guardar en caché
+        ultimaBusqueda = searchValue;
+        resultadoCache = pokemon;
+        
+        mostrarResultado(pokemon);
+    } catch(e) {
+        alert("Error en la búsqueda");
     }
 }
 
-// Función para autocompletar
+function navegarPokemon(direccion) {
+    try {
+        // Obtener el Pokémon actual
+        var pokemonActual = null;
+        var nombreElement = document.getElementById("pokeName");
+        
+        if (nombreElement && nombreElement.innerHTML) {
+            // Extraer el número del Pokémon actual
+            var idActual = parseInt(nombreElement.innerHTML.split(".")[0]);
+            
+            if (!isNaN(idActual)) {
+                // Calcular el nuevo ID
+                var nuevoId = idActual + direccion;
+                
+                // Asegurarse de que el ID esté dentro del rango válido
+                if (nuevoId > 0 && nuevoId <= pokedata.length) {
+                    // Buscar el Pokémon con el nuevo ID
+                    document.getElementById("pokeInput").value = nuevoId;
+                    buscar();
+                }
+            }
+        } else {
+            // Si no hay Pokémon mostrado, mostrar el primero o el último
+            if (direccion > 0) {
+                document.getElementById("pokeInput").value = "1";
+            } else {
+                document.getElementById("pokeInput").value = pokedata.length.toString();
+            }
+            buscar();
+        }
+    } catch(e) {
+        alert("Error al navegar: " + e.message);
+    }
+}
+
+// Función para manejar las teclas (separada para mejor organización)
+function manejarTeclas(event) {
+    var sugerencias = document.getElementById("sugerencias");
+    var items = sugerencias ? sugerencias.getElementsByClassName("sugerencia-item") : [];
+    var selectedIndex = -1;
+    
+    // Buscar elemento seleccionado actualmente
+    for (var i = 0; i < items.length; i++) {
+        if (items[i].classList.contains("selected")) {
+            selectedIndex = i;
+            break;
+        }
+    }
+    
+    // Obtener elementos navegables
+    var navegables = [
+        document.querySelector('.button-small'), // Botón volver
+        document.getElementById('prevPokemon'), // Botón anterior
+        document.getElementById('pokeInput'),   // Campo de búsqueda
+        document.querySelector('input[type="submit"]'), // Botón buscar
+        document.getElementById('nextPokemon')  // Botón siguiente
+    ];
+    
+    var elementoActivo = document.activeElement;
+    var indiceActivo = -1;
+    
+    // Encontrar el índice del elemento activo
+    for (var i = 0; i < navegables.length; i++) {
+        if (navegables[i] === elementoActivo) {
+            indiceActivo = i;
+            break;
+        }
+    }
+    
+    // Tecla izquierda
+    if (event.keyCode === 37) {
+        if (sugerencias && sugerencias.style.display !== "none" && selectedIndex >= 0) {
+            // Si hay sugerencias visibles, ignorar navegación lateral
+            return;
+        }
+        
+        if (indiceActivo > 0) {
+            navegables[indiceActivo - 1].focus();
+            event.preventDefault();
+        }
+    }
+    // Tecla derecha
+    else if (event.keyCode === 39) {
+        if (sugerencias && sugerencias.style.display !== "none" && selectedIndex >= 0) {
+            // Si hay sugerencias visibles, ignorar navegación lateral
+            return;
+        }
+        
+        if (indiceActivo < navegables.length - 1) {
+            navegables[indiceActivo + 1].focus();
+            event.preventDefault();
+        }
+    }
+    // Tecla abajo (para navegar por sugerencias)
+    else if (event.keyCode === 40) {
+        if (sugerencias && sugerencias.style.display !== "none") {
+            event.preventDefault();
+            if (selectedIndex < items.length - 1) {
+                if (selectedIndex >= 0) {
+                    items[selectedIndex].classList.remove("selected");
+                }
+                items[selectedIndex + 1].classList.add("selected");
+            } else if (selectedIndex === -1 && items.length > 0) {
+                // Si no hay ningún elemento seleccionado, seleccionar el primero
+                items[0].classList.add("selected");
+            }
+        }
+    }
+    // Tecla arriba (para navegar por sugerencias)
+    else if (event.keyCode === 38) {
+        if (sugerencias && sugerencias.style.display !== "none") {
+            event.preventDefault();
+            if (selectedIndex > 0) {
+                items[selectedIndex].classList.remove("selected");
+                items[selectedIndex - 1].classList.add("selected");
+            }
+        }
+    }
+    // Tecla Enter
+    else if (event.keyCode === 13) {
+        if (sugerencias && sugerencias.style.display !== "none" && selectedIndex >= 0) {
+            // Seleccionar sugerencia
+            var input = document.getElementById("pokeInput");
+            input.value = items[selectedIndex].getAttribute('data-nombre') || items[selectedIndex].textContent;
+            sugerencias.style.display = "none";
+            buscar();
+            event.preventDefault();
+        } else if (document.activeElement.tagName === 'BUTTON' || 
+                  (document.activeElement.tagName === 'INPUT' && document.activeElement.type === 'submit')) {
+            document.activeElement.click();
+            event.preventDefault();
+        } else if (document.activeElement.tagName === 'INPUT' && document.activeElement.type === 'text') {
+            // Si el foco está en el campo de texto, realizar búsqueda
+            buscar();
+            event.preventDefault();
+        }
+    }
+}
+
+// Modificar la función autocompletar para usar data-nombre
 function autocompletar() {
     var input = document.getElementById("pokeInput");
-    var valor = input.value.trim().toLowerCase();
+    var searchValue = input.value.toLowerCase();
     
-    if (valor.length < 2) {
-        var sugerencias = document.getElementById("sugerencias");
-        if (sugerencias) {
-            sugerencias.style.display = "none";
-        }
+    // Limpiar sugerencias anteriores
+    var sugerenciasContainer = document.getElementById("sugerencias");
+    if (!sugerenciasContainer) {
+        sugerenciasContainer = document.createElement("div");
+        sugerenciasContainer.id = "sugerencias";
+        sugerenciasContainer.className = "sugerencias-container";
+        var formElement = input.parentNode;
+        formElement.insertBefore(sugerenciasContainer, formElement.firstChild);
+    } else {
+        sugerenciasContainer.innerHTML = "";
+    }
+    
+    // Si el campo está vacío, no mostrar sugerencias
+    if (!searchValue) {
+        sugerenciasContainer.style.display = "none";
         return;
     }
     
     // Buscar coincidencias
     var coincidencias = [];
-    for (var i = 0; i < pokedata.length && coincidencias.length < 5; i++) {
-        if (pokedata[i].nombre.toLowerCase().indexOf(valor) === 0) {
-            coincidencias.push(pokedata[i].nombre);
-        }
-    }
-    
-    // Si no hay coincidencias desde el inicio, buscar en cualquier parte
-    if (coincidencias.length === 0) {
-        for (var i = 0; i < pokedata.length && coincidencias.length < 5; i++) {
-            if (pokedata[i].nombre.toLowerCase().indexOf(valor) > 0) {
-                coincidencias.push(pokedata[i].nombre);
-            }
+    for (var i = 0; i < pokedata.length && coincidencias.length < 3; i++) {
+        if (pokedata[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
+            coincidencias.push(pokedata[i]);
         }
     }
     
     // Mostrar sugerencias
-    var sugerencias = document.getElementById("sugerencias");
-    if (!sugerencias) {
-        sugerencias = document.createElement("div");
-        sugerencias.id = "sugerencias";
-        sugerencias.className = "sugerencias";
-        input.parentNode.appendChild(sugerencias);
-    }
-    
     if (coincidencias.length > 0) {
-        var html = "";
+        var html = '';
         for (var i = 0; i < coincidencias.length; i++) {
-            html += "<div>" + coincidencias[i] + "</div>";
+            html += '<div class="sugerencia-item" data-nombre="' + coincidencias[i].nombre + '">' + 
+                    coincidencias[i].nombre + '</div>';
         }
-        sugerencias.innerHTML = html;
-        sugerencias.style.display = "block";
+        sugerenciasContainer.innerHTML = html;
+        sugerenciasContainer.style.display = "block";
         
-        // Agregar eventos a las sugerencias
-        var items = sugerencias.getElementsByTagName("div");
+        // Agregar eventos a los elementos creados
+        var items = sugerenciasContainer.getElementsByClassName("sugerencia-item");
         for (var i = 0; i < items.length; i++) {
-            items[i].addEventListener("click", function() {
-                input.value = this.textContent;
-                sugerencias.style.display = "none";
+            items[i].onclick = function() {
+                input.value = this.getAttribute('data-nombre');
+                sugerenciasContainer.style.display = "none";
                 buscar();
-            });
-            
-            items[i].addEventListener("mouseover", function() {
-                var seleccionado = sugerencias.querySelector(".seleccionado");
-                if (seleccionado) seleccionado.classList.remove("seleccionado");
-                this.classList.add("seleccionado");
-            });
+            };
         }
     } else {
-        sugerencias.style.display = "none";
+        sugerenciasContainer.style.display = "none";
     }
 }
 
-// Función para formatear nombres de tipos (si no está definida)
-function formatearNombresTipos(tipo) {
-    if (typeof tipo !== 'string') return tipo;
+// Código para cargar datos al inicio
+window.onload = function() {
+    cargarDatos();
     
-    // Usar un objeto para mapeo directo (más eficiente)
-    var tiposConAcento = {
-        'dragon': 'Dragón',
-        'electrico': 'Eléctrico',
-        'psiquico': 'Psíquico'
-    };
+    // Agregar evento para autocompletar
+    var input = document.getElementById("pokeInput");
+    if (input) {
+        input.addEventListener("input", autocompletar);
+        
+        // Ocultar sugerencias al perder el foco
+        input.addEventListener("blur", function() {
+            setTimeout(function() {
+                var sugerencias = document.getElementById("sugerencias");
+                if (sugerencias) {
+                    sugerencias.style.display = "none";
+                }
+            }, 200);
+        });
+    }
     
-    return tiposConAcento[tipo.toLowerCase()] || tipo;
-}
-
-// Función para capitalizar (si no está definida)
-function capitalizeFirstLetter(string) {
-    if (typeof string !== 'string') return string;
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+    // Agregar manejo de eventos de teclado
+    document.addEventListener('keydown', manejarTeclas);
+};
