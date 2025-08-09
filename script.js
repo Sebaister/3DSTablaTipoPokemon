@@ -111,38 +111,30 @@ function createTypeDetails(genId, typeData) {
 }
 
 // Función para cargar datos (optimizada)
+// Reemplazar la función loadData con carga más eficiente
 function loadData() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'types.json', true);
+    xhr.timeout = 10000; // Timeout para 3DS
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 try {
                     var data = JSON.parse(xhr.responseText);
                     
-                    // Procesamiento por lotes para mejorar rendimiento
-                    setTimeout(function() {
-                        // Generación 1
-                        var gen1Types = Object.keys(data.gen1 || {});
-                        createTypeButtons('gen1', gen1Types);
-                        createTypeDetails('gen1', data.gen1);
-                        
-                        setTimeout(function() {
-                            // Generación 2-5
-                            var gen2Types = Object.keys(data.gen2 || {});
-                            createTypeButtons('gen2', gen2Types);
-                            createTypeDetails('gen2', data.gen2);
-                            
-                            setTimeout(function() {
-                                // Generación 6+
-                                var gen6Types = Object.keys(data.gen6 || {});
-                                createTypeButtons('gen6', gen6Types);
-                                createTypeDetails('gen6', data.gen6);
-                            }, 0);
-                        }, 0);
-                    }, 0);
+                    // Procesamiento inmediato sin setTimeout para 3DS
+                    var gen1Types = Object.keys(data.gen1 || {});
+                    createTypeButtons('gen1', gen1Types);
+                    createTypeDetails('gen1', data.gen1);
+                    
+                    var gen2Types = Object.keys(data.gen2 || {});
+                    createTypeButtons('gen2', gen2Types);
+                    createTypeDetails('gen2', data.gen2);
+                    
+                    var gen6Types = Object.keys(data.gen6 || {});
+                    createTypeButtons('gen6', gen6Types);
+                    createTypeDetails('gen6', data.gen6);
                 } catch (e) {
-                    console.error('Error al procesar los datos:', e);
                     mostrarError('Error al cargar los datos');
                 }
             } else {

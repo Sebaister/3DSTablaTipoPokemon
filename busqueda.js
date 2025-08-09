@@ -35,6 +35,93 @@ function cargarDatos() {
     }
 }
 
+// Optimización de la función de carga para 3DS
+function cargarDatos() {
+    try {
+        if (pokedata.length === 0) {
+            var xhr1 = new XMLHttpRequest();
+            xhr1.open("GET", "pokedata.json", true);
+            xhr1.timeout = 15000; // Timeout más largo para 3DS
+            xhr1.onreadystatechange = function() {
+                if (xhr1.readyState === 4) {
+                    if (xhr1.status === 200) {
+                        try {
+                            pokedata = JSON.parse(xhr1.responseText);
+                            cargarTipos();
+                        } catch(e) {
+                            alert("Error al procesar datos de Pokémon");
+                        }
+                    } else {
+                        alert("Error al cargar pokedata.json");
+                    }
+                }
+            };
+            xhr1.onerror = function() {
+                alert("Error de conexión");
+            };
+            xhr1.send();
+        } else if (Object.keys(typeData).length === 0) {
+            cargarTipos();
+        }
+    } catch(e) {
+        alert("Error de conexión");
+    }
+}
+
+// Optimización del autocompletado para 3DS
+function autocompletar() {
+    var input = document.getElementById("pokeInput");
+    var searchValue = input.value.toLowerCase();
+    
+    var sugerenciasContainer = document.getElementById("sugerencias");
+    if (!sugerenciasContainer) {
+        sugerenciasContainer = document.createElement("div");
+        sugerenciasContainer.id = "sugerencias";
+        sugerenciasContainer.className = "sugerencias-container";
+        var formElement = input.parentNode;
+        formElement.insertBefore(sugerenciasContainer, formElement.firstChild);
+    } else {
+        sugerenciasContainer.innerHTML = "";
+    }
+    
+    if (!searchValue) {
+        sugerenciasContainer.style.display = "none";
+        return;
+    }
+    
+    // Limitar a 3 sugerencias para mejor rendimiento en 3DS
+    var coincidencias = [];
+    for (var i = 0; i < pokedata.length && coincidencias.length < 3; i++) {
+        if (pokedata[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
+            coincidencias.push(pokedata[i]);
+        }
+    }
+    
+    if (coincidencias.length > 0) {
+        var html = '';
+        for (var i = 0; i < coincidencias.length; i++) {
+            html += '<div class="sugerencia-item" data-nombre="' + coincidencias[i].nombre + '">' + 
+                    coincidencias[i].nombre + '</div>';
+        }
+        sugerenciasContainer.innerHTML = html;
+        sugerenciasContainer.style.display = "block";
+        
+        // Agregar eventos de manera más eficiente
+        var items = sugerenciasContainer.getElementsByClassName("sugerencia-item");
+        for (var i = 0; i < items.length; i++) {
+            (function(item) {
+                item.onclick = function() {
+                    input.value = this.getAttribute('data-nombre');
+                    sugerenciasContainer.style.display = "none";
+                    buscar();
+                };
+            })(items[i]);
+        }
+    } else {
+        sugerenciasContainer.style.display = "none";
+    }
+}
+
 // Función separada para cargar tipos
 function cargarTipos() {
     if (Object.keys(typeData).length === 0) {
