@@ -1,6 +1,6 @@
-/* Optimización de selectores */
+/* Optimización de selectores para 3DS */
 body {
-    font-family: Arial, sans-serif;
+    font-family: sans-serif; /* Reducido a una sola fuente */
     background-color: #000;
     color: #FFF;
     margin: 0;
@@ -8,6 +8,8 @@ body {
     font-size: 12px;
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
+    max-width: 320px; /* Limitar ancho para 3DS */
+    margin: 0 auto; /* Centrar contenido */
 }
 
 h1, h2 {

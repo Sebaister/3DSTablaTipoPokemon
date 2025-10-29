@@ -110,7 +110,7 @@ function createTypeDetails(genId, typeData) {
     }
 }
 
-// Función para cargar datos (optimizada)
+// Función para cargar datos (optimizada para 3DS)
 function loadData() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'types.json', true);
@@ -120,27 +120,35 @@ function loadData() {
                 try {
                     var data = JSON.parse(xhr.responseText);
                     
-                    // Procesamiento por lotes para mejorar rendimiento
-                    setTimeout(function() {
-                        // Generación 1
-                        var gen1Types = Object.keys(data.gen1 || {});
-                        createTypeButtons('gen1', gen1Types);
-                        createTypeDetails('gen1', data.gen1);
+                    // Cargar solo la generación visible inicialmente
+                    var hash = window.location.hash;
+                    if (hash === '#gen1') {
+                        cargarGen1(data);
+                    } else if (hash === '#gen2') {
+                        cargarGen2(data);
+                    } else if (hash === '#gen6') {
+                        cargarGen6(data);
+                    } else {
+                        // Si no hay hash, precargar solo la primera generación
+                        cargarGen1(data);
                         
-                        setTimeout(function() {
-                            // Generación 2-5
-                            var gen2Types = Object.keys(data.gen2 || {});
-                            createTypeButtons('gen2', gen2Types);
-                            createTypeDetails('gen2', data.gen2);
-                            
-                            setTimeout(function() {
-                                // Generación 6+
-                                var gen6Types = Object.keys(data.gen6 || {});
-                                createTypeButtons('gen6', gen6Types);
-                                createTypeDetails('gen6', data.gen6);
-                            }, 0);
-                        }, 0);
-                    }, 0);
+                        // Agregar listeners para cargar las demás generaciones cuando se necesiten
+                        document.querySelector('a[href="#gen2"]').addEventListener('click', function() {
+                            if (!document.getElementById('gen2-types').innerHTML) {
+                                cargarGen2(data);
+                            }
+                        });
+                        
+                        document.querySelector('a[href="#gen6"]').addEventListener('click', function() {
+                            if (!document.getElementById('gen6-types').innerHTML) {
+                                cargarGen6(data);
+                            }
+                        });
+                    }
+                    
+                    // Guardar datos en variable global para acceso rápido
+                    window.typeData = data;
+                    
                 } catch (e) {
                     console.error('Error al procesar los datos:', e);
                     mostrarError('Error al cargar los datos');
@@ -154,6 +162,25 @@ function loadData() {
         mostrarError('Error de conexión');
     };
     xhr.send();
+}
+
+// Funciones para cargar cada generación por separado
+function cargarGen1(data) {
+    var gen1Types = Object.keys(data.gen1 || {});
+    createTypeButtons('gen1', gen1Types);
+    createTypeDetails('gen1', data.gen1);
+}
+
+function cargarGen2(data) {
+    var gen2Types = Object.keys(data.gen2 || {});
+    createTypeButtons('gen2', gen2Types);
+    createTypeDetails('gen2', data.gen2);
+}
+
+function cargarGen6(data) {
+    var gen6Types = Object.keys(data.gen6 || {});
+    createTypeButtons('gen6', gen6Types);
+    createTypeDetails('gen6', data.gen6);
 }
 
 // Función para mostrar errores de manera amigable

@@ -106,40 +106,52 @@ function buscar() {
     }
 }
 
-// Función separada para buscar Pokémon
+// Índices para búsqueda rápida
+var pokemonPorId = null;
+var pokemonPorNombre = null;
+
+// Función para inicializar índices de búsqueda
+function inicializarIndices() {
+    if (pokemonPorId === null && pokedata.length > 0) {
+        pokemonPorId = {};
+        pokemonPorNombre = {};
+        
+        for (var i = 0; i < pokedata.length; i++) {
+            pokemonPorId[pokedata[i].id] = pokedata[i];
+            pokemonPorNombre[pokedata[i].nombre.toLowerCase()] = pokedata[i];
+        }
+    }
+}
+
+// Función separada para buscar Pokémon (optimizada para 3DS)
 function buscarPokemon(searchValue) {
-    // Primero intentar buscar por ID (más rápido)
+    // Inicializar índices si no existen
+    inicializarIndices();
+    
+    // Buscar por ID (acceso directo al objeto)
     if (!isNaN(searchValue)) {
         var id = parseInt(searchValue, 10);
-        // Búsqueda binaria para IDs (asumiendo que están ordenados)
-        var inicio = 0;
-        var fin = pokedata.length - 1;
-        
-        while (inicio <= fin) {
-            var medio = Math.floor((inicio + fin) / 2);
-            if (pokedata[medio].id === id) {
-                return pokedata[medio];
-            } else if (pokedata[medio].id < id) {
-                inicio = medio + 1;
-            } else {
-                fin = medio - 1;
-            }
+        if (pokemonPorId[id]) {
+            return pokemonPorId[id];
         }
     }
     
-    // Si no se encontró por ID, buscar por nombre
-    for (var i = 0; i < pokedata.length; i++) {
-        if (pokedata[i].nombre.toLowerCase() === searchValue) {
-            return pokedata[i];
-        } else if (pokedata[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
-            return pokedata[i];
+    // Buscar por nombre exacto (acceso directo)
+    if (pokemonPorNombre[searchValue]) {
+        return pokemonPorNombre[searchValue];
+    }
+    
+    // Buscar por nombre parcial (solo si es necesario)
+    for (var nombre in pokemonPorNombre) {
+        if (nombre.indexOf(searchValue) === 0) {
+            return pokemonPorNombre[nombre];
         }
     }
     
     return null;
 }
 
-// Función separada para mostrar el resultado
+// Función separada para mostrar el resultado (optimizada para 3DS)
 function mostrarResultado(pokemon) {
     // Ocultar el logo cuando se encuentra un Pokémon
     var logoContainer = document.getElementById("logoContainer");
@@ -157,18 +169,31 @@ function mostrarResultado(pokemon) {
         return;
     }
 
+    // Mostrar primero la información básica para dar feedback rápido al usuario
     resultadoElement.style.display = "block";
-    pokeImgElement.src = "sprites/" + determinarGeneracion(pokemon.id) + "/" + pokemon.id + ".png";
-    pokeImgElement.onerror = function() {
-        this.src = "sprites/MissingNo.png";
-    };
     pokeNameElement.innerHTML = pokemon.id + ". " + pokemon.nombre;
-
-    // Construir HTML de una sola vez para mejor rendimiento
-    var infoHtml = construirInfoHTML(pokemon);
-    document.getElementById("pokeInfo").innerHTML = infoHtml;
     
-    mostrarDetallesTipos(pokemon.tipos);
+    // Cargar la imagen después para evitar bloquear la interfaz
+    setTimeout(function() {
+        // Precargar la imagen para evitar parpadeos
+        var img = new Image();
+        img.onload = function() {
+            pokeImgElement.src = this.src;
+        };
+        img.onerror = function() {
+            pokeImgElement.src = "sprites/MissingNo.png";
+        };
+        img.src = "sprites/" + determinarGeneracion(pokemon.id) + "/" + pokemon.id + ".png";
+        
+        // Construir HTML de una sola vez para mejor rendimiento
+        var infoHtml = construirInfoHTML(pokemon);
+        pokeInfoElement.innerHTML = infoHtml;
+        
+        // Cargar los detalles de tipos al final
+        setTimeout(function() {
+            mostrarDetallesTipos(pokemon.tipos);
+        }, 50);
+    }, 50);
 }
 
 // Función para construir el HTML de la información
@@ -226,6 +251,10 @@ function capitalizeFirstLetter(string) {
 }
 
 function determinarGeneracion(id) {
+    // Convertir a número para asegurar comparación correcta
+    id = parseInt(id, 10);
+    
+    // Usar rangos más eficientes
     if (id >= 1 && id <= 151) return "1gen";
     else if (id >= 152 && id <= 251) return "2gen";
     else if (id >= 252 && id <= 386) return "3gen";
@@ -236,6 +265,28 @@ function determinarGeneracion(id) {
     else if (id >= 810 && id <= 898) return "8gen";
     else if (id >= 899 && id <= 1025) return "9gen";
     else return "unknown";
+}
+
+// Precarga de imágenes para mejorar rendimiento
+var imageCache = {};
+function precargarImagen(src, callback) {
+    // Si ya está en caché, usar directamente
+    if (imageCache[src]) {
+        if (callback) callback(imageCache[src]);
+        return;
+    }
+    
+    // Si no está en caché, cargar
+    var img = new Image();
+    img.onload = function() {
+        imageCache[src] = this;
+        if (callback) callback(this);
+    };
+    img.onerror = function() {
+        imageCache[src] = null;
+        if (callback) callback(null);
+    };
+    img.src = src;
 }
 
 function calcularInteracciones(tipos) {
