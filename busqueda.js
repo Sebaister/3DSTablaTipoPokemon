@@ -73,6 +73,7 @@ function cargarTipos() {
 var ultimaBusqueda = "";
 var resultadoCache = null;
 
+// función buscar (segunda definición al final del archivo)
 function buscar() {
     try {
         if (!pokeData || !pokeData.length) {
@@ -92,31 +93,32 @@ function buscar() {
             return;
         }
         searchValue = searchValue.toLowerCase().replace(/^\s+|\s+$/g, '');
-        
+
         // Usar caché si la búsqueda es la misma
         if (searchValue === ultimaBusqueda && resultadoCache) {
             mostrarResultado(resultadoCache);
             return;
         }
-        
-        // Búsqueda directa en pokeData para evitar problemas
+
+        // Búsqueda directa en pokeData
         var pokemon = null;
-        
+
         // Buscar por ID
         if (!isNaN(searchValue)) {
             var id = parseInt(searchValue, 10);
             for (var i = 0; i < pokeData.length; i++) {
-                if (pokeData[i].id === id) {
+                if (pokeData[i] && pokeData[i].id === id) {
                     pokemon = pokeData[i];
                     break;
                 }
             }
         }
-        
+
         // Si no se encontró por ID, buscar por nombre
         if (!pokemon) {
             for (var i = 0; i < pokeData.length; i++) {
-                if (pokeData[i].nombre && pokeData[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
+                if (pokeData[i] && pokeData[i].nombre &&
+                    pokeData[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
                     pokemon = pokeData[i];
                     break;
                 }
@@ -127,14 +129,13 @@ function buscar() {
             alert(getText("pokemon_not_found", "Pokémon no encontrado"));
             return;
         }
-        
+
         // Guardar en caché
         ultimaBusqueda = searchValue;
         resultadoCache = pokemon;
-        
+
         mostrarResultado(pokemon);
     } catch(e) {
-        console.log("Error en búsqueda: " + e.message);
         alert(getText("search_error", "Error en la búsqueda"));
     }
 }
@@ -360,7 +361,7 @@ function determinarGeneracion(id) {
 
 // Precarga de imágenes para mejorar rendimiento
 var imageCache = {};
-var MAX_IMAGE_CACHE = 50; // Límite de imágenes en caché
+var MAX_IMAGE_CACHE = 10; // Límite de imágenes en caché ajustado para 3DS
 function precargarImagen(src, callback) {
     // Si ya está en caché, usar directamente
     if (imageCache[src]) {
@@ -389,8 +390,8 @@ function precargarImagen(src, callback) {
 }
 
 function calcularInteracciones(tipos) {
-    if (!typeData.gen1 || !tipos || tipos.length === 0) return null;
-    
+    if (!typesData || !typesData.gen1 || !tipos || tipos.length === 0) return null;
+
     var gen = 'gen6';
     
     // Reemplazar includes y every por bucles for tradicionales
@@ -434,14 +435,12 @@ function calcularInteracciones(tipos) {
     
     for (var i = 0; i < tipos.length; i++) {
         var tipo = tipos[i].toLowerCase();
-        
-        // Normalizar tipos con acento para la búsqueda en typeData
         if (tipo === 'dragón') tipo = 'dragon';
         if (tipo === 'eléctrico') tipo = 'electrico';
         if (tipo === 'psíquico') tipo = 'psiquico';
-        
-        if (!typeData[gen] || !typeData[gen][tipo]) continue;
-        var data = typeData[gen][tipo];
+
+        if (!typesData[gen] || !typesData[gen][tipo]) continue;
+        var data = typesData[gen][tipo];
         
         if (data.weak) {
             for (var j = 0; j < data.weak.length; j++) {
@@ -488,8 +487,8 @@ function calcularInteracciones(tipos) {
 
 function mostrarDetallesTipos(tipos) {
     var detailsContainer = document.getElementById('typeDetails');
-    if (!tipos || tipos.length === 0 || !typeData.gen1) {
-        detailsContainer.style.display = 'none';
+    if (!tipos || tipos.length === 0 || !typesData || !typesData.gen1) {
+        if (detailsContainer) detailsContainer.style.display = 'none';
         return;
     }
     
@@ -642,15 +641,15 @@ function navegarPokemon(direccion) {
         // Obtener el Pokémon actual
         var pokemonActual = null;
         var nombreElement = document.getElementById("pokeName");
-        
+
         if (nombreElement && nombreElement.innerHTML) {
             // Extraer el número del Pokémon actual
             var idActual = parseInt(nombreElement.innerHTML.split(".")[0]);
-            
+
             if (!isNaN(idActual)) {
                 // Calcular el nuevo ID
                 var nuevoId = idActual + direccion;
-                
+
                 // Asegurarse de que el ID esté dentro del rango válido
                 if (nuevoId > 0 && nuevoId <= pokeData.length) {
                     // Mostrar indicador de carga rápido
@@ -664,7 +663,7 @@ function navegarPokemon(direccion) {
                         // Buscar el Pokémon con el nuevo ID
                         document.getElementById("pokeInput").value = nuevoId;
                         buscar();
-                        
+
                         // Precargar el siguiente Pokémon en la dirección de navegación
                         var nextId = nuevoId + direccion;
                         if (nextId > 0 && nextId <= pokedata.length) {
@@ -793,48 +792,34 @@ function manejarTeclas(event) {
     }
 }
 
-// Modificar la función autocompletar para usar data-nombre
 function autocompletar() {
     var input = document.getElementById("pokeInput");
-    var searchValue = input.value.toLowerCase();
-    
-    // Limpiar sugerencias anteriores
     var sugerenciasContainer = document.getElementById("sugerencias");
-    if (!sugerenciasContainer) {
-        sugerenciasContainer = document.createElement("div");
-        sugerenciasContainer.id = "sugerencias";
-        sugerenciasContainer.className = "sugerencias-container";
-        var formElement = input.parentNode;
-        formElement.insertBefore(sugerenciasContainer, formElement.firstChild);
-    } else {
-        sugerenciasContainer.innerHTML = "";
-    }
-    
-    // Si el campo está vacío, no mostrar sugerencias
+    if (!input || !sugerenciasContainer || !pokeData || !pokeData.length) return;
+
+    var searchValue = (input.value || "").toLowerCase().trim();
     if (!searchValue) {
         sugerenciasContainer.style.display = "none";
         return;
     }
-    
-    // Buscar coincidencias
+
     var coincidencias = [];
-    for (var i = 0; i < pokedata.length && coincidencias.length < 3; i++) {
-        if (pokedata[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
-            coincidencias.push(pokedata[i]);
+    for (var i = 0; i < pokeData.length && coincidencias.length < 3; i++) {
+        if (pokeData[i] && pokeData[i].nombre &&
+            pokeData[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
+            coincidencias.push(pokeData[i]);
         }
     }
-    
-    // Mostrar sugerencias
+
     if (coincidencias.length > 0) {
         var html = '';
         for (var i = 0; i < coincidencias.length; i++) {
-            html += '<div class="sugerencia-item" data-nombre="' + coincidencias[i].nombre + '">' + 
+            html += '<div class="sugerencia-item" data-nombre="' + coincidencias[i].nombre + '">' +
                     coincidencias[i].nombre + '</div>';
         }
         sugerenciasContainer.innerHTML = html;
         sugerenciasContainer.style.display = "block";
-        
-        // Agregar eventos a los elementos creados
+
         var items = sugerenciasContainer.getElementsByClassName("sugerencia-item");
         for (var i = 0; i < items.length; i++) {
             items[i].onclick = function() {
