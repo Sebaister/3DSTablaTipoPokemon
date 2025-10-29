@@ -99,30 +99,42 @@ function buscar() {
             return;
         }
         
-        // Optimización: Búsqueda más eficiente
-        var pokemon = buscarPokemon(searchValue);
+        // Búsqueda directa en pokeData para evitar problemas
+        var pokemon = null;
+        
+        // Buscar por ID
+        if (!isNaN(searchValue)) {
+            var id = parseInt(searchValue, 10);
+            for (var i = 0; i < pokeData.length; i++) {
+                if (pokeData[i].id === id) {
+                    pokemon = pokeData[i];
+                    break;
+                }
+            }
+        }
+        
+        // Si no se encontró por ID, buscar por nombre
+        if (!pokemon) {
+            for (var i = 0; i < pokeData.length; i++) {
+                if (pokeData[i].nombre && pokeData[i].nombre.toLowerCase().indexOf(searchValue) === 0) {
+                    pokemon = pokeData[i];
+                    break;
+                }
+            }
+        }
 
         if (!pokemon) {
             alert(getText("pokemon_not_found", "Pokémon no encontrado"));
             return;
         }
         
-        // Limitar el tamaño de la caché
-        var MAX_CACHE_SIZE = 20;
-        if (Object.keys(window.cacheHistorial || {}).length >= MAX_CACHE_SIZE) {
-            // Reiniciar caché si es demasiado grande
-            window.cacheHistorial = {};
-        }
-        
         // Guardar en caché
         ultimaBusqueda = searchValue;
         resultadoCache = pokemon;
-        if (window.cacheHistorial) {
-            window.cacheHistorial[searchValue] = pokemon;
-        }
         
         mostrarResultado(pokemon);
     } catch(e) {
+        console.log("Error en búsqueda: " + e.message);
         alert(getText("search_error", "Error en la búsqueda"));
     }
 }
