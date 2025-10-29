@@ -6,16 +6,93 @@
     <meta name="viewport" content="width=320, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="estilos.css">
+    <script>
+    // Sistema de idiomas simple para 3DS
+    var translations = {
+        "es": {
+            "title": "Tablas de Tipos Pokémon",
+            "gen1": "Gen 1",
+            "gen2": "Gen 2-5",
+            "gen6": "Gen 6+",
+            "search": "Buscar Pokémon",
+            "gen1_title": "Generación 1",
+            "gen2_title": "Generaciones 2-5",
+            "gen6_title": "Generación 6+",
+            "back": "Volver",
+            "changes": "<strong>Cambios:</strong><br>• Tipo Hada añadido<br>• Cambios en Acero<br>• Cambios en Planta<br>• Nuevas inmunidades",
+            "weak_against": "Débil contra:",
+            "resistant_to": "Resistente a:",
+            "strong_against": "Fuerte contra:",
+            "immune_to": "Inmune a:",
+            "language": "English"
+        },
+        "en": {
+            "title": "Pokémon Type Charts",
+            "gen1": "Gen 1",
+            "gen2": "Gen 2-5",
+            "gen6": "Gen 6+",
+            "search": "Search Pokémon",
+            "gen1_title": "Generation 1",
+            "gen2_title": "Generations 2-5",
+            "gen6_title": "Generation 6+",
+            "back": "Back",
+            "changes": "<strong>Changes:</strong><br>• Fairy type added<br>• Steel type changes<br>• Grass type changes<br>• New immunities",
+            "weak_against": "Weak against:",
+            "resistant_to": "Resistant to:",
+            "strong_against": "Strong against:",
+            "immune_to": "Immune to:",
+            "language": "Español"
+        }
+    };
+    
+    // Idioma actual
+    var currentLang = "es";
+    
+    // Intentar cargar idioma guardado
+    try {
+        var savedLang = localStorage.getItem("pokeLanguage");
+        if (savedLang && (savedLang === "es" || savedLang === "en")) {
+            currentLang = savedLang;
+        }
+    } catch(e) {
+        // Ignorar errores (3DS puede no soportar localStorage)
+    }
+    
+    // Función para cambiar idioma
+    function changeLang() {
+        currentLang = (currentLang === "es") ? "en" : "es";
+        
+        // Guardar preferencia
+        try {
+            localStorage.setItem("pokeLanguage", currentLang);
+        } catch(e) {
+            // Ignorar errores
+        }
+        
+        // Actualizar textos
+        updatePageTexts();
+        
+        return false;
+    }
+    
+    // Función para obtener texto traducido
+    function getText(key) {
+        return translations[currentLang][key] || key;
+    }
+    </script>
 </head>
 <body>
-    <h1>Tablas de Tipos Pokémon</h1>
+    <h1 id="mainTitle">Tablas de Tipos Pokémon</h1>
     
     <div class="menu">
         <div class="button-container">
-            <a href="#gen1" class="button" tabindex="1">Gen 1</a>
-            <a href="#gen2" class="button" tabindex="2">Gen 2-5</a>
-            <a href="#gen6" class="button" tabindex="3">Gen 6+</a>
-            <a href="busqueda.html" class="button" tabindex="4">Buscar Pokémon</a>
+            <a href="#gen1" class="button" tabindex="1" id="btn-gen1">Gen 1</a>
+            <a href="#gen2" class="button" tabindex="2" id="btn-gen2">Gen 2-5</a>
+            <a href="#gen6" class="button" tabindex="3" id="btn-gen6">Gen 6+</a>
+            <a href="busqueda.html" class="button" tabindex="4" id="btn-search">Buscar Pokémon</a>
+        </div>
+        <div class="lang-switch">
+            <a href="#" onclick="return changeLang();" class="button-small" tabindex="5" id="btn-lang">English</a>
         </div>
     </div>
 
@@ -26,28 +103,28 @@
 
     <!-- GENERACIÓN 1 -->
     <div id="gen1" class="content">
-        <h2>Generación 1</h2>
+        <h2 id="gen1-heading">Generación 1</h2>
         <div class="type-menu" id="gen1-types"></div>
         <div id="gen1-details"></div>
         <div class="button-back">
-            <a href="#" class="button">Volver</a>
+            <a href="#" class="button" id="back-btn1">Volver</a>
         </div>
     </div>
 
     <!-- GENERACIÓN 2-5 -->
     <div id="gen2" class="content">
-        <h2>Generaciones 2-5</h2>
+        <h2 id="gen2-heading">Generaciones 2-5</h2>
         <div class="type-menu" id="gen2-types"></div>
         <div id="gen2-details"></div>
         <div class="button-back">
-            <a href="#" class="button">Volver</a>
+            <a href="#" class="button" id="back-btn2">Volver</a>
         </div>
     </div>
 
     <!-- GENERACIÓN 6+ -->
     <div id="gen6" class="content">
-        <h2>Generación 6+</h2>
-        <div class="note">
+        <h2 id="gen6-heading">Generación 6+</h2>
+        <div class="note" id="gen6-changes">
             <strong>Cambios:</strong><br>
             • Tipo Hada añadido<br>
             • Cambios en Acero<br>
@@ -57,7 +134,7 @@
         <div class="type-menu" id="gen6-types"></div>
         <div id="gen6-details"></div>
         <div class="button-back">
-            <a href="#" class="button">Volver</a>
+            <a href="#" class="button" id="back-btn3">Volver</a>
         </div>
     </div>
 
@@ -74,7 +151,57 @@
         
         // Eventos optimizados
         window.addEventListener('hashchange', actualizarLogoVisibilidad);
-        window.addEventListener('load', actualizarLogoVisibilidad);
+        window.addEventListener('load', function() {
+            actualizarLogoVisibilidad();
+            updatePageTexts(); // Actualizar textos al cargar
+        });
+        
+        // Función para actualizar los textos de la página según el idioma
+        function updatePageTexts() {
+            // Actualizar título principal
+            document.getElementById('mainTitle').textContent = getText('title');
+            document.title = getText('title');
+            
+            // Actualizar botones de navegación
+            document.getElementById('btn-gen1').textContent = getText('gen1');
+            document.getElementById('btn-gen2').textContent = getText('gen2');
+            document.getElementById('btn-gen6').textContent = getText('gen6');
+            document.getElementById('btn-search').textContent = getText('search');
+            document.getElementById('btn-lang').textContent = getText('language');
+            
+            // Actualizar títulos de secciones
+            document.getElementById('gen1-heading').textContent = getText('gen1_title');
+            document.getElementById('gen2-heading').textContent = getText('gen2_title');
+            document.getElementById('gen6-heading').textContent = getText('gen6_title');
+            
+            // Actualizar botones de volver
+            document.getElementById('back-btn1').textContent = getText('back');
+            document.getElementById('back-btn2').textContent = getText('back');
+            document.getElementById('back-btn3').textContent = getText('back');
+            
+            // Actualizar cambios de gen6
+            document.getElementById('gen6-changes').innerHTML = getText('changes');
+            
+            // Actualizar detalles de tipos si están cargados
+            updateTypeDetails();
+        }
+        
+        // Función para actualizar los detalles de tipos
+        function updateTypeDetails() {
+            var details = document.querySelectorAll('.type-section strong');
+            for (var i = 0; i < details.length; i++) {
+                var text = details[i].textContent.trim();
+                if (text === "Débil contra:" || text === "Weak against:") {
+                    details[i].textContent = getText('weak_against');
+                } else if (text === "Resistente a:" || text === "Resistant to:") {
+                    details[i].textContent = getText('resistant_to');
+                } else if (text === "Fuerte contra:" || text === "Strong against:") {
+                    details[i].textContent = getText('strong_against');
+                } else if (text === "Inmune a:" || text === "Immune to:") {
+                    details[i].textContent = getText('immune_to');
+                }
+            }
+        }
     </script>
 </body>
 </html>

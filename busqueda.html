@@ -3,14 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <title>Buscar Pokémon</title>
-    <meta name="viewport" content="width=320">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=320, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="estilos.css">
+    <script>
+    // Sistema de idiomas simple para 3DS
+    var translations = {
+        "es": {
+            "title": "Buscar Pokémon",
+            "back": "Volver",
+            "search": "Buscar",
+            "types": "Tipos:",
+            "stats": "Estadísticas:",
+            "evolves_to": "Evoluciona a:",
+            "check_type_chart": "Revisar tabla de tipos",
+            "pokemon_not_found": "Pokémon no encontrado",
+            "enter_name_number": "Por favor ingrese un nombre o número",
+            "error_load_data": "Error al cargar los datos",
+            "error_connection": "Error de conexión",
+            "language": "English",
+            "hp": "PS",
+            "attack": "Ataque",
+            "defense": "Defensa",
+            "special_attack": "Ataque Especial",
+            "special_defense": "Defensa Especial",
+            "speed": "Velocidad"
+        },
+        "en": {
+            "title": "Search Pokémon",
+            "back": "Back",
+            "search": "Search",
+            "types": "Types:",
+            "stats": "Stats:",
+            "evolves_to": "Evolves to:",
+            "check_type_chart": "Check type chart",
+            "pokemon_not_found": "Pokémon not found",
+            "enter_name_number": "Please enter a name or number",
+            "error_load_data": "Error loading data",
+            "error_connection": "Connection error",
+            "language": "Español",
+            "hp": "HP",
+            "attack": "Attack",
+            "defense": "Defense",
+            "special_attack": "Special Attack",
+            "special_defense": "Special Defense",
+            "speed": "Speed"
+        }
+    };
+    
+    // Traducciones de tipos
+    var typeTranslations = {
+        "es": {
+            "normal": "Normal",
+            "fuego": "Fuego",
+            "agua": "Agua",
+            "planta": "Planta",
+            "electrico": "Eléctrico",
+            "hielo": "Hielo",
+            "lucha": "Lucha",
+            "veneno": "Veneno",
+            "tierra": "Tierra",
+            "volador": "Volador",
+            "psiquico": "Psíquico",
+            "bicho": "Bicho",
+            "roca": "Roca",
+            "fantasma": "Fantasma",
+            "dragon": "Dragón",
+            "siniestro": "Siniestro",
+            "acero": "Acero",
+            "hada": "Hada"
+        },
+        "en": {
+            "normal": "Normal",
+            "fuego": "Fire",
+            "agua": "Water",
+            "planta": "Grass",
+            "electrico": "Electric",
+            "hielo": "Ice",
+            "lucha": "Fighting",
+            "veneno": "Poison",
+            "tierra": "Ground",
+            "volador": "Flying",
+            "psiquico": "Psychic",
+            "bicho": "Bug",
+            "roca": "Rock",
+            "fantasma": "Ghost",
+            "dragon": "Dragon",
+            "siniestro": "Dark",
+            "acero": "Steel",
+            "hada": "Fairy"
+        }
+    };
+    
+    // Idioma actual
+    var currentLang = "es";
+    
+    // Intentar cargar idioma guardado
+    try {
+        var savedLang = localStorage.getItem("pokeLanguage");
+        if (savedLang && (savedLang === "es" || savedLang === "en")) {
+            currentLang = savedLang;
+        }
+    } catch(e) {
+        // Ignorar errores (3DS puede no soportar localStorage)
+    }
+    
+    // Función para cambiar idioma
+    function changeLang() {
+        currentLang = (currentLang === "es") ? "en" : "es";
+        
+        // Guardar preferencia
+        try {
+            localStorage.setItem("pokeLanguage", currentLang);
+        } catch(e) {
+            // Ignorar errores
+        }
+        
+        // Actualizar textos
+        updatePageTexts();
+        
+        return false;
+    }
+    
+    // Función para obtener texto traducido
+    function getText(key) {
+        return translations[currentLang][key] || key;
+    }
+    
+    // Función para obtener traducción de tipo
+    function getTypeText(type) {
+        return typeTranslations[currentLang][type] || type;
+    }
+    </script>
 </head>
 <body>
-    <!-- Botón de volver a la página principal (pequeño y en la esquina superior izquierda) -->
+    <!-- Botón de volver a la página principal y cambio de idioma -->
     <div class="button-back-small">
-        <a href="index.html" class="button-small" tabindex="1">Volver</a>
+        <a href="index.html" class="button-small" tabindex="1" id="back-btn">Volver</a>
+        <a href="#" onclick="return changeLang();" class="button-small" tabindex="6" id="btn-lang">English</a>
     </div>
 
     <div id="logoContainer" style="text-align: center; margin-top: 20px;">
@@ -29,14 +159,14 @@
     </div>
 
     <div id="search-container">
-        <h1>Buscar Pokémon</h1>
+        <h1 id="search-title">Buscar Pokémon</h1>
         <div class="nav-container">
             <button id="prevPokemon" class="nav-button" onclick="navegarPokemon(-1);" tabindex="2">
                 <img src="sprites/izq.png" class="nav-arrow" alt="Anterior">
             </button>
             <form onsubmit="buscar(); return false;">
                 <input type="text" id="pokeInput" tabindex="3" autocomplete="off">
-                <input type="submit" value="Buscar" tabindex="4">
+                <input type="submit" value="Buscar" tabindex="4" id="search-btn">
             </form>
             <button id="nextPokemon" class="nav-button" onclick="navegarPokemon(1);" tabindex="5">
                 <img src="sprites/der.png" class="nav-arrow" alt="Siguiente">
@@ -45,5 +175,34 @@
     </div>
 
     <script src="busqueda.js"></script>
+    <script>
+        // Función para actualizar los textos de la página según el idioma
+        function updatePageTexts() {
+            // Actualizar título y botones
+            document.getElementById('search-title').textContent = getText('title');
+            document.getElementById('back-btn').textContent = getText('back');
+            document.getElementById('search-btn').value = getText('search');
+            document.getElementById('btn-lang').textContent = getText('language');
+            document.title = getText('title');
+            
+            // Si hay un Pokémon mostrado, actualizar su información
+            if (document.getElementById('resultado').style.display !== 'none') {
+                actualizarInfoPokemon();
+            }
+        }
+        
+        // Inicializar textos al cargar
+        window.addEventListener('load', function() {
+            updatePageTexts();
+        });
+        
+        // Función para actualizar la información del Pokémon actual
+        function actualizarInfoPokemon() {
+            // Esta función será implementada en busqueda.js
+            if (typeof onLanguageChange === "function") {
+                onLanguageChange();
+            }
+        }
+    </script>
 </body>
 </html>

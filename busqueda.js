@@ -1,6 +1,11 @@
 var pokedata = [];
 var typeData = {};
 
+// Variables globales para caché
+var ultimoPokemon = null;
+var MAX_CACHE_SIZE = 20; // Límite de caché para 3DS (memoria limitada)
+var MAX_IMAGE_CACHE = 10;
+
 // Reemplazar esta función
 function cargarDatos() {
     try {
@@ -65,19 +70,19 @@ var resultadoCache = null;
 function buscar() {
     try {
         if (!pokedata || !pokedata.length) {
-            alert("No hay datos cargados");
+            alert(getText("no_data_loaded", "No hay datos cargados"));
             return;
         }
 
         var inputElement = document.getElementById("pokeInput");
         if (!inputElement) {
-            alert("Error: No se encuentra el campo de búsqueda");
+            alert(getText("search_field_error", "Error: No se encuentra el campo de búsqueda"));
             return;
         }
 
         var searchValue = inputElement.value;
         if (!searchValue) {
-            alert("Por favor ingrese un nombre o número");
+            alert(getText("enter_name_number", "Por favor ingrese un nombre o número"));
             return;
         }
         searchValue = searchValue.toLowerCase().replace(/^\s+|\s+$/g, '');
@@ -92,17 +97,27 @@ function buscar() {
         var pokemon = buscarPokemon(searchValue);
 
         if (!pokemon) {
-            alert("Pokémon no encontrado");
+            alert(getText("pokemon_not_found", "Pokémon no encontrado"));
             return;
+        }
+        
+        // Limitar el tamaño de la caché
+        var MAX_CACHE_SIZE = 20;
+        if (Object.keys(window.cacheHistorial || {}).length >= MAX_CACHE_SIZE) {
+            // Reiniciar caché si es demasiado grande
+            window.cacheHistorial = {};
         }
         
         // Guardar en caché
         ultimaBusqueda = searchValue;
         resultadoCache = pokemon;
+        if (window.cacheHistorial) {
+            window.cacheHistorial[searchValue] = pokemon;
+        }
         
         mostrarResultado(pokemon);
     } catch(e) {
-        alert("Error en la búsqueda");
+        alert(getText("search_error", "Error en la búsqueda"));
     }
 }
 
@@ -194,6 +209,24 @@ function mostrarResultado(pokemon) {
             mostrarDetallesTipos(pokemon.tipos);
         }, 50);
     }, 50);
+    
+    // Guardar el último Pokémon buscado para poder actualizar la información cuando cambie el idioma
+    ultimoPokemon = pokemon;
+}
+
+// Función para actualizar la información del Pokémon con el idioma actual
+function actualizarInfoPokemon() {
+    if (ultimoPokemon) {
+        var infoHtml = construirInfoHTML(ultimoPokemon);
+        document.getElementById("pokeInfo").innerHTML = infoHtml;
+        mostrarDetallesTipos(ultimoPokemon.tipos);
+    }
+}
+
+// Función que se llama cuando cambia el idioma
+function onLanguageChange() {
+    // Actualizar la información del Pokémon actual
+    actualizarInfoPokemon();
 }
 
 // Función para construir el HTML de la información
@@ -269,11 +302,19 @@ function determinarGeneracion(id) {
 
 // Precarga de imágenes para mejorar rendimiento
 var imageCache = {};
+var MAX_IMAGE_CACHE = 50; // Límite de imágenes en caché
 function precargarImagen(src, callback) {
     // Si ya está en caché, usar directamente
     if (imageCache[src]) {
         if (callback) callback(imageCache[src]);
         return;
+    }
+    
+    // Limitar el tamaño de la caché de imágenes
+    if (Object.keys(imageCache).length >= MAX_IMAGE_CACHE) {
+        // Eliminar la entrada más antigua
+        var keys = Object.keys(imageCache);
+        delete imageCache[keys[0]];
     }
     
     // Si no está en caché, cargar
@@ -400,11 +441,33 @@ function mostrarDetallesTipos(tipos) {
         return;
     }
     
+    // Traducciones para las etiquetas de efectividad
+    var efectividadTextos = {
+        "es": {
+            "header": "Interacciones de Tipo",
+            "debil": "Débil contra:",
+            "resistente": "Resistente a:",
+            "inmune": "Inmune a:",
+            "fuerte": "Fuerte contra:"
+        },
+        "en": {
+            "header": "Type Interactions",
+            "debil": "Weak against:",
+            "resistente": "Resistant to:",
+            "inmune": "Immune to:",
+            "fuerte": "Strong against:"
+        }
+    };
+    
+    // Usar el idioma actual o español por defecto
+    var currentLang = window.currentLang || "es";
+    var textos = efectividadTextos[currentLang] || efectividadTextos["es"];
+    
     // Optimización: Construir HTML de una sola vez
-    var html = ['<div class="type-header">Interacciones de Tipo</div>'];
+    var html = ['<div class="type-header">' + textos.header + '</div>'];
     
     if (Object.keys(interacciones.weak).length > 0) {
-        html.push('<div class="type-section"><strong>Débil contra:</strong><div class="type-list">');
+        html.push('<div class="type-section"><strong>' + textos.debil + '</strong><div class="type-list">');
         for (var type in interacciones.weak) {
             var multiplier = interacciones.weak[type] > 1 ? ' (x4)' : ' (x2)';
             html.push('<div class="type-tag weak ' + type + '">' + formatearNombresTipos(capitalizeFirstLetter(type)) + multiplier + '</div>');
@@ -413,7 +476,7 @@ function mostrarDetallesTipos(tipos) {
     }
     
     if (Object.keys(interacciones.resist).length > 0) {
-        html.push('<div class="type-section"><strong>Resistente a:</strong><div class="type-list">');
+        html.push('<div class="type-section"><strong>' + textos.resistente + '</strong><div class="type-list">');
         for (var type in interacciones.resist) {
             var multiplier = interacciones.resist[type] > 1 ? ' (x1/4)' : ' (x1/2)';
             html.push('<div class="type-tag resist ' + type + '">' + formatearNombresTipos(capitalizeFirstLetter(type)) + multiplier + '</div>');
@@ -422,7 +485,7 @@ function mostrarDetallesTipos(tipos) {
     }
     
     if (interacciones.immune.length > 0) {
-        html.push('<div class="type-section"><strong>Inmune a:</strong><div class="type-list">');
+        html.push('<div class="type-section"><strong>' + textos.inmune + '</strong><div class="type-list">');
         for (var i = 0; i < interacciones.immune.length; i++) {
             var immuneType = interacciones.immune[i];
             html.push('<div class="type-tag immune ' + immuneType + '">' + formatearNombresTipos(capitalizeFirstLetter(immuneType)) + '</div>');
@@ -431,7 +494,7 @@ function mostrarDetallesTipos(tipos) {
     }
     
     if (Object.keys(interacciones.strong).length > 0) {
-        html.push('<div class="type-section"><strong>Fuerte contra:</strong><div class="type-list">');
+        html.push('<div class="type-section"><strong>' + textos.fuerte + '</strong><div class="type-list">');
         for (var type in interacciones.strong) {
             html.push('<div class="type-tag strong ' + type + '">' + formatearNombresTipos(capitalizeFirstLetter(type)) + '</div>');
         }
@@ -532,9 +595,26 @@ function navegarPokemon(direccion) {
                 
                 // Asegurarse de que el ID esté dentro del rango válido
                 if (nuevoId > 0 && nuevoId <= pokedata.length) {
-                    // Buscar el Pokémon con el nuevo ID
-                    document.getElementById("pokeInput").value = nuevoId;
-                    buscar();
+                    // Mostrar indicador de carga rápido
+                    var pokeImgElement = document.getElementById("pokeImg");
+                    if (pokeImgElement) {
+                        pokeImgElement.src = "sprites/MissingNo.png"; // Usar como indicador de carga
+                    }
+                    
+                    // Usar setTimeout para dar tiempo al navegador para actualizar la UI
+                    setTimeout(function() {
+                        // Buscar el Pokémon con el nuevo ID
+                        document.getElementById("pokeInput").value = nuevoId;
+                        buscar();
+                        
+                        // Precargar el siguiente Pokémon en la dirección de navegación
+                        var nextId = nuevoId + direccion;
+                        if (nextId > 0 && nextId <= pokedata.length) {
+                            var nextGen = determinarGeneracion(nextId);
+                            var nextImgPath = 'sprites/' + nextGen + '/' + nextId + '.png';
+                            precargarImagen(nextImgPath, function(){});
+                        }
+                    }, 50);
                 }
             }
         } else {
@@ -712,11 +792,22 @@ function autocompletar() {
 
 // Código para cargar datos al inicio
 window.onload = function() {
+    // Mostrar indicador de carga
+    var loadingIndicator = document.createElement('div');
+    loadingIndicator.id = 'loadingIndicator';
+    loadingIndicator.textContent = '...';
+    loadingIndicator.style.textAlign = 'center';
+    loadingIndicator.style.margin = '20px 0';
+    document.body.appendChild(loadingIndicator);
+    
+    // Cargar datos en segundo plano
     cargarDatos();
     
     // Agregar evento para autocompletar
     var input = document.getElementById("pokeInput");
     if (input) {
+        // Deshabilitar input hasta que los datos estén cargados
+        input.disabled = true;
         input.addEventListener("input", autocompletar);
         
         // Ocultar sugerencias al perder el foco
@@ -732,4 +823,34 @@ window.onload = function() {
     
     // Agregar manejo de eventos de teclado
     document.addEventListener('keydown', manejarTeclas);
+    
+    // Precargar imágenes de Pokémon populares
+    setTimeout(function() {
+        precargarPokemonesPopulares();
+    }, 2000);
 };
+
+// Función para precargar Pokémon populares
+function precargarPokemonesPopulares() {
+    // IDs de Pokémon populares (Pikachu, Charizard, Mewtwo, etc.)
+    var pokemonPopulares = [25, 6, 150, 1, 9];
+    
+    // Precargar en secuencia para no sobrecargar
+    function precargarSiguiente(indice) {
+        if (indice >= pokemonPopulares.length) return;
+        
+        var id = pokemonPopulares[indice];
+        var gen = determinarGeneracion(id);
+        var imgPath = 'sprites/' + gen + '/' + id + '.png';
+        
+        precargarImagen(imgPath, function() {
+            // Continuar con el siguiente después de un breve retraso
+            setTimeout(function() {
+                precargarSiguiente(indice + 1);
+            }, 100);
+        });
+    }
+    
+    // Comenzar precarga
+    precargarSiguiente(0);
+}
