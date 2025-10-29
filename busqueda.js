@@ -7,63 +7,76 @@ var MAX_CACHE_SIZE = 20; // Límite de caché para 3DS (memoria limitada)
 var MAX_IMAGE_CACHE = 10; // Límite de imágenes en caché (unificado para 3DS)
 
 // Función para cargar datos
+// function cargarDatos()
 function cargarDatos() {
     try {
         // Cargar datos solo si no están ya cargados
         if (pokeData.length === 0) {
             var xhr1 = new XMLHttpRequest();
-            xhr1.open("GET", "pokedata.json", true); // Asíncrono para mejor rendimiento
+            // Cache-busting para evitar respuestas obsoletas o bloqueos del cache en 3DS
+            xhr1.open("GET", "./pokedata.json?ts=" + new Date().getTime(), true);
             xhr1.onreadystatechange = function() {
                 if (xhr1.readyState === 4) {
+                    var loadingIndicator = document.getElementById("loadingIndicator");
                     if (xhr1.status === 200) {
                         try {
-                            // Usar JSON.parse en lugar de eval para mejor seguridad y rendimiento
                             pokeData = JSON.parse(xhr1.responseText);
-                            
-                            // Habilitar el campo de búsqueda
                             var inputElement = document.getElementById("pokeInput");
-                            if (inputElement) {
-                                inputElement.disabled = false;
-                            }
-                            
-                            // Cargar datos de tipos después de cargar pokeData
+                            if (inputElement) inputElement.disabled = false;
+                            if (loadingIndicator) loadingIndicator.parentNode.removeChild(loadingIndicator);
                             cargarTipos();
-                        } catch(e) {
-                            alert("Error al procesar datos de Pokémon");
+                        } catch (e) {
+                            if (loadingIndicator) loadingIndicator.parentNode.removeChild(loadingIndicator);
+                            alert(getText ? getText("error_load_data", "Error al procesar datos de Pokémon") : "Error al procesar datos de Pokémon");
                         }
                     } else {
-                        alert("Error al cargar pokedata.json");
+                        if (loadingIndicator) loadingIndicator.parentNode.removeChild(loadingIndicator);
+                        alert(getText ? getText("error_load_data", "Error al cargar pokedata.json") : "Error al cargar pokedata.json");
                     }
                 }
             };
+            xhr1.onerror = function() {
+                var loadingIndicator = document.getElementById("loadingIndicator");
+                if (loadingIndicator) loadingIndicator.parentNode.removeChild(loadingIndicator);
+                alert(getText ? getText("error_connection", "Error de conexión") : "Error de conexión");
+            };
             xhr1.send();
         } else if (Object.keys(typesData).length === 0) {
-            // Si ya tenemos pokeData pero no typesData
             cargarTipos();
         }
-    } catch(e) {
-        alert("Error de conexión");
+    } catch (e) {
+        alert(getText ? getText("error_connection", "Error de conexión") : "Error de conexión");
     }
 }
 
 // Función separada para cargar tipos
+// function cargarTipos()
 function cargarTipos() {
     if (Object.keys(typesData).length === 0) {
         var xhr2 = new XMLHttpRequest();
-        xhr2.open("GET", "types.json", true);
+        // Cache-busting para evitar problemas de cache del 3DS
+        xhr2.open("GET", "./types.json?ts=" + new Date().getTime(), true);
         xhr2.onreadystatechange = function() {
             if (xhr2.readyState === 4) {
+                var loadingIndicator = document.getElementById("loadingIndicator");
                 if (xhr2.status === 200) {
                     try {
-                        // Usar JSON.parse en lugar de eval
                         typesData = JSON.parse(xhr2.responseText);
-                    } catch(e) {
-                        alert("Error al procesar datos de tipos");
+                        if (loadingIndicator) loadingIndicator.parentNode.removeChild(loadingIndicator);
+                    } catch (e) {
+                        if (loadingIndicator) loadingIndicator.parentNode.removeChild(loadingIndicator);
+                        alert(getText ? getText("error_load_data", "Error al procesar datos de tipos") : "Error al procesar datos de tipos");
                     }
                 } else {
-                    alert("Error al cargar types.json");
+                    if (loadingIndicator) loadingIndicator.parentNode.removeChild(loadingIndicator);
+                    alert(getText ? getText("error_load_data", "Error al cargar types.json") : "Error al cargar types.json");
                 }
             }
+        };
+        xhr2.onerror = function() {
+            var loadingIndicator = document.getElementById("loadingIndicator");
+            if (loadingIndicator) loadingIndicator.parentNode.removeChild(loadingIndicator);
+            alert(getText ? getText("error_connection", "Error de conexión") : "Error de conexión");
         };
         xhr2.send();
     }
@@ -593,7 +606,7 @@ function formatearNombresTipos(type) {
 
 function buscar() {
     try {
-        if (!pokedata || !pokedata.length) {
+        if (!pokeData || !pokeData.length) {
             alert("No hay datos cargados");
             return;
         }
@@ -635,6 +648,7 @@ function buscar() {
     }
 }
 
+// function navegarPokemon(direccion)  (corrige 'pokedata' → 'pokeData')
 function navegarPokemon(direccion) {
     try {
         // Obtener el Pokémon actual
@@ -665,7 +679,7 @@ function navegarPokemon(direccion) {
 
                         // Precargar el siguiente Pokémon en la dirección de navegación
                         var nextId = nuevoId + direccion;
-                        if (nextId > 0 && nextId <= pokedata.length) {
+                        if (nextId > 0 && nextId <= pokeData.length) {
                             var nextGen = determinarGeneracion(nextId);
                             var nextImgPath = 'sprites/' + nextGen + '/' + nextId + '.png';
                             precargarImagen(nextImgPath, function(){});
@@ -678,7 +692,7 @@ function navegarPokemon(direccion) {
             if (direccion > 0) {
                 document.getElementById("pokeInput").value = "1";
             } else {
-                document.getElementById("pokeInput").value = pokedata.length.toString();
+                document.getElementById("pokeInput").value = pokeData.length.toString();
             }
             buscar();
         }
