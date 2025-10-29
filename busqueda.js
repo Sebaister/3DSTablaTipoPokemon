@@ -1,16 +1,16 @@
-var pokedata = [];
-var typeData = {};
+var pokeData = [];
+var typesData = {};
 
 // Variables globales para caché
 var ultimoPokemon = null;
 var MAX_CACHE_SIZE = 20; // Límite de caché para 3DS (memoria limitada)
 var MAX_IMAGE_CACHE = 10;
 
-// Reemplazar esta función
+// Función para cargar datos
 function cargarDatos() {
     try {
         // Cargar datos solo si no están ya cargados
-        if (pokedata.length === 0) {
+        if (pokeData.length === 0) {
             var xhr1 = new XMLHttpRequest();
             xhr1.open("GET", "pokedata.json", true); // Asíncrono para mejor rendimiento
             xhr1.onreadystatechange = function() {
@@ -18,9 +18,15 @@ function cargarDatos() {
                     if (xhr1.status === 200) {
                         try {
                             // Usar JSON.parse en lugar de eval para mejor seguridad y rendimiento
-                            pokedata = JSON.parse(xhr1.responseText);
+                            pokeData = JSON.parse(xhr1.responseText);
                             
-                            // Cargar datos de tipos después de cargar pokedata
+                            // Habilitar el campo de búsqueda
+                            var inputElement = document.getElementById("pokeInput");
+                            if (inputElement) {
+                                inputElement.disabled = false;
+                            }
+                            
+                            // Cargar datos de tipos después de cargar pokeData
                             cargarTipos();
                         } catch(e) {
                             alert("Error al procesar datos de Pokémon");
@@ -31,8 +37,8 @@ function cargarDatos() {
                 }
             };
             xhr1.send();
-        } else if (Object.keys(typeData).length === 0) {
-            // Si ya tenemos pokedata pero no typeData
+        } else if (Object.keys(typesData).length === 0) {
+            // Si ya tenemos pokeData pero no typesData
             cargarTipos();
         }
     } catch(e) {
@@ -42,7 +48,7 @@ function cargarDatos() {
 
 // Función separada para cargar tipos
 function cargarTipos() {
-    if (Object.keys(typeData).length === 0) {
+    if (Object.keys(typesData).length === 0) {
         var xhr2 = new XMLHttpRequest();
         xhr2.open("GET", "types.json", true);
         xhr2.onreadystatechange = function() {
@@ -50,7 +56,7 @@ function cargarTipos() {
                 if (xhr2.status === 200) {
                     try {
                         // Usar JSON.parse en lugar de eval
-                        typeData = JSON.parse(xhr2.responseText);
+                        typesData = JSON.parse(xhr2.responseText);
                     } catch(e) {
                         alert("Error al procesar datos de tipos");
                     }
@@ -69,7 +75,7 @@ var resultadoCache = null;
 
 function buscar() {
     try {
-        if (!pokedata || !pokedata.length) {
+        if (!pokeData || !pokeData.length) {
             alert(getText("no_data_loaded", "No hay datos cargados"));
             return;
         }
@@ -127,13 +133,13 @@ var pokemonPorNombre = null;
 
 // Función para inicializar índices de búsqueda
 function inicializarIndices() {
-    if (pokemonPorId === null && pokedata.length > 0) {
+    if (pokemonPorId === null && pokeData && pokeData.length > 0) {
         pokemonPorId = {};
         pokemonPorNombre = {};
         
-        for (var i = 0; i < pokedata.length; i++) {
-            pokemonPorId[pokedata[i].id] = pokedata[i];
-            pokemonPorNombre[pokedata[i].nombre.toLowerCase()] = pokedata[i];
+        for (var i = 0; i < pokeData.length; i++) {
+            pokemonPorId[pokeData[i].id] = pokeData[i];
+            pokemonPorNombre[pokeData[i].nombre.toLowerCase()] = pokeData[i];
         }
     }
 }
