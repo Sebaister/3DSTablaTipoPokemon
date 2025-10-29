@@ -138,38 +138,75 @@ function inicializarIndices() {
         pokemonPorNombre = {};
         
         for (var i = 0; i < pokeData.length; i++) {
-            pokemonPorId[pokeData[i].id] = pokeData[i];
-            pokemonPorNombre[pokeData[i].nombre.toLowerCase()] = pokeData[i];
+            var pokemon = pokeData[i];
+            if (pokemon && pokemon.id && pokemon.nombre) {
+                pokemonPorId[pokemon.id] = pokemon;
+                pokemonPorNombre[pokemon.nombre.toLowerCase()] = pokemon;
+            }
         }
+        console.log("Índices inicializados correctamente");
+    } else {
+        console.log("No se pudieron inicializar los índices o ya estaban inicializados");
     }
 }
 
 // Función separada para buscar Pokémon (optimizada para 3DS)
 function buscarPokemon(searchValue) {
-    // Inicializar índices si no existen
-    inicializarIndices();
-    
-    // Buscar por ID (acceso directo al objeto)
-    if (!isNaN(searchValue)) {
-        var id = parseInt(searchValue, 10);
-        if (pokemonPorId[id]) {
-            return pokemonPorId[id];
+    try {
+        // Inicializar índices si no existen
+        inicializarIndices();
+        
+        // Si los índices no se inicializaron correctamente, buscar directamente en pokeData
+        if (!pokemonPorId || !pokemonPorNombre) {
+            // Búsqueda de respaldo directamente en pokeData
+            if (!pokeData) return null;
+            
+            // Buscar por ID
+            if (!isNaN(searchValue)) {
+                var id = parseInt(searchValue, 10);
+                for (var i = 0; i < pokeData.length; i++) {
+                    if (pokeData[i].id === id) {
+                        return pokeData[i];
+                    }
+                }
+            }
+            
+            // Buscar por nombre
+            var searchLower = searchValue.toLowerCase();
+            for (var i = 0; i < pokeData.length; i++) {
+                if (pokeData[i].nombre.toLowerCase() === searchLower || 
+                    pokeData[i].nombre.toLowerCase().indexOf(searchLower) === 0) {
+                    return pokeData[i];
+                }
+            }
+            return null;
         }
-    }
-    
-    // Buscar por nombre exacto (acceso directo)
-    if (pokemonPorNombre[searchValue]) {
-        return pokemonPorNombre[searchValue];
-    }
-    
-    // Buscar por nombre parcial (solo si es necesario)
-    for (var nombre in pokemonPorNombre) {
-        if (nombre.indexOf(searchValue) === 0) {
-            return pokemonPorNombre[nombre];
+        
+        // Buscar por ID (acceso directo al objeto)
+        if (!isNaN(searchValue)) {
+            var id = parseInt(searchValue, 10);
+            if (pokemonPorId[id]) {
+                return pokemonPorId[id];
+            }
         }
+        
+        // Buscar por nombre exacto (acceso directo)
+        if (pokemonPorNombre[searchValue]) {
+            return pokemonPorNombre[searchValue];
+        }
+        
+        // Buscar por nombre parcial (solo si es necesario)
+        for (var nombre in pokemonPorNombre) {
+            if (nombre.indexOf(searchValue) === 0) {
+                return pokemonPorNombre[nombre];
+            }
+        }
+        
+        return null;
+    } catch (error) {
+        console.log("Error en buscarPokemon: " + error.message);
+        return null;
     }
-    
-    return null;
 }
 
 // Función separada para mostrar el resultado (optimizada para 3DS)
