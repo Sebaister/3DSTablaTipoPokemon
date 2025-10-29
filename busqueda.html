@@ -166,6 +166,7 @@
             </button>
             <form onsubmit="buscar(); return false;">
                 <input type="text" id="pokeInput" tabindex="3" autocomplete="off">
+                <div id="sugerencias" class="sugerencias-container" aria-live="polite"></div>
                 <input type="submit" value="Buscar" tabindex="4" id="search-btn">
             </form>
             <button id="nextPokemon" class="nav-button" onclick="navegarPokemon(1);" tabindex="5">
