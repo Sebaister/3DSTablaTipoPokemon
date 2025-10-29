@@ -3,8 +3,7 @@
 <head>
     <title>Tablas de Tipos Pokémon</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=320, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=320">
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
@@ -63,7 +62,7 @@
 
     <script src="script.js"></script>
     <script>
-        // Función optimizada para 3DS
+        // Función optimizada para manejar la visibilidad del logo
         function actualizarLogoVisibilidad() {
             var hash = window.location.hash;
             var defaultLogo = document.getElementById('defaultLogo');
@@ -72,15 +71,9 @@
             }
         }
         
-        // Eventos optimizados para 3DS
-        if ('addEventListener' in window) {
-            window.addEventListener('hashchange', actualizarLogoVisibilidad, false);
-            window.addEventListener('load', actualizarLogoVisibilidad, false);
-        } else {
-            // Fallback para navegadores muy antiguos
-            window.onhashchange = actualizarLogoVisibilidad;
-            window.onload = actualizarLogoVisibilidad;
-        }
+        // Eventos optimizados
+        window.addEventListener('hashchange', actualizarLogoVisibilidad);
+        window.addEventListener('load', actualizarLogoVisibilidad);
     </script>
 </body>
 </html>

@@ -8,34 +8,6 @@ body {
     font-size: 12px;
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
-    /* Optimización para 3DS */
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-
-/* Reducir uso de flexbox para mejor compatibilidad */
-.type-list {
-    text-align: center;
-    margin: 2px 0;
-}
-
-.type-list .type-tag {
-    display: inline-block;
-    margin: 2px;
-    vertical-align: top;
-}
-
-/* Optimizar transiciones para 3DS */
-.type-btn, .button {
-    transition: none; /* Eliminar transiciones para mejor rendimiento */
-}
-
-/* Mejorar contraste para pantalla 3DS */
-.type-btn {
-    border: 1px solid rgba(255,255,255,0.3);
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
 }
 
 h1, h2 {
@@ -221,21 +193,19 @@ h2 {
 .strong { background-color: #26F; }
 .immune { background-color: #999; }
 
-/* Estilos de búsqueda y resultados - COMPATIBLE CON 3DS */
+/* Estilos de búsqueda y resultados */
 #search-container {
     padding: 2px 0;
     text-align: center;
-    position: absolute !important; /* Usar absolute en lugar de fixed para 3DS */
+    position: fixed !important;
     bottom: 0;
     left: 0;
     right: 0;
-    width: 100%;
     background-color: #000;
     border-top: 1px solid #444;
     height: auto;
     min-height: 40px;
     z-index: 1000;
-    box-sizing: border-box;
 }
 
 #search-container h1 {
@@ -246,22 +216,9 @@ h2 {
     text-shadow: 1px 1px 1px #000;
 }
 
-/* Asegurar que el contenido no se superponga con la barra */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #000;
-    color: #FFF;
-    margin: 0;
-    padding: 2px;
-    padding-bottom: 50px;
-    font-size: 12px;
-    position: relative; /* Importante para que absolute funcione correctamente */
-    min-height: 100vh; /* Asegurar altura mínima */
-}
-
 #resultado {
     padding: 6px;
-    margin-bottom: 50px;
+    margin-bottom: 45px;
     text-align: center;
 }
 
