@@ -131,7 +131,7 @@ function buscar() {
 var pokemonPorId = null;
 var pokemonPorNombre = null;
 
-// Función para inicializar índices de búsqueda
+// Función para inicializar índices de búsqueda (optimizada para 3DS)
 function inicializarIndices() {
     if (pokemonPorId === null && pokeData && pokeData.length > 0) {
         pokemonPorId = {};
@@ -165,7 +165,7 @@ function buscarPokemon(searchValue) {
             if (!isNaN(searchValue)) {
                 var id = parseInt(searchValue, 10);
                 for (var i = 0; i < pokeData.length; i++) {
-                    if (pokeData[i].id === id) {
+                    if (pokeData[i] && pokeData[i].id === id) {
                         return pokeData[i];
                     }
                 }
@@ -174,8 +174,9 @@ function buscarPokemon(searchValue) {
             // Buscar por nombre
             var searchLower = searchValue.toLowerCase();
             for (var i = 0; i < pokeData.length; i++) {
-                if (pokeData[i].nombre.toLowerCase() === searchLower || 
-                    pokeData[i].nombre.toLowerCase().indexOf(searchLower) === 0) {
+                if (pokeData[i] && pokeData[i].nombre && 
+                    (pokeData[i].nombre.toLowerCase() === searchLower || 
+                     pokeData[i].nombre.toLowerCase().indexOf(searchLower) === 0)) {
                     return pokeData[i];
                 }
             }
@@ -185,20 +186,22 @@ function buscarPokemon(searchValue) {
         // Buscar por ID (acceso directo al objeto)
         if (!isNaN(searchValue)) {
             var id = parseInt(searchValue, 10);
-            if (pokemonPorId[id]) {
+            if (pokemonPorId && pokemonPorId[id]) {
                 return pokemonPorId[id];
             }
         }
         
         // Buscar por nombre exacto (acceso directo)
-        if (pokemonPorNombre[searchValue]) {
+        if (pokemonPorNombre && pokemonPorNombre[searchValue]) {
             return pokemonPorNombre[searchValue];
         }
         
         // Buscar por nombre parcial (solo si es necesario)
-        for (var nombre in pokemonPorNombre) {
-            if (nombre.indexOf(searchValue) === 0) {
-                return pokemonPorNombre[nombre];
+        if (pokemonPorNombre) {
+            for (var nombre in pokemonPorNombre) {
+                if (nombre.indexOf(searchValue) === 0) {
+                    return pokemonPorNombre[nombre];
+                }
             }
         }
         
