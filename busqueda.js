@@ -594,7 +594,7 @@ function navegarPokemon(direccion) {
                 var nuevoId = idActual + direccion;
                 
                 // Asegurarse de que el ID esté dentro del rango válido
-                if (nuevoId > 0 && nuevoId <= pokedata.length) {
+                if (nuevoId > 0 && nuevoId <= pokeData.length) {
                     // Mostrar indicador de carga rápido
                     var pokeImgElement = document.getElementById("pokeImg");
                     if (pokeImgElement) {
