@@ -4,7 +4,7 @@ var typesData = {};
 // Variables globales para caché
 var ultimoPokemon = null;
 var MAX_CACHE_SIZE = 20; // Límite de caché para 3DS (memoria limitada)
-var MAX_IMAGE_CACHE = 10;
+var MAX_IMAGE_CACHE = 10; // Límite de imágenes en caché (unificado para 3DS)
 
 // Función para cargar datos
 function cargarDatos() {
@@ -99,7 +99,7 @@ function buscar() {
             mostrarResultado(resultadoCache);
             return;
         }
-
+        
         // Búsqueda directa en pokeData
         var pokemon = null;
 
@@ -361,7 +361,6 @@ function determinarGeneracion(id) {
 
 // Precarga de imágenes para mejorar rendimiento
 var imageCache = {};
-var MAX_IMAGE_CACHE = 10; // Límite de imágenes en caché ajustado para 3DS
 function precargarImagen(src, callback) {
     // Si ya está en caché, usar directamente
     if (imageCache[src]) {
@@ -438,7 +437,7 @@ function calcularInteracciones(tipos) {
         if (tipo === 'dragón') tipo = 'dragon';
         if (tipo === 'eléctrico') tipo = 'electrico';
         if (tipo === 'psíquico') tipo = 'psiquico';
-
+        
         if (!typesData[gen] || !typesData[gen][tipo]) continue;
         var data = typesData[gen][tipo];
         
@@ -488,7 +487,7 @@ function calcularInteracciones(tipos) {
 function mostrarDetallesTipos(tipos) {
     var detailsContainer = document.getElementById('typeDetails');
     if (!tipos || tipos.length === 0 || !typesData || !typesData.gen1) {
-        if (detailsContainer) detailsContainer.style.display = 'none';
+        detailsContainer.style.display = 'none';
         return;
     }
     
@@ -641,7 +640,7 @@ function navegarPokemon(direccion) {
         // Obtener el Pokémon actual
         var pokemonActual = null;
         var nombreElement = document.getElementById("pokeName");
-
+        
         if (nombreElement && nombreElement.innerHTML) {
             // Extraer el número del Pokémon actual
             var idActual = parseInt(nombreElement.innerHTML.split(".")[0]);
